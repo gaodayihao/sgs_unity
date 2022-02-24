@@ -47,7 +47,7 @@ namespace Model
                 if (hit == true)
                 {
                     if (src.weapon is QiLinGong) await ((QiLinGong)src.weapon).Skill(dest);
-                    await new Damaged(dest, Src, 1).Execute();
+                    await new Damaged(dest, 1, Src, this).Execute();
                 }
             }
 
@@ -56,6 +56,38 @@ namespace Model
         }
 
         public int ShanCount { get; set; } = 1;
+
+        public static async Task<bool> Call(Player player)
+        {
+            TimerTask.Instance.Hint = "请打出一张杀。";
+            TimerTask.Instance.GivenCard = new List<string> { "杀", "雷杀", "火杀" };
+            bool result = await TimerTask.Instance.Run(player, TimerType.UseCard);
+
+            if (player.isAI)
+            {
+                // foreach (var card in player.HandCards)
+                // {
+                //     if (card is Sha)
+                //     {
+                //         TimerTask.Instance.Cards = new List<Card> { card };
+                //         result = true;
+                //         break;
+                //     }
+                // }
+                var card = player.FindCard<Sha>();
+                if (card != null)
+                {
+                    TimerTask.Instance.Cards = new List<Card> { card };
+                    result = true;
+                }
+            }
+
+            if (!result) return false;
+
+            CardPile.Instance.AddToDiscard(TimerTask.Instance.Cards);
+            await new LoseCard(player, TimerTask.Instance.Cards).Execute();
+            return true;
+        }
     }
 
     public class Shan : Card
@@ -73,21 +105,31 @@ namespace Model
             TimerTask.Instance.GivenCard = new List<string> { "闪" };
             result = await TimerTask.Instance.Run(player, TimerType.UseCard);
 
-            if (result)
+            if (player.isAI)
+            {
+                // foreach (var card in player.HandCards)
+                // {
+                //     if (card is Shan)
+                //     {
+                //         TimerTask.Instance.Cards = new List<Card> { card };
+                //         result = true;
+                //         break;
+                //     }
+                // }
+                var card = player.FindCard<Shan>();
+                if (card != null)
+                {
+                    TimerTask.Instance.Cards = new List<Card> { card };
+                    result = true;
+                }
+            }
+
+            if (!result) return false;
+
+            else
             {
                 await TimerTask.Instance.Cards[0].UseCard(player);
                 return true;
-            }
-            else
-            {
-                if (player.isAI) foreach (var card in player.HandCards)
-                        if (card is Shan)
-                        {
-                            await card.UseCard(player);
-                            return true;
-                        }
-
-                return false;
             }
 
         }
@@ -95,24 +137,11 @@ namespace Model
 
     public class Tao : Card
     {
-        // public override async Task UseCard()
-        // {
-        //     // 默认将目标设为使用者
-        //     if (Dests is null) Dests = new Player[1] { Src };
-
-        //     await base.UseCard();
-
-        //     // 回复体力
-        //     foreach (var dest in Dests) await new Recover(dest).Execute();
-
-        //     ResetCard();
-        // }
 
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
             // 默认将目标设为使用者
             if (dests is null || dests.Count == 0) dests = new List<Player> { src };
-            // Debug.Log(src.Position);
 
             await base.UseCard(src, dests);
 
@@ -126,21 +155,32 @@ namespace Model
             TimerTask.Instance.GivenDest = dest;
             TimerTask.Instance.GivenCard = new List<string> { "桃" };
             bool result = await TimerTask.Instance.Run(player, TimerType.UseCard);
-            if (result)
+
+            if (player.isAI && player == dest)
             {
-                await TimerTask.Instance.Cards[0].UseCard(player, new List<Player> { dest });
-                return true;
+                // foreach (var card in player.HandCards)
+                // {
+                //     if (card is Tao)
+                //     {
+                //         TimerTask.Instance.Cards = new List<Card> { card };
+                //         result = true;
+                //         break;
+                //     }
+                // }
+                var card = player.FindCard<Tao>();
+                if (card != null)
+                {
+                    TimerTask.Instance.Cards = new List<Card> { card };
+                    result = true;
+                }
             }
+
+            if (!result) return false;
+
             else
             {
-                if (player.isAI && player == dest) foreach (var card in player.HandCards)
-                        if (card is Tao)
-                        {
-                            await card.UseCard(player);
-                            return true;
-                        }
-
-                return false;
+                await TimerTask.Instance.Cards[0].UseCard(player);
+                return true;
             }
         }
     }

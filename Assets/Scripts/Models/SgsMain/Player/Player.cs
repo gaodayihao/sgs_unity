@@ -65,7 +65,7 @@ namespace Model
         /// <param name="dest">目标角色</param>
         public int GetDistance(Player dest)
         {
-            if (!dest.IsAlive) return 0;
+            if (!dest.IsAlive || dest == this) return 0;
             int distance = 1 + dest.DstPlus - DstSub;
 
             Player next = Next, last = Last;
@@ -80,5 +80,14 @@ namespace Model
         }
 
         public int ShaCount { get; set; }
+
+        public T FindCard<T>() where T : Card
+        {
+            foreach (var card in HandCards)
+            {
+                if (card is T) return (T)card;
+            }
+            return null;
+        }
     }
 }

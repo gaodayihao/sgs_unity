@@ -62,7 +62,13 @@ namespace Model
                     case "乐不思蜀": card = new LeBuSiShu(); break;
 
                     case "过河拆桥": card = new GuoHeChaiQiao(); break;
+                    case "顺手牵羊": card = new ShunShouQianYang(); break;
                     case "无懈可击": card = new WuXieKeJi(); break;
+                    case "南蛮入侵": card = new NanManRuQin(); break;
+                    case "万箭齐发": card = new WanJianQiFa(); break;
+                    case "桃园结义": card = new TaoYuanJieYi(); break;
+                    case "无中生有": card = new WuZhongShengYou(); break;
+                    case "决斗": card = new JueDou(); break;
 
                     default: card = new Tao(); break;
                 }

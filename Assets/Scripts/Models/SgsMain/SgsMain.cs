@@ -59,7 +59,7 @@ namespace Model
 
             await DebugCard();
 
-            foreach (var player in players) await new GetCard(player, 4).Execute();
+            foreach (var player in players) await new GetCardFromPile(player, 4).Execute();
 
             // debug
             // await new Damaged(players[0], null).Execute();
@@ -97,12 +97,12 @@ namespace Model
         {
             List<string> list = new List<string>
             {
-                "麒麟弓","过河拆桥","无懈可击"
+                "决斗","桃园结义","无中生有","顺手牵羊","万箭齐发"
             };
 
             while (list.Count > 0)
             {
-                await new GetCard(players[0], 1).Execute();
+                await new GetCardFromPile(players[0], 1).Execute();
                 var newCard = players[0].HandCards[players[0].HandCardCount - 1];
                 if (!list.Contains(newCard.Name)) await new Discard(players[0], new List<Card> { newCard }).Execute();
                 else list.Remove(newCard.Name);

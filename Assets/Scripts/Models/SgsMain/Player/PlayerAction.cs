@@ -27,14 +27,14 @@ namespace Model
         }
     }
 
-    public class AcquireCard : PlayerAction<AcquireCard>
+    public class GetCard : PlayerAction<GetCard>
     {
         /// <summary>
         /// 获得牌
         /// </summary>
         /// <param name="player">玩家</param>
         /// <param name="cards">卡牌数组</param>
-        public AcquireCard(Player player, List<Card> cards = null) : base(player)
+        public GetCard(Player player, List<Card> cards) : base(player)
         {
             Cards = cards;
         }
@@ -49,19 +49,25 @@ namespace Model
             }
             actionView?.Invoke(this);
 
-            // 执行弃牌后事件
+            // 执行获得牌后事件
             await player.playerEvents.acquireCard.Execute(this);
         }
+
+        // public async Task FromElse(Player dest)
+        // {
+        //     await new LoseCard(dest, Cards).Execute();
+        //     await Execute();
+        // }
     }
 
-    public class GetCard : AcquireCard
+    public class GetCardFromPile : GetCard
     {
         /// <summary>
         /// 摸牌
         /// </summary>
         /// <param name="player">玩家</param>
         /// <param name="count">摸牌数</param>
-        public GetCard(Player player, int count) : base(player, new List<Card>())
+        public GetCardFromPile(Player player, int count) : base(player, new List<Card>())
         {
             this.count = count;
         }
@@ -89,11 +95,6 @@ namespace Model
 
         public override async Task Execute()
         {
-            // // 失去手牌
-            // if (Cards != null) foreach (var handCard in Cards) player.HandCards.Remove(handCard);
-            // // 失去装备牌
-            // if (Equipages != null) foreach (var equipage in Equipages) equipage.RemoveEquipage();
-
             foreach (var card in Cards)
             {
                 if (player.HandCards.Contains(card)) player.HandCards.Remove(card);
@@ -119,11 +120,6 @@ namespace Model
             string str = "";
             foreach (var card in Cards) str += "【" + card.Name + card.Suit + card.Weight.ToString() + "】";
             Debug.Log((player.Position + 1).ToString() + "号位弃置了" + str);
-
-            // // 失去手牌
-            // if (Cards != null) CardPile.Instance.AddToDiscard(Cards);
-            // // 失去装备牌
-            // if (Equipages != null) foreach (var equipage in Equipages) CardPile.Instance.AddToDiscard(equipage);
 
             CardPile.Instance.AddToDiscard(Cards);
 
@@ -201,7 +197,7 @@ namespace Model
             player.Next.Last = player.Last;
             player.Last.Next = player.Next;
 
-            if (damageSrc != null) await new GetCard(damageSrc, 3).Execute();
+            if (damageSrc != null) await new GetCardFromPile(damageSrc, 3).Execute();
         }
     }
 
@@ -240,18 +236,18 @@ namespace Model
         /// 受到伤害
         /// </summary>
         /// <param name="player">玩家</param>
-        /// <param name="damageSrc">伤害来源</param>
+        /// <param name="src">伤害来源</param>
         /// <param name="value">伤害量</param>
-        public Damaged(Player player, Player damageSrc, int value = 1) : base(player, -value)
+        public Damaged(Player player, int value, Player src, Card srcCard = null) : base(player, -value)
         {
-            DamageSrc = damageSrc;
+            DamageSrc = src;
         }
 
         public Player DamageSrc { get; private set; }
 
         public override async Task Execute()
         {
-            Debug.Log((player.Position + 1).ToString() + "受到了" + Value.ToString() + "点伤害");
+            Debug.Log((player.Position + 1).ToString() + "受到了" + (-Value).ToString() + "点伤害");
 
             // 受到伤害时
             await player.playerEvents.whenDamaged.Execute(this);
@@ -264,13 +260,31 @@ namespace Model
         }
     }
 
-    // public class AcquireFromPlayer:PlayerAction<AcquireFromPlayer>
-    // {
-    //     public override async Task Execute()
-    //     {
-    //         throw new System.NotImplementedException();
-    //     }
-    // }
+    public class GetCardFromElse : GetCard
+    {
+        public GetCardFromElse(Player player, Player dest, List<Card> cards) : base(player, cards)
+        {
+            Dest = dest;
+            Cards = cards;
+        }
+        public Player Dest { get; private set; }
+
+        public override async Task Execute()
+        {
+            // 获得牌
+            foreach (var card in Cards)
+            {
+                player.HandCards.Add(card);
+            }
+            actionView?.Invoke(this);
+
+            // 目标失去牌
+            await new LoseCard(Dest, Cards).Execute();
+
+            // 执行获得牌后事件
+            await player.playerEvents.acquireCard.Execute(this);
+        }
+    }
 
     public class Judge
     {

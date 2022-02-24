@@ -28,7 +28,7 @@ namespace View
         /// <summary>
         /// 在手牌区中添加手牌
         /// </summary>
-        public void AddHandCard(Model.AcquireCard operation)
+        public void AddHandCard(Model.GetCard operation)
         {
             var player = operation.player;
             if (self.model != operation.player) return;
@@ -60,8 +60,11 @@ namespace View
 
             foreach (var i in operation.Cards)
             {
-                Destroy(handcards[i.Id].gameObject);
-                handcards.Remove(i.Id);
+                if (handcards.ContainsKey(i.Id))
+                {
+                    Destroy(handcards[i.Id].gameObject);
+                    handcards.Remove(i.Id);
+                }
             }
         }
 
@@ -233,7 +236,7 @@ namespace View
             UpdateSpacing();
         }
 
-        public void UpdateHandCardText(Model.AcquireCard operation)
+        public void UpdateHandCardText(Model.GetCard operation)
         {
             UpdateHandCardText(operation.player);
         }

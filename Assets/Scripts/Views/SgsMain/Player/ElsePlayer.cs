@@ -112,7 +112,7 @@ namespace View
             handCardCount.text = player.HandCardCount.ToString();
         }
 
-        public void UpdateHandCardCount(Model.AcquireCard operation)
+        public void UpdateHandCardCount(Model.GetCard operation)
         {
             UpdateHandCardCount(operation.player);
         }

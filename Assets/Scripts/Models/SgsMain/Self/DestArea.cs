@@ -50,7 +50,7 @@ namespace Model
         /// <summary>
         /// 判断dest是否能成为src的目标
         /// </summary>
-        public static bool PerformPhase(Player src, Player dest, int id)
+        public static bool PerformPhase(Player src, Player dest, int id, int firstdest = -1)
         {
             if (!dest.IsAlive) return false;
             Card card = CardPile.Instance.cards[id];
@@ -60,11 +60,32 @@ namespace Model
                 case "杀":
                 case "火杀":
                 case "雷杀":
-                    return src != dest && src.AttackRange >= src.GetDistance(dest);
+                    return UseSha(src, dest);
+
+                case "过河拆桥":
+                    return src != dest && HaveCard(dest);
+
+                case "顺手牵羊":
+                    return src.GetDistance(dest) == 1 && HaveCard(dest);
+
+                case "借刀杀人":
+                    if (firstdest == -1) return src != dest && src.weapon != null;
+                    else return UseSha(SgsMain.Instance.players[firstdest], dest);
+
+                case "决斗":
+                    return src != dest;
 
                 default:
                     return true;
             }
+        }
+
+        private static bool HaveCard(Player player)
+        {
+            if (player.HandCardCount != 0) return true;
+            foreach (var equip in player.Equipages.Values) if (equip != null) return true;
+            if (player.JudgeArea.Count != 0) return true;
+            return false;
         }
 
         public static bool UseSha(Player src, Player dest)

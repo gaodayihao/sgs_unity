@@ -137,6 +137,16 @@ namespace View
             // 若已选中角色的数量超出范围，取消第一个选中的角色
             while (SelectedPlayer.Count > maxCount) SelectedPlayer[0].Unselect();
 
+            // 判断每个角色能否成为目标
+
+            foreach (var player in Players)
+            {
+                int cardId = cardArea.SelectedCard[0].Id;
+                int destPos = SelectedPlayer.Count != 0 ? SelectedPlayer[0].model.Position : -1;
+                bool enable = Model.DestArea.PerformPhase(self.model, player.model, cardId, destPos);
+                player.button.interactable = enable;
+            }
+
             IsSettled = SelectedPlayer.Count >= minCount ? true : false;
         }
 

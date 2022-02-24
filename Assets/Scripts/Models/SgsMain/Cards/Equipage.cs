@@ -31,7 +31,6 @@ namespace Model
                 await new LoseCard(Owner, new List<Card> { Owner.Equipages[Type] }).Execute();
             }
             Owner.Equipages[Type] = this;
-            // Debug.Log("AddEquipage " + Type + Src.Equipages[Type].Name);
         }
 
         /// <summary>

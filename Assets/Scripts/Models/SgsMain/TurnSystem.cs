@@ -140,7 +140,7 @@ namespace Model
                 // 执行摸牌阶段
                 case Phase.Get:
 
-                    await new GetCard(CurrentPlayer, 2).Execute();
+                    await new GetCardFromPile(CurrentPlayer, 2).Execute();
                     break;
 
                 // 执行出牌阶段

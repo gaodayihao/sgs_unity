@@ -23,7 +23,7 @@ namespace Controller
             Model.CardPanel.Instance.StopTimerView += elsePlayer.HideTimer;
 
             // 获得牌
-            Model.AcquireCard.ActionView += elsePlayer.UpdateHandCardCount;
+            Model.GetCard.ActionView += elsePlayer.UpdateHandCardCount;
 
             // 失去牌
             Model.LoseCard.ActionView += elsePlayer.UpdateHandCardCount;
@@ -44,7 +44,7 @@ namespace Controller
             Model.CardPanel.Instance.StartTimerView -= elsePlayer.ShowTimer;
             Model.CardPanel.Instance.StopTimerView -= elsePlayer.HideTimer;
 
-            Model.AcquireCard.ActionView -= elsePlayer.UpdateHandCardCount;
+            Model.GetCard.ActionView -= elsePlayer.UpdateHandCardCount;
 
             Model.LoseCard.ActionView -= elsePlayer.UpdateHandCardCount;
 

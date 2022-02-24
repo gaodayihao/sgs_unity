@@ -36,8 +36,8 @@ namespace Controller
             Model.TimerTask.Instance.StopTimerView += destArea.ResetDestArea;
 
             // 获得牌
-            Model.AcquireCard.ActionView += cardArea.AddHandCard;
-            Model.AcquireCard.ActionView += cardArea.UpdateHandCardText;
+            Model.GetCard.ActionView += cardArea.AddHandCard;
+            Model.GetCard.ActionView += cardArea.UpdateHandCardText;
 
             // 失去牌
             Model.LoseCard.ActionView += cardArea.RemoveHandCard;
@@ -66,8 +66,8 @@ namespace Controller
             // Model.TimerTask.Instance.StartTimerView -= destArea.InitDestArea;
             Model.TimerTask.Instance.StopTimerView -= destArea.ResetDestArea;
 
-            Model.AcquireCard.ActionView -= cardArea.AddHandCard;
-            Model.AcquireCard.ActionView -= cardArea.UpdateHandCardText;
+            Model.GetCard.ActionView -= cardArea.AddHandCard;
+            Model.GetCard.ActionView -= cardArea.UpdateHandCardText;
 
             Model.LoseCard.ActionView -= cardArea.RemoveHandCard;
             Model.LoseCard.ActionView -= cardArea.UpdateHandCardText;

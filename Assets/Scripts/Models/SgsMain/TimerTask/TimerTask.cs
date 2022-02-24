@@ -33,8 +33,8 @@ namespace Model
             }
         }
 
-        public List<Card> Cards { get; private set; }
-        public List<Equipage> Equipages { get; private set; }
+        public List<Card> Cards { get; set; }
+        public List<Card> Equipages { get; private set; }
         public List<Player> Dests { get; private set; }
 
         /// <summary>
@@ -80,26 +80,15 @@ namespace Model
         /// </summary>
         public void SetResult(List<int> cards, List<int> dests, List<int> equipages)
         {
-            if (cards != null)
-            {
-                Cards = new List<Card>();
-                foreach (var id in cards) Cards.Add(CardPile.Instance.cards[id]);
-            }
+            Cards = new List<Card>();
+            foreach (var id in cards) Cards.Add(CardPile.Instance.cards[id]);
 
-            if (dests != null)
-            {
-                Dests = new List<Player>();
-                foreach (var id in dests) Dests.Add(SgsMain.Instance.players[id]);
-            }
+            Dests = new List<Player>();
+            foreach (var id in dests) Dests.Add(SgsMain.Instance.players[id]);
 
-            if (equipages != null)
-            {
-                Equipages = new List<Equipage>();
-                foreach (var id in equipages) Equipages.Add((Equipage)CardPile.Instance.cards[id]);
-            }
-            // Cards = cards;
-            // Equipages = equipages;
-            // Dests = dests;
+            Equipages = new List<Card>();
+            foreach (var id in equipages) Equipages.Add(CardPile.Instance.cards[id]);
+
             waitAction.TrySetResult(true);
         }
 
@@ -192,7 +181,7 @@ namespace Model
             if (result)
             {
                 player = SgsMain.Instance.players[src];
-                SetResult(cards, null, null);
+                SetResult(cards, new List<int>(), new List<int>());
             }
             else
             {
