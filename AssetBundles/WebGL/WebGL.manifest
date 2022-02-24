@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 3639195632
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: base
+      Dependencies: {}
+    Info_1:
+      Name: sprite
+      Dependencies: {}
+    Info_2:
+      Name: menu
+      Dependencies:
+        Dependency_0: base
+        Dependency_1: fonts
+    Info_3:
+      Name: sgsasset
+      Dependencies:
+        Dependency_0: sprite
+        Dependency_1: fonts
+    Info_4:
+      Name: sgsmain
+      Dependencies:
+        Dependency_0: base
+        Dependency_1: sprite
+        Dependency_2: fonts
+    Info_5:
+      Name: fonts
+      Dependencies: {}

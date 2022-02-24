@@ -1,0 +1,52 @@
+ManifestFileVersion: 0
+CRC: 1942488857
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b859073e8a59689ffa50bae484c21385
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 49c44606e580a95bb35ae83fb0a1d733
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b59ea64d74168734db9af69a1762a961, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4db03cec1d43a93438de7adaf4f8d43f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 062b01ae459fc9948aff1baaa0543f5c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e57737c65a4cebe4d9c6c816bfa2adef, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Prefabs/SgsMain/Panels/RegionPanel.prefab
+- Assets/Prefabs/SgsMain/Panels/QlgPanel.prefab
+- Assets/Prefabs/SgsMain/Card.prefab
+- "Assets/Prefabs/SgsMain/\u5224\u5B9A\u724C.prefab"
+Dependencies:
+- D:/Unity/sgs/AssetBundles/WebGL/fonts
+- D:/Unity/sgs/AssetBundles/WebGL/sprite
