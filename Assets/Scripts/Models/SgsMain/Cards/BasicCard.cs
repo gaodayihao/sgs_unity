@@ -7,30 +7,6 @@ namespace Model
 {
     public class Sha : Card
     {
-        // public Sha()
-        // {
-        //     Name = "杀";
-        //     Type = "基本牌";
-        // }
-
-        // public override async Task UseCard()
-        // {
-        //     await base.UseCard();
-
-        //     foreach (var dest in Dests)
-        //     {
-        //         if (!await TimerTask.Instance.Run(dest, TimerType.AskForShan))
-        //         {
-        //             await new Damaged(dest, Src, 1).Execute();
-        //         }
-        //         else
-        //         {
-        //             if (Src.Equipages["武器"] is QingLongYanYueDao) await ((QingLongYanYueDao)Src.Equipages["武器"]).Skill(dest);
-        //         }
-        //     }
-        //     ResetCard();
-        // }
-
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
             src.ShaCount++;

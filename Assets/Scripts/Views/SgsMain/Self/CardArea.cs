@@ -56,9 +56,9 @@ namespace View
         public void RemoveHandCard(Model.LoseCard operation)
         {
             if (self.model != operation.player) return;
-            if (operation.HandCards is null) return;
+            if (operation.Cards is null) return;
 
-            foreach (var i in operation.HandCards)
+            foreach (var i in operation.Cards)
             {
                 Destroy(handcards[i.Id].gameObject);
                 handcards.Remove(i.Id);

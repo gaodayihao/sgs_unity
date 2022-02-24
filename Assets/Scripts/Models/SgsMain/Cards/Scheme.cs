@@ -59,19 +59,12 @@ namespace Model
                 }
                 else card = CardPanel.Instance.Cards[0];
 
-                if (dest.HandCards.Contains(card))
-                {
-                    await new Discard(dest, new List<Card> { card }).Execute();
-                }
-                else if (card is Equipage && dest.Equipages.ContainsValue((Equipage)card))
-                {
-                    await new Discard(dest, null, new List<Equipage> { (Equipage)card }).Execute();
-                }
-                else
+                if (card is DelayScheme && dest.JudgeArea.Contains((DelayScheme)card))
                 {
                     ((DelayScheme)card).RemoveToJudgeArea();
                     CardPile.Instance.AddToDiscard(card);
                 }
+                else await new Discard(dest, new List<Card> { card }).Execute();
             }
         }
     }

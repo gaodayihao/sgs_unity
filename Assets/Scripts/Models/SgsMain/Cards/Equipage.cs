@@ -28,7 +28,7 @@ namespace Model
             if (Owner.Equipages[Type] != null)
             {
                 CardPile.Instance.AddToDiscard(Owner.Equipages[Type]);
-                await new LoseCard(Owner, null, new List<Equipage> { Owner.Equipages[Type] }).Execute();
+                await new LoseCard(Owner, new List<Card> { Owner.Equipages[Type] }).Execute();
             }
             Owner.Equipages[Type] = this;
             // Debug.Log("AddEquipage " + Type + Src.Equipages[Type].Name);

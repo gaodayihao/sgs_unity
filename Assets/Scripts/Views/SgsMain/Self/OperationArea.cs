@@ -49,47 +49,28 @@ namespace View
             StopAllCoroutines();
 
             List<int> cards = null;
-            if (cardArea.SelectedCard.Count != 0)
-            {
+            // if (cardArea.SelectedCard.Count != 0)
+            // {
                 cards = new List<int>();
                 foreach (var card in cardArea.SelectedCard) cards.Add(card.Id);
-            }
+            // }
 
             List<int> players = null;
-            if (destArea.SelectedPlayer.Count != 0)
-            {
+            // if (destArea.SelectedPlayer.Count != 0)
+            // {
                 players = new List<int>();
                 foreach (var player in destArea.SelectedPlayer) players.Add(player.model.Position);
-            }
+            // }
 
             List<int> equips = null;
-            if (equipArea.SelectedCard.Count != 0)
-            {
+            // if (equipArea.SelectedCard.Count != 0)
+            // {
                 equips = new List<int>();
                 foreach (var card in equipArea.SelectedCard) equips.Add(card.Id);
-            }
+            // }
 
             if (timerTask.timerType == TimerType.UseWxkj) timerTask.SendSetWxkjResult(self.model.Position, true, cards);
             else timerTask.SendSetResult(cards, players, equips);
-
-            // switch (timerTask.timerType)
-            // {
-            //     // 弃牌
-            //     case TimerType.Discard:
-            //         var discards = new List<Model.Card>();
-            //         foreach (var discard in cardArea.SelectedCard) discards.Add(Model.CardPile.Instance.cards[discard.Id]);
-            //         timerTask.SetResult(discards.ToArray(),dests.ToArray());
-            //         break;
-
-            //     // 使用选中的第一张牌
-            //     default:
-            //         var card = cards[cardArea.SelectedCard[0].Id];
-            //         card.Src = player;
-            //         if (dests.Count != 0) card.Dests = dests.ToArray();
-
-            //         timerTask.SetResult(card.UseCard);
-            //         break;
-            // }
         }
 
         /// <summary>

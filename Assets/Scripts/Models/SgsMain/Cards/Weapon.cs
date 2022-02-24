@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Model
 {
@@ -64,11 +65,11 @@ namespace Model
             CardPanel.Instance.Title = "麒麟弓";
             result = await CardPanel.Instance.Run(Owner, dest, TimerType.QLG);
 
-            Equipage horse;
-            if (result) horse = (Equipage)CardPanel.Instance.Cards[0];
+            Card horse;
+            if (result) horse = CardPanel.Instance.Cards[0];
             else horse = dest.plusHorse is null ? dest.subHorse : dest.plusHorse;
 
-            await new Discard(dest, null, new List<Equipage> { horse }).Execute();
+            await new Discard(dest, new List<Card> { horse }).Execute();
         }
     }
 
@@ -137,7 +138,8 @@ namespace Model
             bool result = await TimerTask.Instance.Run(Owner, TimerType.SelectCard, 2);
             if (result)
             {
-                await new Discard(Owner, TimerTask.Instance.Cards, TimerTask.Instance.Equipages).Execute();
+                var list = TimerTask.Instance.Cards.Union(TimerTask.Instance.Equipages).ToList();
+                await new Discard(Owner, list).Execute();
                 return true;
             }
             else return false;

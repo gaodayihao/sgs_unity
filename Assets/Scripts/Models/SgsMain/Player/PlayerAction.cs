@@ -81,20 +81,24 @@ namespace Model
         /// <summary>
         /// 失去牌
         /// </summary>
-        public LoseCard(Player player, List<Card> handCards, List<Equipage> equipages = null) : base(player)
+        public LoseCard(Player player, List<Card> cards) : base(player)
         {
-            HandCards = handCards;
-            Equipages = equipages;
+            Cards = cards;
         }
-        public List<Card> HandCards { get; private set; }
-        public List<Equipage> Equipages { get; private set; }
+        public List<Card> Cards { get; private set; }
 
         public override async Task Execute()
         {
-            // 失去手牌
-            if (HandCards != null) foreach (var handCard in HandCards) player.HandCards.Remove(handCard);
-            // 失去装备牌
-            if (Equipages != null) foreach (var equipage in Equipages) equipage.RemoveEquipage();
+            // // 失去手牌
+            // if (Cards != null) foreach (var handCard in Cards) player.HandCards.Remove(handCard);
+            // // 失去装备牌
+            // if (Equipages != null) foreach (var equipage in Equipages) equipage.RemoveEquipage();
+
+            foreach (var card in Cards)
+            {
+                if (player.HandCards.Contains(card)) player.HandCards.Remove(card);
+                else if (card is Equipage) ((Equipage)card).RemoveEquipage();
+            }
 
             actionView?.Invoke(this);
 
@@ -108,23 +112,20 @@ namespace Model
         /// <summary>
         /// 弃牌
         /// </summary>
-        public Discard(Player player, List<Card> handCards, List<Equipage> equipages = null) :
-        base(player, handCards, equipages)
-        { }
+        public Discard(Player player, List<Card> cards) : base(player, cards) { }
 
         public override async Task Execute()
         {
             string str = "";
-            if (HandCards != null) foreach (var handCard in HandCards)
-                    str += "【" + handCard.Name + handCard.Suit + handCard.Weight.ToString() + "】";
-            if (Equipages != null) foreach (var equipage in Equipages)
-                    str += "【" + equipage.Name + equipage.Suit + equipage.Weight.ToString() + "】";
+            foreach (var card in Cards) str += "【" + card.Name + card.Suit + card.Weight.ToString() + "】";
             Debug.Log((player.Position + 1).ToString() + "号位弃置了" + str);
 
-            // 失去手牌
-            if (HandCards != null) CardPile.Instance.AddToDiscard(HandCards);
-            // 失去装备牌
-            if (Equipages != null) foreach (var equipage in Equipages) CardPile.Instance.AddToDiscard(equipage);
+            // // 失去手牌
+            // if (Cards != null) CardPile.Instance.AddToDiscard(Cards);
+            // // 失去装备牌
+            // if (Equipages != null) foreach (var equipage in Equipages) CardPile.Instance.AddToDiscard(equipage);
+
+            CardPile.Instance.AddToDiscard(Cards);
 
             // losecard
             await base.Execute();
