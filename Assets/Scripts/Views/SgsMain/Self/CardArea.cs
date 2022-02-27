@@ -68,71 +68,30 @@ namespace View
             }
         }
 
-        /// <summary>
-        /// 初始化手牌区（显示进度条时调用）
-        /// </summary>
-        // public void InitCardArea(TimerType timerType, int maxCount, int minCount)
-        // {
-        //     this.maxCount = maxCount;
-        //     this.minCount = minCount;
-
-        //     if (maxCount == 0)
-        //     {
-        //         foreach (var card in handcards.Values)
-        //         {
-        //             card.button.interactable = false;
-        //             card.AddShadow();
-        //         }
-        //         IsSettled = true;
-        //         return;
-        //     }
-
-        //     switch (timerType)
-        //     {
-        //         // 出牌阶段
-        //         case TimerType.PerformPhase:
-        //             foreach (var card in handcards.Values)
-        //             {
-        //                 // 设置不能使用的手牌
-        //                 card.button.interactable = Model.CardArea.PerformPhase(self.model, card.Id) ? true : false;
-        //             }
-        //             break;
-
-        //         case TimerType.AskForShan:
-        //             foreach (var card in handcards.Values)
-        //             {
-        //                 // 设置不能使用的手牌
-        //                 card.button.interactable = card.name == "闪" ? true : false;
-        //             }
-        //             break;
-
-        //         case TimerType.AskForTao:
-        //             foreach (var card in handcards.Values)
-        //             {
-        //                 // 设置不能使用的手牌
-        //                 card.button.interactable = card.name == "桃" ? true : false;
-        //             }
-        //             break;
-
-        //         // case TimerType.CallSkill:
-        //         //     break;
-
-        //         // 弃牌
-        //         default:
-        //             foreach (var card in handcards.Values) card.button.interactable = true;
-        //             break;
-        //     }
-
-        //     // 对已禁用的手牌设置阴影
-        //     foreach (var card in handcards.Values) card.AddShadow();
-        // }
-
-        public void InitCardArea(Model.TimerTask timerTask)
+        public void InitCardArea(TimerType timerType)
         {
-            if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
+            var timerTask = Model.TimerTask.Instance;
 
-            this.maxCount = timerTask.maxCount;
-            this.minCount = timerTask.minCount;
+            if (timerType == timerTask.timerType)
+            {
+                maxCount = timerTask.maxCount;
+                minCount = timerTask.minCount;
+            }
+            else
+            {
+                switch (timerType)
+                {
+                    case TimerType.ZBSM:
+                        maxCount = 3;
+                        minCount = 3;
+                        break;
+
+                    default:
+                        maxCount = 0;
+                        minCount = 0;
+                        break;
+                }
+            }
 
             if (maxCount == 0)
             {
@@ -145,50 +104,29 @@ namespace View
                 return;
             }
 
-            if (timerTask.GivenCard != null)
-            {
-                foreach (var card in handcards.Values)
-                {
-                    card.button.interactable = timerTask.GivenCard.Contains(card.name);
-                    card.AddShadow();
-                }
-                return;
-            }
-
-            switch (timerTask.timerType)
+            switch (timerType)
             {
                 // 出牌阶段
                 case TimerType.PerformPhase:
                     foreach (var card in handcards.Values)
                     {
                         // 设置不能使用的手牌
-                        card.button.interactable = Model.CardArea.PerformPhase(self.model, card.Id) ? true : false;
+                        card.button.interactable = Model.CardArea.PerformPhase(self.model, card.Id);
                     }
                     break;
-
-                // case TimerType.AskForShan:
-                //     foreach (var card in handcards.Values)
-                //     {
-                //         // 设置不能使用的手牌
-                //         card.button.interactable = card.name == "闪" ? true : false;
-                //     }
-                //     break;
-
-                // case TimerType.AskForTao:
-                //     foreach (var card in handcards.Values)
-                //     {
-                //         // 设置不能使用的手牌
-                //         card.button.interactable = card.name == "桃" ? true : false;
-                //     }
-                //     break;
-
-                // case TimerType.CallSkill:
-                //     break;
 
                 // 弃牌
                 default:
                     foreach (var card in handcards.Values) card.button.interactable = true;
                     break;
+            }
+
+            if (Model.TimerTask.Instance.timerType == timerType && Model.TimerTask.Instance.GivenCard != null)
+            {
+                foreach (var card in handcards.Values)
+                {
+                    card.button.interactable = Model.TimerTask.Instance.GivenCard.Contains(card.name);
+                }
             }
 
             // 对已禁用的手牌设置阴影
@@ -198,14 +136,20 @@ namespace View
         /// <summary>
         /// 重置手牌区（进度条结束时调用）
         /// </summary>
-        public void ResetCardArea(Model.TimerTask timerTask)
+        public void ResetCardArea()
         {
-            if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
-
+            Debug.Log("重置手牌状态");
             // 重置手牌状态
             foreach (var card in handcards.Values) card.ResetCard();
 
             IsSettled = false;
+        }
+
+        public void ResetCardArea(Model.TimerTask timerTask)
+        {
+            if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
+
+            ResetCardArea();
         }
 
         /// <summary>
@@ -214,14 +158,30 @@ namespace View
         public void UpdateCardArea()
         {
             var equipArea = GetComponent<EquipArea>();
-            // 若已选中手牌数量超出范围，取消第一个选中的手牌
-            while (SelectedCard.Count + equipArea.SelectedCard.Count > maxCount)
+
+            int count = SelectedCard.Count + equipArea.SelectedCard.Count;
+            foreach (var card in equipArea.SelectedCard)
             {
-                if (SelectedCard.Count > 0) SelectedCard[0].Unselect();
-                else equipArea.SelectedCard[0].Unselect();
+                if (card.name == Model.TimerTask.Instance.SkillName)
+                {
+                    count--;
+                    break;
+                }
             }
 
-            IsSettled = SelectedCard.Count + equipArea.SelectedCard.Count >= minCount;
+            // 若已选中手牌数量超出范围，取消第一个选中的手牌
+            while (count > maxCount)
+            {
+                if (SelectedCard.Count > 0) SelectedCard[0].Unselect();
+                else if (equipArea.SelectedCard[0].name != Model.TimerTask.Instance.SkillName)
+                {
+                    equipArea.SelectedCard[0].Unselect();
+                }
+                else equipArea.SelectedCard[1].Unselect();
+                count--;
+            }
+
+            IsSettled = count >= minCount;
         }
 
         /// <summary>

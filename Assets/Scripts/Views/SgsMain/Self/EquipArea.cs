@@ -23,32 +23,55 @@ namespace View
             };
         }
 
-        public void InitEquipArea(Model.TimerTask timerTask)
+        public void InitEquipArea(TimerType timerType)
         {
-            switch (timerTask.timerType)
+            switch (timerType)
             {
                 case TimerType.Discard:
-                case TimerType.SelectCard:
                     foreach (var card in equipages.Values) card.button.interactable = true;
                     break;
                 case TimerType.PerformPhase:
-                    if (equipages["武器"].name == "丈八蛇矛") equipages["武器"].button.interactable = true;
-                    break;
-                case TimerType.UseCard:
-                    if (timerTask.GivenCard.Contains("杀"))
+                    if (equipages["武器"].name == "丈八蛇矛")
                     {
-                        if (equipages["武器"].name == "丈八蛇矛") equipages["武器"].button.interactable = true;
+                        equipages["武器"].button.interactable = Model.CardArea.UseSha(self.model);
                     }
                     break;
+                case TimerType.UseCard:
+                    if (Model.TimerTask.Instance.GivenCard.Contains("杀") && equipages["武器"].name == "丈八蛇矛")
+                    {
+                        equipages["武器"].button.interactable = true;
+                    }
+                    break;
+                case TimerType.ZBSM:
+                    equipages["武器"].button.interactable = true;
+                    break;
             }
+
+            if (Model.TimerTask.Instance.SkillName != null)
+            {
+                foreach (var card in equipages.Values)
+                {
+                    if (card.name == Model.TimerTask.Instance.SkillName)
+                    {
+                        card.button.Select();
+                        card.button.interactable = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void ResetEquipArea()
+        {
+            // 重置装备牌状态
+            foreach (var card in equipages.Values) card.ResetCard();
         }
 
         public void ResetEquipArea(Model.TimerTask timerTask)
         {
             if (self.model != timerTask.player) return;
 
-            // 重置装备牌状态
-            foreach (var card in equipages.Values) card.ResetCard();
+            ResetEquipArea();
         }
 
         public void ShowEquipage(Model.Equipage card)

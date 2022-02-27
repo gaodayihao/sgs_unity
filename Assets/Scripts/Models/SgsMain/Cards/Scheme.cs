@@ -7,6 +7,12 @@ namespace Model
 {
     public class WuXieKeJi : Card
     {
+        public WuXieKeJi()
+        {
+            Type = "锦囊牌";
+            Name = "无懈可击";
+        }
+
         public static async Task<bool> Call(Card card, Player dest)
         {
             string hint = dest != null ? "对" + (dest.Position + 1).ToString() + "号位" : "";
@@ -37,15 +43,21 @@ namespace Model
 
     public class GuoHeChaiQiao : Card
     {
+        public GuoHeChaiQiao()
+        {
+            Type = "锦囊牌";
+            Name = "过河拆桥";
+        }
+
         public override async Task UseCard(Player src, List<Player> dests)
         {
             await base.UseCard(src, dests);
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) break;
+                if (await WuXieKeJi.Call(this, dest)) continue;
 
                 CardPanel.Instance.Title = "过河拆桥";
-                bool result = await CardPanel.Instance.Run(Src, dest, TimerType.GHCQ);
+                bool result = await CardPanel.Instance.Run(Src, dest, TimerType.RegionPanel);
 
                 Card card;
                 if (!result)
@@ -71,15 +83,21 @@ namespace Model
 
     public class ShunShouQianYang : Card
     {
+        public ShunShouQianYang()
+        {
+            Type = "锦囊牌";
+            Name = "顺手牵羊";
+        }
+
         public override async Task UseCard(Player src, List<Player> dests)
         {
             await base.UseCard(src, dests);
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) break;
+                if (await WuXieKeJi.Call(this, dest)) continue;
 
                 CardPanel.Instance.Title = "顺手牵羊";
-                bool result = await CardPanel.Instance.Run(Src, dest, TimerType.GHCQ);
+                bool result = await CardPanel.Instance.Run(Src, dest, TimerType.RegionPanel);
 
                 Card card;
                 if (!result)
@@ -105,13 +123,19 @@ namespace Model
 
     public class JueDou : Card
     {
+        public JueDou()
+        {
+            Type = "锦囊牌";
+            Name = "决斗";
+        }
+
         public override async Task UseCard(Player src, List<Player> dests)
         {
             await base.UseCard(src, dests);
 
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) break;
+                if (await WuXieKeJi.Call(this, dest)) continue;
 
                 var player = dest;
                 bool done = false;
@@ -127,16 +151,23 @@ namespace Model
 
     public class NanManRuQin : Card
     {
+        public NanManRuQin()
+        {
+            Type = "锦囊牌";
+            Name = "南蛮入侵";
+        }
+
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
             dests = new List<Player>();
-            for (Player i = src.Next; i != src; i = i.Next) dests.Add(i);
+            foreach (var i in SgsMain.Instance.AlivePlayers) dests.Add(i);
+            dests.Remove(src);
 
             await base.UseCard(src, dests);
 
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) break;
+                if (await WuXieKeJi.Call(this, dest)) continue;
 
                 if (!await Sha.Call(dest)) await new Damaged(dest, 1, src, this).Execute();
             }
@@ -145,16 +176,23 @@ namespace Model
 
     public class WanJianQiFa : Card
     {
+        public WanJianQiFa()
+        {
+            Type = "锦囊牌";
+            Name = "万箭齐发";
+        }
+
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
             dests = new List<Player>();
-            for (Player i = src.Next; i != src; i = i.Next) dests.Add(i);
+            foreach (var i in SgsMain.Instance.AlivePlayers) dests.Add(i);
+            dests.Remove(src);
 
             await base.UseCard(src, dests);
 
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) break;
+                if (await WuXieKeJi.Call(this, dest)) continue;
 
                 if (!await Shan.Call(dest)) await new Damaged(dest, 1, src, this).Execute();
             }
@@ -163,21 +201,23 @@ namespace Model
 
     public class TaoYuanJieYi : Card
     {
+        public TaoYuanJieYi()
+        {
+            Type = "锦囊牌";
+            Name = "桃园结义";
+        }
+
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
             dests = new List<Player>();
-            Player i = src;
-            do
-            {
-                if (i.Hp < i.HpLimit) dests.Add(i);
-                i = i.Next;
-            } while (i != src);
+            foreach (var i in SgsMain.Instance.AlivePlayers) dests.Add(i);
 
             await base.UseCard(src, dests);
 
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) break;
+                if (dest.Hp >= dest.HpLimit) continue;
+                if (await WuXieKeJi.Call(this, dest)) continue;
 
                 await new Recover(dest).Execute();
             }
@@ -186,16 +226,22 @@ namespace Model
 
     public class WuZhongShengYou : Card
     {
+        public WuZhongShengYou()
+        {
+            Type = "锦囊牌";
+            Name = "无中生有";
+        }
+
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
             // 默认将目标设为使用者
             if (dests is null || dests.Count == 0) dests = new List<Player> { src };
-            
+
             await base.UseCard(src, dests);
 
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) break;
+                if (await WuXieKeJi.Call(this, dest)) continue;
 
                 await new GetCardFromPile(dest, 2).Execute();
             }

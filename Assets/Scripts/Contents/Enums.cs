@@ -14,11 +14,12 @@ public enum TimerType
     Discard,
     DiscardFromHand,
     UseCard,
+    UseSha,
     UseWxkj,
-    SelectCard,
     SelectHandCard,
     CallSkill,
-    QLG,
-    GHCQ,
+    ZBSM,
+    QlgPanel,
+    RegionPanel,
     SSQY
 }

@@ -166,9 +166,9 @@ namespace View
                     {
                         switch (timerType)
                         {
-                            case TimerType.GHCQ:
+                            case TimerType.RegionPanel:
                             case TimerType.SSQY:
-                            case TimerType.QLG:
+                            case TimerType.QlgPanel:
                                 Model.CardPanel.Instance.SetResult();
                                 break;
                             default:

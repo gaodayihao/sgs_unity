@@ -97,7 +97,7 @@ namespace Model
         {
             List<string> list = new List<string>
             {
-                "决斗","桃园结义","无中生有","顺手牵羊","万箭齐发"
+                "决斗","桃园结义","无中生有","的卢","无懈可击","无懈可击"
             };
 
             while (list.Count > 0)

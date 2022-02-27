@@ -7,6 +7,12 @@ namespace Model
 {
     public class Sha : Card
     {
+        public Sha()
+        {
+            Type = "基本牌";
+            Name = "杀";
+        }
+
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
             src.ShaCount++;
@@ -65,15 +71,6 @@ namespace Model
 
             if (player.isAI)
             {
-                // foreach (var card in player.HandCards)
-                // {
-                //     if (card is Sha)
-                //     {
-                //         TimerTask.Instance.Cards = new List<Card> { card };
-                //         result = true;
-                //         break;
-                //     }
-                // }
                 var card = player.FindCard<Sha>();
                 if (card != null)
                 {
@@ -84,14 +81,19 @@ namespace Model
 
             if (!result) return false;
 
-            CardPile.Instance.AddToDiscard(TimerTask.Instance.Cards);
-            await new LoseCard(player, TimerTask.Instance.Cards).Execute();
+            await TimerTask.Instance.Cards[0].Put(player);
             return true;
         }
     }
 
     public class Shan : Card
     {
+        public Shan()
+        {
+            Type = "基本牌";
+            Name = "闪";
+        }
+
         public static async Task<bool> Call(Player player)
         {
             bool result;
@@ -137,6 +139,11 @@ namespace Model
 
     public class Tao : Card
     {
+        public Tao()
+        {
+            Type = "基本牌";
+            Name = "桃";
+        }
 
         public override async Task UseCard(Player src, List<Player> dests = null)
         {

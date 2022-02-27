@@ -11,6 +11,7 @@ namespace Model
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
             await base.UseCard(src, dests);
+            CardPile.Instance.RemoveToDiscard(this);
             AddToJudgeArea(dests[0]);
         }
 
@@ -55,6 +56,12 @@ namespace Model
 
     public class LeBuSiShu : DelayScheme
     {
+        public LeBuSiShu()
+        {
+            Type = "延时锦囊";
+            Name = "乐不思蜀";
+        }
+        
         public override async Task Judge()
         {
             await base.Judge();

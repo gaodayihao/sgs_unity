@@ -32,6 +32,7 @@ namespace Model
 
         public async Task Skill(Player dest)
         {
+            TimerTask.Instance.SkillName = "青龙偃月刀";
             TimerTask.Instance.Hint = "是否发动青龙偃月刀？";
             TimerTask.Instance.GivenDest = dest;
             TimerTask.Instance.GivenCard = new List<string> { "杀", "雷杀", "火杀" };
@@ -55,6 +56,7 @@ namespace Model
         {
             if (dest.plusHorse is null && dest.subHorse is null) return;
 
+            TimerTask.Instance.SkillName = "麒麟弓";
             TimerTask.Instance.Hint = "是否发动麒麟弓？";
             TimerTask.Instance.GivenDest = dest;
             bool result = await TimerTask.Instance.Run(Owner, TimerType.CallSkill, 0);
@@ -63,7 +65,7 @@ namespace Model
 
             SkillView();
             CardPanel.Instance.Title = "麒麟弓";
-            result = await CardPanel.Instance.Run(Owner, dest, TimerType.QLG);
+            result = await CardPanel.Instance.Run(Owner, dest, TimerType.QlgPanel);
 
             Card horse;
             if (result) horse = CardPanel.Instance.Cards[0];
@@ -115,6 +117,12 @@ namespace Model
         {
             range = 3;
         }
+
+        public Sha ConvertSkill(List<Card> primitives)
+        {
+            SkillView();
+            return Card.Convert<Sha>(primitives);
+        }
     }
 
     public class ZhuGeLianNu : Weapon
@@ -134,11 +142,13 @@ namespace Model
 
         public async Task<bool> Skill()
         {
+            TimerTask.Instance.SkillName = "贯石斧";
             TimerTask.Instance.Hint = "是否发动贯石斧？";
-            bool result = await TimerTask.Instance.Run(Owner, TimerType.SelectCard, 2);
+            bool result = await TimerTask.Instance.Run(Owner, TimerType.Discard, 2);
             if (result)
             {
                 var list = TimerTask.Instance.Cards.Union(TimerTask.Instance.Equipages).ToList();
+                list.Remove(this);
                 await new Discard(Owner, list).Execute();
                 return true;
             }

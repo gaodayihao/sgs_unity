@@ -66,6 +66,7 @@ namespace View
             else Unselect();
 
             cardArea.UpdateCardArea();
+            GetComponentInParent<DestArea>().ResetDestArea();
             GetComponentInParent<DestArea>().InitDestArea();
             GetComponentInParent<OperationArea>().UpdateButtonArea();
         }

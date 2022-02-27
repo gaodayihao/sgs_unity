@@ -61,6 +61,7 @@ namespace View
         public void AddShadow()
         {
             if (!button.interactable && !IsSelected && model.IsAlive) heroImage.color = new Color(0.5f, 0.5f, 0.5f);
+            else heroImage.color = new Color(1, 1, 1);
         }
 
         /// <summary>

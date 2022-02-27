@@ -63,11 +63,11 @@ namespace View
 
             switch (model.timerType)
             {
-                case TimerType.GHCQ:
+                case TimerType.RegionPanel:
                 case TimerType.SSQY:
                     ShowRegion(model);
                     break;
-                case TimerType.QLG:
+                case TimerType.QlgPanel:
                     ShowQlg(model);
                     break;
             }

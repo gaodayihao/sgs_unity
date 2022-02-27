@@ -28,6 +28,7 @@ namespace View
 
         private Self self { get => GetComponent<Self>(); }
         private CardArea cardArea { get => GetComponent<CardArea>(); }
+        private OperationArea operationArea { get => GetComponent<OperationArea>(); }
 
         public List<PlayerButton> SelectedPlayer { get; private set; } = new List<PlayerButton>();
         private int maxCount;
@@ -36,83 +37,77 @@ namespace View
         public bool IsSettled { get; private set; } = false;
 
         // 定时器类型
-        private Model.TimerTask timerTask;
+        // private Model.TimerTask timerTask;
 
         public void InitDestArea()
         {
-            ResetDestArea();
-
-            if (timerTask.GivenDest != null)
+            if (Model.TimerTask.Instance.GivenDest != null)
             {
+                maxCount = 1;
+                minCount = 1;
                 foreach (var player in players)
                 {
-                    if (player.model == timerTask.GivenDest)
+                    if (player.model == Model.TimerTask.Instance.GivenDest)
                     {
                         player.Select();
                         break;
                     }
                 }
-                IsSettled = true;
-                // 对不能指定的角色设置阴影
-                foreach (var player in Players) player.AddShadow();
-                return;
+                // IsSettled = true;
+                // // 对不能指定的角色设置阴影
+                // foreach (var player in Players) player.AddShadow();
+                // return;
+
+                // if(usesha)
             }
 
-            switch (timerTask.timerType)
+            // 设置目标数量范围
+            switch (operationArea.timerType)
             {
                 // 出牌阶段
                 case TimerType.PerformPhase:
                     if (!cardArea.IsSettled) return;
-
-                    // 设置目标数量范围
-                    var destCount = Model.DestArea.InitDestCount(self.model, cardArea.SelectedCard[0].Id);
+                    var destCount = Model.DestArea.InitDestCount(self.model, cardArea.SelectedCard[0].name);
                     maxCount = destCount[0];
                     minCount = destCount[1];
-
-                    if (minCount == 0)
-                    {
-                        IsSettled = true;
-                        return;
-                    }
-
-                    // 判断每个角色能否成为目标
-                    foreach (var player in Players)
-                    {
-                        bool enable = Model.DestArea.PerformPhase(self.model, player.model, cardArea.SelectedCard[0].Id);
-                        player.button.interactable = enable;
-                    }
-
                     break;
 
-                // case TimerType.AskForTao:
-                //     foreach (var player in players)
-                //     {
-                //         if (player.model == timerTask.givenDest)
-                //         {
-                //             player.Select();
-                //             break;
-                //         }
-                //     }
-                //     IsSettled = true;
-                //     break;
+                case TimerType.ZBSM:
+                case TimerType.UseSha:
+                    // 打出
+                    if (Model.TimerTask.Instance.timerType == TimerType.UseCard)
+                    {
+                        maxCount = 0;
+                        minCount = 0;
+                    }
+                    // 使用
+                    else
+                    {
+                        var shaDestCount = Model.DestArea.ShaDestCount(self.model);
+                        maxCount = shaDestCount[0];
+                        minCount = shaDestCount[1];
+                    }
+                    break;
 
-                // 弃牌
                 default:
-                    IsSettled = true;
-                    return;
+                    if (Model.TimerTask.Instance.GivenDest == null)
+                    {
+                        maxCount = 0;
+                        minCount = 0;
+                    }
+                    break;
             }
 
-            // 对不能指定的角色设置阴影
-            foreach (var player in Players) player.AddShadow();
+            UpdateDestArea();
         }
 
-        public void InitDestArea(Model.TimerTask timerTask)
-        {
-            if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
+        // public void InitDestArea(Model.TimerTask timerTask)
+        // {
+        //     if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
 
-            this.timerTask = timerTask;
-            InitDestArea();
-        }
+        //     this.timerTask = timerTask;
+        //     InitDestArea();
+        // }
 
         /// <summary>
         /// 重置目标区
@@ -137,17 +132,40 @@ namespace View
             // 若已选中角色的数量超出范围，取消第一个选中的角色
             while (SelectedPlayer.Count > maxCount) SelectedPlayer[0].Unselect();
 
-            // 判断每个角色能否成为目标
+            IsSettled = SelectedPlayer.Count >= minCount;
 
-            foreach (var player in Players)
+            // 判断每个角色能否成为目标
+            if (!IsSettled)
             {
-                int cardId = cardArea.SelectedCard[0].Id;
-                int destPos = SelectedPlayer.Count != 0 ? SelectedPlayer[0].model.Position : -1;
-                bool enable = Model.DestArea.PerformPhase(self.model, player.model, cardId, destPos);
-                player.button.interactable = enable;
+                switch (operationArea.timerType)
+                {
+                    case TimerType.PerformPhase:
+                        foreach (var player in Players)
+                        {
+                            int cardId = cardArea.SelectedCard[0].Id;
+                            int destPos = SelectedPlayer.Count != 0 ? SelectedPlayer[0].model.Position : -1;
+                            bool enable = Model.DestArea.PerformPhase(self.model, player.model, cardId, destPos);
+                            player.button.interactable = enable;
+                        }
+                        break;
+                    case TimerType.ZBSM:
+                        foreach (var player in players)
+                        {
+                            player.button.interactable = Model.DestArea.UseSha(self.model, player.model);
+                        }
+                        break;
+                }
             }
 
-            IsSettled = SelectedPlayer.Count >= minCount ? true : false;
+            foreach (var player in players)
+            {
+                // 目标已指定
+                if (Model.TimerTask.Instance.GivenDest != null && maxCount == 1) player.button.interactable = false;
+                // 可选择额外目标
+                else if (player.model == Model.TimerTask.Instance.GivenDest) player.button.interactable = false;
+                // 对不能选择的角色设置阴影
+                player.AddShadow();
+            }
         }
 
     }

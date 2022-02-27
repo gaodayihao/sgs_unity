@@ -15,10 +15,11 @@ namespace View
         public Button button;
         public bool IsSelected { get; private set; }
         public EquipArea equipArea { get => GetComponentInParent<EquipArea>(); }
+        public OperationArea operationArea { get => GetComponentInParent<OperationArea>(); }
 
         void Start()
         {
-            button.interactable = false;
+            // button.interactable = false;
             button.onClick.AddListener(ClickCard);
         }
 
@@ -39,6 +40,19 @@ namespace View
         /// </summary>
         private void ClickCard()
         {
+            if (name == "丈八蛇矛")
+            {
+                if (operationArea.timerType == TimerType.PerformPhase ||
+                    operationArea.timerType == TimerType.UseCard || operationArea.timerType == TimerType.UseSha)
+                {
+                    operationArea.ChangeType(TimerType.ZBSM);
+                }
+                else if (operationArea.timerType == TimerType.ZBSM)
+                {
+                    operationArea.ChangeType(Model.TimerTask.Instance.timerType);
+                }
+            }
+
             // 选中卡牌
             if (!IsSelected) Select();
             else Unselect();
@@ -52,6 +66,7 @@ namespace View
         public void Select()
         {
             if (IsSelected) return;
+
             IsSelected = true;
             GetComponent<RectTransform>().anchoredPosition += new Vector2(20, 0);
             equipArea.SelectedCard.Add(this);

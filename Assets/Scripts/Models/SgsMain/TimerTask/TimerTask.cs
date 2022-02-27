@@ -17,7 +17,7 @@ namespace Model
         public string Hint { get; set; }
         public Player GivenDest { get; set; }
         public List<string> GivenCard { get; set; }
-        // public string SkillName { get; set; }
+        public string SkillName { get; set; }
 
         public int second
         {
@@ -48,9 +48,9 @@ namespace Model
             this.maxCount = maxCount;
             this.minCount = maxCount;
 
-            Cards = null;
-            Equipages = null;
-            Dests = null;
+            Cards = new List<Card>();
+            Equipages = new List<Card>();
+            Dests = new List<Player>();
 
             waitAction = new TaskCompletionSource<bool>();
 
@@ -59,13 +59,17 @@ namespace Model
 
             var result = await waitAction.Task;
 
-            // Connection.Instance.IsRunning = true;
             stopTimerView?.Invoke(this);
 
             Hint = "";
             GivenDest = null;
             GivenCard = null;
-            // SkillName = null;
+            SkillName = null;
+
+            if (Equipages.Count != 0 && Equipages[0] is ZhangBaSheMao)
+            {
+                Cards = new List<Card> { ((ZhangBaSheMao)Equipages[0]).ConvertSkill(Cards) };
+            }
 
             return result;
         }
@@ -80,13 +84,10 @@ namespace Model
         /// </summary>
         public void SetResult(List<int> cards, List<int> dests, List<int> equipages)
         {
-            Cards = new List<Card>();
             foreach (var id in cards) Cards.Add(CardPile.Instance.cards[id]);
 
-            Dests = new List<Player>();
             foreach (var id in dests) Dests.Add(SgsMain.Instance.players[id]);
 
-            Equipages = new List<Card>();
             foreach (var id in equipages) Equipages.Add(CardPile.Instance.cards[id]);
 
             waitAction.TrySetResult(true);
@@ -151,9 +152,9 @@ namespace Model
             this.minCount = 1;
             GivenCard = new List<string> { "无懈可击" };
 
-            Cards = null;
-            Equipages = null;
-            Dests = null;
+            Cards = new List<Card>();
+            Equipages = new List<Card>();
+            Dests = new List<Player>();
 
             wxkjDone = new Dictionary<int, bool>();
             foreach (var i in SgsMain.Instance.players)
@@ -178,6 +179,7 @@ namespace Model
 
         public void SetWxkjResult(int src, bool result, List<int> cards)
         {
+            if (cards is null) cards = new List<int>();
             if (result)
             {
                 player = SgsMain.Instance.players[src];

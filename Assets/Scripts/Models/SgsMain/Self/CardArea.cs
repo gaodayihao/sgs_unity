@@ -17,7 +17,7 @@ namespace Model
                     return false;
 
                 case "桃":
-                    return player.Hp < player.HpLimit ? true : false;
+                    return player.Hp < player.HpLimit;
 
                 case "杀":
                     return UseSha(player);
@@ -29,8 +29,9 @@ namespace Model
 
         public static bool UseSha(Player player)
         {
-            if (player.Equipages["武器"] is ZhuGeLianNu) return true;
-            return player.ShaCount < 1;
+            // if (player.Equipages["武器"] is ZhuGeLianNu) return true;
+            // return player.ShaCount < 1;
+            return player.Equipages["武器"] is ZhuGeLianNu || player.ShaCount < 1;
         }
     }
 }

@@ -196,6 +196,7 @@ namespace Model
             player.IsAlive = false;
             player.Next.Last = player.Last;
             player.Last.Next = player.Next;
+            SgsMain.Instance.AlivePlayers.Remove(player);
 
             if (damageSrc != null) await new GetCardFromPile(damageSrc, 3).Execute();
         }

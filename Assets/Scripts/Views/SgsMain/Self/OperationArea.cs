@@ -28,6 +28,7 @@ namespace View
         private EquipArea equipArea { get => GetComponent<EquipArea>(); }
 
         private Model.TimerTask timerTask;
+        public TimerType timerType { get; private set; }
 
         void Start()
         {
@@ -51,25 +52,28 @@ namespace View
             List<int> cards = null;
             // if (cardArea.SelectedCard.Count != 0)
             // {
-                cards = new List<int>();
-                foreach (var card in cardArea.SelectedCard) cards.Add(card.Id);
+            cards = new List<int>();
+            foreach (var card in cardArea.SelectedCard) cards.Add(card.Id);
             // }
 
             List<int> players = null;
             // if (destArea.SelectedPlayer.Count != 0)
             // {
-                players = new List<int>();
-                foreach (var player in destArea.SelectedPlayer) players.Add(player.model.Position);
+            players = new List<int>();
+            foreach (var player in destArea.SelectedPlayer) players.Add(player.model.Position);
             // }
 
             List<int> equips = null;
             // if (equipArea.SelectedCard.Count != 0)
             // {
-                equips = new List<int>();
-                foreach (var card in equipArea.SelectedCard) equips.Add(card.Id);
+            equips = new List<int>();
+            foreach (var card in equipArea.SelectedCard) equips.Add(card.Id);
             // }
 
-            if (timerTask.timerType == TimerType.UseWxkj) timerTask.SendSetWxkjResult(self.model.Position, true, cards);
+            if (timerTask.timerType == TimerType.UseWxkj)
+            {
+                timerTask.SendSetWxkjResult(self.model.Position, true, cards);
+            }
             else timerTask.SendSetResult(cards, players, equips);
         }
 
@@ -101,37 +105,34 @@ namespace View
             if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
 
             this.timerTask = timerTask;
+            timerType = timerTask.timerType;
             operationArea.SetActive(true);
-            // hint.text = GetHint();
             hint.text = timerTask.Hint;
 
             // 根据进度条类型初始化进度条和按键
-            switch (timerTask.timerType)
+            switch (timerType)
             {
                 // 确定 + 回合结束
                 case TimerType.PerformPhase:
                     confirm.gameObject.SetActive(true);
                     finishPhase.gameObject.SetActive(true);
-                    // confirm.interactable = false;
                     break;
 
                 // 确定
                 case TimerType.DiscardFromHand:
                     confirm.gameObject.SetActive(true);
-                    // confirm.interactable = false;
                     break;
 
                 // 确定 + 取消
                 default:
                     confirm.gameObject.SetActive(true);
                     cancel.gameObject.SetActive(true);
-                    // confirm.interactable = false;
                     break;
             }
 
-            cardArea.InitCardArea(timerTask);
-            destArea.InitDestArea(timerTask);
-            equipArea.InitEquipArea(timerTask);
+            cardArea.InitCardArea(timerType);
+            destArea.InitDestArea();
+            equipArea.InitEquipArea(timerType);
             UpdateButtonArea();
             StartTimer(timerTask.second);
         }
@@ -153,38 +154,6 @@ namespace View
         {
             if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
             HideTimer();
-        }
-
-        /// <summary>
-        /// 显示出牌阶段操作区
-        /// </summary>
-        private void ShowPerformPhase(int second)
-        {
-            // 显示按键
-            confirm.gameObject.SetActive(true);
-            finishPhase.gameObject.SetActive(true);
-            confirm.interactable = false;
-
-            // 开始倒计时
-            StartTimer(second);
-        }
-
-        /// <summary>
-        /// 仅显示确定键
-        /// </summary>
-        /// <param name="second"></param>
-        private void ShowConfirm(int second)
-        {
-            // 显示按键
-            confirm.gameObject.SetActive(true);
-            confirm.interactable = false;
-
-            // 设置按键位置
-            confirm.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
-            buttonBar.GetComponent<RectTransform>().anchoredPosition = new Vector2(-75, 0);
-
-            // 开始倒计时
-            StartTimer(second);
         }
 
         /// <summary>
@@ -215,32 +184,24 @@ namespace View
             confirm.interactable = cardArea.IsSettled && destArea.IsSettled ? true : false;
         }
 
-        private string GetHint()
+        public void ChangeType(TimerType timerType)
         {
-            switch (timerTask.timerType)
-            {
-                case TimerType.PerformPhase:
-                    return "出牌阶段，请选择一张卡牌";
+            this.timerType = timerType;
 
-                case TimerType.DiscardFromHand:
-                    return "请弃置" + timerTask.minCount + "张手牌";
+            cardArea.ResetCardArea();
+            destArea.ResetDestArea();
+            equipArea.ResetEquipArea();
 
+            cardArea.InitCardArea(timerType);
+            destArea.InitDestArea();
+            equipArea.InitEquipArea(timerType);
 
-                // case TimerType.AskForShan:
-                //     return "请使用一张闪";
+            UpdateButtonArea();
+        }
 
-                // case TimerType.AskForTao:
-                //     return "请使用一张桃";
-
-                // case TimerType.QLYYD:
-                //     return "发动青龙偃月刀";
-
-                // case TimerType.CallSkill:
-                //     return "是否发动" + timerTask.SkillName + "？";
-
-                default:
-                    return "请选择一张牌";
-            }
+        public void ChangeType()
+        {
+            ChangeType(timerTask.timerType);
         }
 
     }

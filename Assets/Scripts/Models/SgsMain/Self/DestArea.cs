@@ -11,12 +11,12 @@ namespace Model
         /// 根据玩家和卡牌id初始化目标数量
         /// </summary>
         /// <returns>目标数量最大值与最小值</returns>
-        public static int[] InitDestCount(Player player, int id)
+        public static int[] InitDestCount(Player player, string cardName)
         {
             int maxCount = 0;
             int minCount = 0;
-            Card card = CardPile.Instance.cards[id];
-            switch (card.Name)
+            // Card card = CardPile.Instance.cards[id];
+            switch (cardName)
             {
                 case "杀":
                 case "雷杀":
@@ -44,6 +44,14 @@ namespace Model
                 default:
                     break;
             }
+            return new int[2] { maxCount, minCount };
+        }
+
+        public static int[] ShaDestCount(Player player)
+        {
+            int maxCount = 1;
+            int minCount = 1;
+            if (player.HandCardCount == 1 && player.Equipages["武器"] is FangTianHuaJi) maxCount += 2;
             return new int[2] { maxCount, minCount };
         }
 
