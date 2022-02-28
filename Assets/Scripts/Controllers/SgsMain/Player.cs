@@ -12,9 +12,10 @@ namespace Controller
         {
             player = GetComponent<View.Player>();
             
-            // 初始化
-            Model.SgsMain.Instance.HeroView += player.UpdateHpLimit;
-            Model.SgsMain.Instance.HeroView += player.UpdateHp;
+            // 武将
+            Model.SgsMain.Instance.GeneralView += player.UpdateHpLimit;
+            Model.SgsMain.Instance.GeneralView += player.UpdateHp;
+            Model.SgsMain.Instance.GeneralView += player.InitGeneral;
 
             // 回合
             Model.TurnSystem.Instance.StartTurnView += player.StartTurn;
@@ -33,8 +34,9 @@ namespace Controller
 
         private void OnDestroy()
         {
-            Model.SgsMain.Instance.HeroView -= player.UpdateHpLimit;
-            Model.SgsMain.Instance.HeroView -= player.UpdateHp;
+            Model.SgsMain.Instance.GeneralView -= player.UpdateHpLimit;
+            Model.SgsMain.Instance.GeneralView -= player.UpdateHp;
+            Model.SgsMain.Instance.GeneralView -= player.InitGeneral;
             
             Model.TurnSystem.Instance.StartTurnView -= player.StartTurn;
             Model.TurnSystem.Instance.FinishTurnView -= player.FinishTurn;

@@ -20,7 +20,16 @@ public static class Urls
     /// </summary>
     public const string STATIC_URL = DOMAIN_NAME + "static/";
 
+    public static string JSON_URL =
+#if UNITY_EDITOR
+        "file:///" + UnityEngine.Application.dataPath + "/../Json/";
+#else
+        STATIC_URL + "json/";
+#endif
+
     // 图片文件地址
+    public const string IMAGE_URL = STATIC_URL + "image/";
+    public const string GENERAL_IMAGE = IMAGE_URL + "general/";
     // 音频文件地址
 
     public const string TEST_BACKGROUND_IMAGE = "https://web.sanguosha.com/220/h5/res/runtime/pc/wallpaper/bg/10.jpg";

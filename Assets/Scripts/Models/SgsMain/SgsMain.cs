@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 
 namespace Model
 {
@@ -51,8 +51,8 @@ namespace Model
             positionView(players);
 
             // 初始化武将
-            if (heroView is null) await Task.Yield();
-            foreach (var player in players) heroView(player);
+            await InitGeneral();
+            foreach (var player in players) generalView?.Invoke(player);
 
             // 初始化牌堆
             await CardPile.Instance.Init();
@@ -86,11 +86,11 @@ namespace Model
             remove => positionView -= value;
         }
 
-        private UnityAction<Player> heroView;
-        public event UnityAction<Player> HeroView
+        private UnityAction<Player> generalView;
+        public event UnityAction<Player> GeneralView
         {
-            add => heroView += value;
-            remove => heroView -= value;
+            add => generalView += value;
+            remove => generalView -= value;
         }
 
         private async Task DebugCard()
@@ -106,6 +106,29 @@ namespace Model
                 var newCard = players[0].HandCards[players[0].HandCardCount - 1];
                 if (!list.Contains(newCard.Name)) await new Discard(players[0], new List<Card> { newCard }).Execute();
                 else list.Remove(newCard.Name);
+            }
+        }
+
+        private async Task InitGeneral()
+        {
+            UnityWebRequest www = UnityWebRequest.Get(Urls.JSON_URL + "general.json");
+            www.SendWebRequest();
+
+            while (!www.isDone) await Task.Yield();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+                return;
+            }
+
+            List<General> json = JsonList<General>.FromJson(www.downloadHandler.text);
+            foreach(var player in players)
+            {
+                var general = json[Random.Range(0, json.Count)];
+                player.LoadGeneral(general);
+                Debug.Log(general.name);
+                json.Remove(general);
             }
         }
     }

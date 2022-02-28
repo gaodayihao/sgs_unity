@@ -19,6 +19,7 @@ namespace Model
         public bool isAI { get; set; }
 
         // 武将
+        public General general { get; private set; }
         // 技能
         // 是否存活
         public bool IsAlive { get; set; } = true;
@@ -88,6 +89,13 @@ namespace Model
                 if (card is T) return (T)card;
             }
             return null;
+        }
+
+        public void LoadGeneral(General general)
+        {
+            this.general = general;
+            HpLimit = general.hp_limit;
+            Hp = HpLimit;
         }
     }
 }

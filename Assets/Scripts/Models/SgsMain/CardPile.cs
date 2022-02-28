@@ -10,13 +10,7 @@ namespace Model
     {
         public async Task Init()
         {
-            string url;
-#if UNITY_EDITOR
-            url = "file:///" + Application.dataPath + "/../Json/card.json";
-#else
-            url = Urls.STATIC_URL + "json/card.json";
-#endif
-            UnityWebRequest www = UnityWebRequest.Get(url);
+            UnityWebRequest www = UnityWebRequest.Get(Urls.JSON_URL + "card.json");
             www.SendWebRequest();
 
             while (!www.isDone) await Task.Yield();

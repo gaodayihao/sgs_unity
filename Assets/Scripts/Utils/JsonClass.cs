@@ -53,17 +53,22 @@ public class CardJson
     public string name;
 }
 
+// [Serializable]
+// public class HeroJson
+// {
+//     public int id;
+//     public string nation;
+//     public string name;
+//     public bool gender;
+//     public int hp_limit;
+//     public List<string> skill;
+//     public List<Skin> skin;
+// }
+
 [Serializable]
 public class WebsocketJson
 {
     public string eventname;
-    // public string username;
-    // public List<string> players;
-
-    // public bool timerResult;
-    // public List<int> cards;
-    // public List<int> dests;
-    // public List<int> equipages;
 }
 
 [Serializable]

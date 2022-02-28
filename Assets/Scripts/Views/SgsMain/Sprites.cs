@@ -32,6 +32,10 @@ namespace View
         public Dictionary<int, Sprite> seat_redWeight;
         // 判定牌
         public Dictionary<string, Sprite> judgeCard;
+        // 势力边框
+        public Dictionary<string, Sprite> nationBack;
+        // 势力
+        public Dictionary<string, Sprite> nation;
 
         // selfseat
         // 每阶段对应sprite
@@ -199,6 +203,24 @@ namespace View
                 {"乐不思蜀", seat[18]},
                 {"闪电", seat[9]},
                 {"兵粮寸断", seat[124]},
+            };
+
+            // 势力边框
+            nationBack = new Dictionary<string, Sprite>
+            {
+                {"蜀", seat[180]},
+                {"吴", seat[179]},
+                {"魏", seat[122]},
+                {"群", seat[178]}
+            };
+
+            // 势力
+            nation = new Dictionary<string, Sprite>
+            {
+                {"蜀", seat[40]},
+                {"吴", seat[17]},
+                {"魏", seat[69]},
+                {"群", seat[68]}
             };
 
             // self

@@ -2,18 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+using System.Threading.Tasks;
 
 namespace View
 {
     public class Player : MonoBehaviour
     {
+        #region 属性
         // 位置
         public bool IsSelf { get; private set; }
-        // public int Position { get; private set; }
         public Image positionImage;
 
         // 武将
-        public Image heroImage;
+        public Image generalImage;
+        public Text generalName;
+        public Image nationBack;
+        public Image nation;
         public Material gray;
 
         // 体力
@@ -37,11 +42,13 @@ namespace View
         // 判定区
         public Transform judgeArea;
 
+        #endregion
+
         public Model.Player model { get; private set; }
 
         private void Start()
         {
-            heroImage.material = null;
+            generalImage.material = null;
             death.gameObject.SetActive(false);
         }
 
@@ -55,6 +62,39 @@ namespace View
             positionImage.sprite = Sprites.Instance.position[model.Position];
         }
 
+        public void InitGeneral(Model.Player player)
+        {
+            if (model != player) return;
+
+            generalName.text = player.general.name;
+            nationBack.sprite = Sprites.Instance.nationBack[player.general.nation];
+            nation.sprite = Sprites.Instance.nation[player.general.nation];
+
+            UpdateGeneralImage(player, player.general.skin[Random.Range(0, player.general.skin.Count)]);
+        }
+
+        public async void UpdateGeneralImage(Model.Player player, Model.Skin skin)
+        {
+            if (model != player) return;
+
+            string url = Urls.GENERAL_IMAGE + player.general.id.ToString().PadLeft(3, '0') + "/" + skin.id + ".png";
+            Debug.Log(url);
+            UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
+            www.SendWebRequest();
+
+            while (!www.isDone) await Task.Yield();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+                return;
+            }
+
+            var texture = DownloadHandlerTexture.GetContent(www);
+            generalImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+        }
+
+        #region 体力值
         /// <summary>
         /// 更新体力上限
         /// </summary>
@@ -127,14 +167,31 @@ namespace View
             UpdateHp(operation.player);
         }
 
+        /// <summary>
+        /// 根据体力与上限比值返回颜色(红，黄，绿)
+        /// </summary>
+        /// <returns>颜色对应索引</returns>
+        public int GetColorIndex(int hp, int hpLimit)
+        {
+            var ratio = hp / (float)hpLimit;
+            // 红
+            if (ratio < 0.34) return 1;
+            // 绿
+            if (ratio > 0.67) return 3;
+            // 黄
+            return 2;
+        }
+        #endregion
+
         public void OnDead(Model.Die operation)
         {
             if (operation.player != model) return;
             nearDeath.gameObject.SetActive(false);
-            heroImage.material = gray;
+            generalImage.material = gray;
             death.gameObject.SetActive(true);
         }
 
+        #region 回合内
         public void StartTurn(Model.TurnSystem turnSystem)
         {
             if (turnSystem.CurrentPlayer != model) return;
@@ -150,7 +207,9 @@ namespace View
             turnBorder.gameObject.SetActive(false);
             positionImage.gameObject.SetActive(true);
         }
+        #endregion
 
+        #region 判定区
         public void AddJudgeCard(Model.DelayScheme card)
         {
             if (card.Owner != model) return;
@@ -165,7 +224,7 @@ namespace View
         public void RemoveJudgeCard(Model.DelayScheme card)
         {
             if (card.Owner != model) return;
-            
+
             foreach (Transform i in judgeArea)
             {
                 if (i.name == card.Name)
@@ -175,20 +234,7 @@ namespace View
                 }
             }
         }
+        #endregion
 
-        /// <summary>
-        /// 根据体力与上限比值返回颜色(红，黄，绿)
-        /// </summary>
-        /// <returns>颜色对应索引</returns>
-        public int GetColorIndex(int hp, int hpLimit)
-        {
-            var ratio = hp / (float)hpLimit;
-            // 红
-            if (ratio < 0.34) return 1;
-            // 绿
-            if (ratio > 0.66) return 3;
-            // 黄
-            return 2;
-        }
     }
 }
