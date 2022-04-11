@@ -71,6 +71,7 @@ namespace View
             nation.sprite = Sprites.Instance.nation[player.general.nation];
 
             UpdateGeneralImage(player, player.general.skin[Random.Range(0, player.general.skin.Count)]);
+            if (!IsSelf) StartCoroutine(RandomSkin(player));
         }
 
         public async void UpdateGeneralImage(Model.Player player, Model.Skin skin)
@@ -92,6 +93,19 @@ namespace View
 
             var texture = DownloadHandlerTexture.GetContent(www);
             generalImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+        }
+
+        public IEnumerator RandomSkin(Model.Player player)
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(10);
+                float r = Random.Range(0, 1.0f);
+                if (r > 0.8f)
+                {
+                    UpdateGeneralImage(player, player.general.skin[Random.Range(0, player.general.skin.Count)]);
+                }
+            }
         }
 
         #region 体力值
