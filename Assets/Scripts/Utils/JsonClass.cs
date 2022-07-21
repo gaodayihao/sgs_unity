@@ -83,6 +83,7 @@ public class StartGameJson
 {
     public string eventname;
     public List<string> players;
+    public List<int> generals;
 }
 
 [Serializable]
@@ -94,6 +95,7 @@ public class TimerJson
     public List<int> cards;
     public List<int> dests;
     public List<int> equipages;
+    public string skill;
     public int src;
 }
 

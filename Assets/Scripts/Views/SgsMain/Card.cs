@@ -27,6 +27,8 @@ namespace View
         // 手牌区
         private CardArea cardArea { get => GetComponentInParent<CardArea>(); }
 
+        public Model.Card model { get => Model.CardPile.Instance.cards[Id]; }
+
         /// <summary>
         /// 初始化卡牌
         /// </summary>

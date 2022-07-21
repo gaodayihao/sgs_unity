@@ -45,6 +45,10 @@ namespace View
                 case TimerType.ZBSM:
                     equipages["武器"].button.interactable = true;
                     break;
+                case TimerType.CallSkill:
+                    var skill = GetComponent<SkillArea>().SelectedSkill.model;
+                    foreach (var card in equipages.Values) card.button.interactable = skill.IsValidCard(card.model);
+                    break;
             }
 
             if (Model.TimerTask.Instance.SkillName != null)

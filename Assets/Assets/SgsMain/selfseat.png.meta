@@ -477,6 +477,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1615,7 +1616,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1825,7 +1826,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1846,7 +1847,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1867,7 +1868,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1909,7 +1910,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1930,7 +1931,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1951,7 +1952,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1972,7 +1973,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1993,7 +1994,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -2077,7 +2078,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -2098,7 +2099,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -2140,7 +2141,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -2161,7 +2162,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -2182,7 +2183,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -2266,7 +2267,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -2287,7 +2288,7 @@ TextureImporter:
         height: 35
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 27, y: 6, z: 7, w: 6}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -3736,6 +3737,158 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      selfseat_6: 1417443120948114152
+      selfseat_44: -3284110583522401138
+      selfseat_87: -8881992683219672076
+      selfseat_120: 7722656900324503757
+      selfseat_68: -2355244783810682927
+      selfseat_94: 8434014426655833724
+      selfseat_140: -7461592143119087322
+      selfseat_54: 2198839874754659298
+      selfseat_76: 8908602645087660505
+      selfseat_129: -8577766775060233722
+      selfseat_149: -3844130465630062570
+      selfseat_43: 233926256185919206
+      selfseat_33: 3223131038177936559
+      selfseat_60: 8269330988289218606
+      selfseat_99: -8699957794065945659
+      selfseat_7: 4173324856054228885
+      selfseat_91: -4020428283013712995
+      selfseat_101: -5895405446639038033
+      selfseat_72: -8181111228369514450
+      selfseat_11: -3768247104028270579
+      selfseat_132: -4181856810420958877
+      selfseat_30: -5418234196558526521
+      selfseat_22: 1771446640603595134
+      selfseat_62: 3308851999256264609
+      selfseat_16: -2011377951662295848
+      selfseat_104: 956535890456718223
+      selfseat_115: 4537781526568297634
+      selfseat_23: -5331816542132555353
+      selfseat_39: 882822135211167721
+      selfseat_19: 2368928713686938272
+      selfseat_81: 7266686984870627659
+      selfseat_58: 5077073725121919569
+      selfseat_9: -3006630636673633871
+      selfseat_136: 6904721831425950992
+      selfseat_145: -197132260356277733
+      selfseat_1: 414418895054464936
+      selfseat_35: -5346694443984761784
+      selfseat_88: 7265004560052797138
+      selfseat_90: -2929023022839052125
+      selfseat_124: 5250206497274452695
+      selfseat_125: -79147696652231371
+      selfseat_98: -5480714027518693780
+      selfseat_109: -5537060372231607036
+      selfseat_67: -5703418050944525145
+      selfseat_116: 4608334505800546626
+      selfseat_65: -648170271738323597
+      selfseat_5: 3908207352910473148
+      selfseat_71: 6005578029555573586
+      selfseat_119: 4390741015091009119
+      selfseat_28: 6174116275092945109
+      selfseat_86: -3738025434036581469
+      selfseat_102: 2698409246389066755
+      selfseat_51: 428601848539144079
+      selfseat_131: 6048957758546155533
+      selfseat_107: -1216164210917907695
+      selfseat_111: -8793295127765290120
+      selfseat_0: -4277315727225170271
+      selfseat_92: -3025400129226214673
+      selfseat_128: 9144182007762676190
+      selfseat_64: -135991042799875142
+      selfseat_133: 4288244873631795297
+      selfseat_146: -5975074665769562890
+      selfseat_37: 4721535625552112110
+      selfseat_150: 3285640355904398177
+      selfseat_103: -5342118827519485375
+      selfseat_135: -1066661677595310863
+      selfseat_138: 4786775472169934331
+      selfseat_31: 7978764584846453303
+      selfseat_143: 1902161874006232670
+      selfseat_20: 1315169942305162267
+      selfseat_139: 5870685552350780314
+      selfseat_77: -3496996370256492667
+      selfseat_106: 6038762377184151733
+      selfseat_13: 4755718228062822093
+      selfseat_29: 5710910785278686147
+      selfseat_97: -3689254916439957303
+      selfseat_73: 1699770543232716491
+      selfseat_34: -4498416726584555455
+      selfseat_41: 3654664926448015227
+      selfseat_66: -7684389164252886992
+      selfseat_46: -8980425004720992182
+      selfseat_83: 2910657300838186528
+      selfseat_137: 3982109016873164880
+      selfseat_148: 1316436744919532190
+      selfseat_2: 1867727849994948062
+      selfseat_78: 3924546888513992237
+      selfseat_105: 270808667219201566
+      selfseat_144: 4995640746065881111
+      selfseat_57: 1362027954412071692
+      selfseat_95: -3235988460867905835
+      selfseat_24: 92268597075512906
+      selfseat_84: -770396354443060775
+      selfseat_147: 1586256519806012306
+      selfseat_47: 6046746087867371747
+      selfseat_42: 7628078593766789801
+      selfseat_70: 3150217856063750042
+      selfseat_117: 2312258583078317297
+      selfseat_40: 499822306936458655
+      selfseat_126: 389437690041641038
+      selfseat_130: -3732567810888355404
+      selfseat_142: 3267866079736597211
+      selfseat_108: -1628791358169156869
+      selfseat_27: 3723088600898682445
+      selfseat_10: -21015544913745051
+      selfseat_89: 1445159158545350287
+      selfseat_82: -7445192406327409966
+      selfseat_61: -2565905497662330221
+      selfseat_15: -3028135278434099884
+      selfseat_3: -7500382506170940039
+      selfseat_17: -7584244594823159508
+      selfseat_36: -4484921380972353429
+      selfseat_112: 2144263906431895005
+      selfseat_12: 5311493361356630707
+      selfseat_121: -1222198414785917605
+      selfseat_56: 120033031981212206
+      selfseat_85: -26143661467693521
+      selfseat_69: 2025769663441454716
+      selfseat_96: -1374430381969965629
+      selfseat_141: -4416323404147679064
+      selfseat_100: -7188143068664944780
+      selfseat_113: -2800118647400698799
+      selfseat_74: 4545737862365071222
+      selfseat_25: -3549411794497009021
+      selfseat_48: -7849229675714854486
+      selfseat_18: 7805682030441305742
+      selfseat_8: 7203757676830629257
+      selfseat_50: -2600892170802597542
+      selfseat_123: 4517160984074103831
+      selfseat_52: 8006273166234089037
+      selfseat_59: 4325784666360058122
+      selfseat_110: -5059133254850792093
+      selfseat_114: 7288323563737452465
+      selfseat_118: -1286479909499965563
+      selfseat_49: -4960906936284245871
+      selfseat_55: 4278557457930763885
+      selfseat_79: 3616290476797450700
+      selfseat_63: 7184231555765074445
+      selfseat_14: 5280722216174896832
+      selfseat_21: 2547187360422537606
+      selfseat_4: 4737121156844674954
+      selfseat_122: -6028673961413532483
+      selfseat_75: 4880700350775291292
+      selfseat_127: -8310070792506461750
+      selfseat_134: 1592244537356179223
+      selfseat_45: -2990120211676351551
+      selfseat_80: 8649525461822015932
+      selfseat_26: 7808070309725291882
+      selfseat_53: 6631605363863623019
+      selfseat_32: -2427098360052770745
+      selfseat_38: -2754263021359386975
+      selfseat_93: 6611337674871394760
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

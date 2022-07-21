@@ -26,7 +26,7 @@ namespace Model
                 switch (timerType)
                 {
                     case TimerType.PerformPhase: return 10;
-                    case TimerType.DiscardFromHand: return 5 + maxCount;
+                    case TimerType.SelectHandCard: return 5 + maxCount;
                     case TimerType.UseWxkj: return 5;
                     default: return 10;
                 }
@@ -36,6 +36,7 @@ namespace Model
         public List<Card> Cards { get; set; }
         public List<Card> Equipages { get; private set; }
         public List<Player> Dests { get; private set; }
+        public string Skill { get; private set; }
 
         /// <summary>
         /// 暂停主线程，并通过服务器或view开始计时
@@ -51,6 +52,7 @@ namespace Model
             Cards = new List<Card>();
             Equipages = new List<Card>();
             Dests = new List<Player>();
+            Skill = "";
 
             waitAction = new TaskCompletionSource<bool>();
 
@@ -82,13 +84,15 @@ namespace Model
         /// <summary>
         /// 传入已选中的卡牌与目标，通过设置TaskCompletionSource返回值，继续主线程
         /// </summary>
-        public void SetResult(List<int> cards, List<int> dests, List<int> equipages)
+        public void SetResult(List<int> cards, List<int> dests, List<int> equipages, string skill)
         {
             foreach (var id in cards) Cards.Add(CardPile.Instance.cards[id]);
 
             foreach (var id in dests) Dests.Add(SgsMain.Instance.players[id]);
 
             foreach (var id in equipages) Equipages.Add(CardPile.Instance.cards[id]);
+
+            Skill = skill;
 
             waitAction.TrySetResult(true);
         }
@@ -98,9 +102,9 @@ namespace Model
             waitAction.TrySetResult(false);
         }
 
-        public void SendSetResult(List<int> cards, List<int> dests, List<int> equipages)
+        public void SendSetResult(List<int> cards, List<int> dests, List<int> equipages, string skill)
         {
-            if (Room.Instance.isSingle) SetResult(cards, dests, equipages);
+            if (Room.Instance.isSingle) SetResult(cards, dests, equipages, skill);
             // 多人模式
             else
             {
@@ -111,6 +115,7 @@ namespace Model
                 json.cards = cards;
                 json.dests = dests;
                 json.equipages = equipages;
+                json.skill = skill;
 
                 Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
             }
@@ -138,9 +143,9 @@ namespace Model
             if (timerType != TimerType.UseWxkj)
             {
                 if (!json.result) SetResult();
-                else SetResult(json.cards, json.dests, json.equipages);
+                else SetResult(json.cards, json.dests, json.equipages, json.skill);
             }
-            else SetWxkjResult(json.src, json.result, json.cards);
+            else SetWxkjResult(json.src, json.result, json.cards, json.skill);
         }
 
         private Dictionary<int, bool> wxkjDone;
@@ -177,13 +182,13 @@ namespace Model
             return result;
         }
 
-        public void SetWxkjResult(int src, bool result, List<int> cards)
+        public void SetWxkjResult(int src, bool result, List<int> cards, string skill)
         {
             if (cards is null) cards = new List<int>();
             if (result)
             {
                 player = SgsMain.Instance.players[src];
-                SetResult(cards, new List<int>(), new List<int>());
+                SetResult(cards, new List<int>(), new List<int>(), "");
             }
             else
             {
@@ -202,9 +207,9 @@ namespace Model
             }
         }
 
-        public void SendSetWxkjResult(int src, bool result, List<int> cards = null)
+        public void SendSetWxkjResult(int src, bool result, List<int> cards = null, string skill = "")
         {
-            if (Room.Instance.isSingle) SetWxkjResult(src, result, cards);
+            if (Room.Instance.isSingle) SetWxkjResult(src, result, cards, skill);
             // 多人模式
             else
             {

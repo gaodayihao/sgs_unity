@@ -166,18 +166,32 @@ namespace Model
 
         private async Task Perform()
         {
-            bool performIsDone = false;
+            // 重置出杀次数
             CurrentPlayer.ShaCount = 0;
+            // 重置使用技能次数
+            foreach (var i in CurrentPlayer.skills.Values) if (i is Active) (i as Active).Time = 0;
+            
+            bool performIsDone = false;
+            var timerTask = TimerTask.Instance;
+
             while (!performIsDone)
             {
                 // 暂停线程,显示进度条
-                TimerTask.Instance.Hint = "出牌阶段，请选择一张牌。";
-                performIsDone = !await TimerTask.Instance.Run(CurrentPlayer, TimerType.PerformPhase);
+                timerTask.Hint = "出牌阶段，请选择一张牌。";
+                performIsDone = !await timerTask.Run(CurrentPlayer, TimerType.PerformPhase);
 
                 if (!performIsDone)
                 {
-                    var card = TimerTask.Instance.Cards[0];
-                    await card.UseCard(CurrentPlayer, TimerTask.Instance.Dests);
+                    if (timerTask.Skill != "")
+                    {
+                        var skill = CurrentPlayer.skills[timerTask.Skill] as Active;
+                        await skill.Execute(timerTask.Dests, timerTask.Cards, "");
+                    }
+                    else
+                    {
+                        var card = timerTask.Cards[0];
+                        await card.UseCard(CurrentPlayer, timerTask.Dests);
+                    }
                 }
 
                 else if (CurrentPlayer.isAI && CardArea.UseSha(CurrentPlayer))

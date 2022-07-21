@@ -54,6 +54,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -352,6 +353,17 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      seatStateGreen_2: 3700149368077226558
+      seatStateGreen_5: -9024330596960932359
+      seatStateGreen_7: 5611730292388105422
+      seatStateGreen_0: -6341142398226995462
+      seatStateGreen_6: -8362411412187892489
+      seatStateGreen_1: -2136829321121876172
+      seatStateGreen_3: 6301619900078386713
+      seatStateGreen_4: -4418257603300861959
+      seatStateGreen_9: 6178851785268836239
+      seatStateGreen_8: 7114359024691535892
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

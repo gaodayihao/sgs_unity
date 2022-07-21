@@ -12,14 +12,15 @@ public enum TimerType
 {
     PerformPhase,
     Discard,
-    DiscardFromHand,
+    SelectHandCard,
     UseCard,
     UseSha,
     UseWxkj,
-    SelectHandCard,
-    CallSkill,
+    CallEquipSkill,
     ZBSM,
     QlgPanel,
     RegionPanel,
-    SSQY
+    SSQY,
+    CallSkill,
+    ActiveSkill
 }

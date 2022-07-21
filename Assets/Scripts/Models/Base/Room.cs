@@ -49,6 +49,8 @@ namespace Model
         public void InitPlayers(StartGameJson json)
         {
             players = new List<Player>();
+            RandomGeneral = json.generals;
+            Debug.Log(json.generals[0]);
             foreach (string username in json.players)
             {
                 Player player = new Player();
@@ -56,5 +58,7 @@ namespace Model
                 players.Add(player);
             }
         }
+
+        public List<int> RandomGeneral { get; set; }
     }
 }

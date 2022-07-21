@@ -36,7 +36,7 @@ namespace Model
             TimerTask.Instance.Hint = "是否发动青龙偃月刀？";
             TimerTask.Instance.GivenDest = dest;
             TimerTask.Instance.GivenCard = new List<string> { "杀", "雷杀", "火杀" };
-            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallSkill);
+            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallEquipSkill);
 
             if (!result) return;
 
@@ -59,7 +59,7 @@ namespace Model
             TimerTask.Instance.SkillName = "麒麟弓";
             TimerTask.Instance.Hint = "是否发动麒麟弓？";
             TimerTask.Instance.GivenDest = dest;
-            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallSkill, 0);
+            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallEquipSkill, 0);
 
             if (!result) return;
 

@@ -1,7 +1,7 @@
 import os
 import paramiko
 
-instruct = "scp .\Json\card.json django:~/sgs/game/static/json"
+instruct = "scp Json/card.json Json/general.json django:~/sgs/game/static/json"
 os.system(instruct)
 
 

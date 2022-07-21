@@ -152,7 +152,7 @@ namespace View
                     if (!done && model.isAI && timer.value <= 1 - 1.0f / second)
                     {
                         done = true;
-                        Model.TimerTask.Instance.SetWxkjResult(model.Position, false, null);
+                        Model.TimerTask.Instance.SetWxkjResult(model.Position, false, null, "");
                     }
                     yield return new WaitForSeconds(0.1f);
                 }

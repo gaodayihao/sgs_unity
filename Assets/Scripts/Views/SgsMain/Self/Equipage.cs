@@ -14,8 +14,10 @@ namespace View
 
         public Button button;
         public bool IsSelected { get; private set; }
+
         public EquipArea equipArea { get => GetComponentInParent<EquipArea>(); }
         public OperationArea operationArea { get => GetComponentInParent<OperationArea>(); }
+        public Model.Card model { get => Model.CardPile.Instance.cards[Id]; }
 
         void Start()
         {

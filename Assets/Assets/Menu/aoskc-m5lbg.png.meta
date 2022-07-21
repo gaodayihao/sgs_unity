@@ -198,6 +198,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -1504,6 +1505,65 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      aoskc-m5lbg_48: -1210621575158959899
+      aoskc-m5lbg_57: -8639601965622587266
+      aoskc-m5lbg_43: 5959466216076712286
+      aoskc-m5lbg_54: 4250243309774911064
+      aoskc-m5lbg_22: 4728808711528620273
+      aoskc-m5lbg_7: -2516774718619390443
+      aoskc-m5lbg_2: 6412181528890735946
+      aoskc-m5lbg_47: -270350256852863859
+      aoskc-m5lbg_52: 3446083404582945654
+      aoskc-m5lbg_11: -1757190028697449575
+      aoskc-m5lbg_28: 634862495417870206
+      aoskc-m5lbg_45: 2447982305386036250
+      aoskc-m5lbg_31: 3597370697589113352
+      aoskc-m5lbg_40: -51303511610026651
+      aoskc-m5lbg_1: -4696281294164030791
+      aoskc-m5lbg_4: -4118795829532124015
+      aoskc-m5lbg_9: -2495778152964038395
+      aoskc-m5lbg_18: -586954411809613013
+      aoskc-m5lbg_36: 195362751576700973
+      aoskc-m5lbg_34: -6152982479559308354
+      aoskc-m5lbg_21: 7576901164468202709
+      aoskc-m5lbg_29: 8812352301458775018
+      aoskc-m5lbg_51: -9080623056241617523
+      aoskc-m5lbg_32: 987599352362062152
+      aoskc-m5lbg_8: 4572215591525876700
+      aoskc-m5lbg_35: -2102841845519671626
+      aoskc-m5lbg_25: 5698990342705113845
+      aoskc-m5lbg_46: 513500461801505876
+      aoskc-m5lbg_33: -3736702028143612060
+      aoskc-m5lbg_53: 7039093827087823651
+      aoskc-m5lbg_10: -4319407796583442700
+      aoskc-m5lbg_20: 4335873997651881712
+      aoskc-m5lbg_3: -7461229496098767782
+      aoskc-m5lbg_27: 6498390917888165573
+      aoskc-m5lbg_6: 7733644658325523820
+      aoskc-m5lbg_39: -8587485733366845083
+      aoskc-m5lbg_42: -6628798581643602148
+      aoskc-m5lbg_19: 4206509076300557313
+      aoskc-m5lbg_0: 3945266691166401978
+      aoskc-m5lbg_30: -6396821724009863992
+      aoskc-m5lbg_49: -4630016427101348334
+      aoskc-m5lbg_44: 8240643740264446329
+      aoskc-m5lbg_38: -1490238796470349194
+      aoskc-m5lbg_37: 932877812470841102
+      aoskc-m5lbg_50: 1444895180441654278
+      aoskc-m5lbg_12: -4715911926690421255
+      aoskc-m5lbg_17: 6217810928886556078
+      aoskc-m5lbg_55: 8735119408243770166
+      aoskc-m5lbg_13: -7511494693565573491
+      aoskc-m5lbg_41: 7665929234537599430
+      aoskc-m5lbg_5: 7457253141783747740
+      aoskc-m5lbg_15: 6671119813402715402
+      aoskc-m5lbg_14: 8156521025265987460
+      aoskc-m5lbg_26: -3297743150092943122
+      aoskc-m5lbg_23: -8101273488405949583
+      aoskc-m5lbg_24: -4395200269582823666
+      aoskc-m5lbg_16: -7792829490819709624
+      aoskc-m5lbg_56: 3943678136716652424
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

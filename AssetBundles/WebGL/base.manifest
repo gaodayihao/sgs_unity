@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3505047935
+CRC: 3412797863
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 599bcae599df18b922efc3bf08c2bd4f
+    Hash: f07a5b4804bea335a66777e5fc3e233b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 17ca605a3c3576f8f576988780c3906e
+    Hash: de0b7f651089d69339bbf3f84b419f35
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,7 +23,11 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
-SerializeReferenceClassIdentifiers: []
+SerializeReferenceClassIdentifiers:
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
 Assets:
 - Assets/Assets/boyunjianri_s.jpg
 - Assets/Prefabs/Base/BackgroundImage.prefab

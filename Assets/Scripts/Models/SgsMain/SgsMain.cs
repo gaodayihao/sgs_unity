@@ -109,6 +109,9 @@ namespace Model
             }
         }
 
+        /// <summary>
+        /// 初始化武将
+        /// </summary>
         private async Task InitGeneral()
         {
             UnityWebRequest www = UnityWebRequest.Get(Urls.JSON_URL + "general.json");
@@ -123,10 +126,25 @@ namespace Model
             }
 
             List<General> json = JsonList<General>.FromJson(www.downloadHandler.text);
-            foreach(var player in players)
+
+            // debug
+            // 关羽
+            General self = json[1];
+            json.Remove(self);
+
+            foreach (var player in players)
             {
-                var general = json[Random.Range(0, json.Count)];
-                player.LoadGeneral(general);
+                General general;
+
+                if (Room.Instance.isSingle)
+                {
+                    // debug
+                    if (player.isSelf) general = self;
+                    else general = json[Random.Range(0, json.Count)];
+                }
+                else general = json[Room.Instance.RandomGeneral[player.Position]];
+
+                player.InitGeneral(general);
                 Debug.Log(general.name);
                 json.Remove(general);
             }

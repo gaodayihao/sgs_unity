@@ -89,6 +89,12 @@ namespace View
                     }
                     break;
 
+                case TimerType.CallSkill:
+                    var skill = GetComponent<SkillArea>().SelectedSkill.model;
+                    maxCount = skill.MaxCard();
+                    minCount = skill.MinCard();
+                    break;
+
                 default:
                     if (Model.TimerTask.Instance.GivenDest == null)
                     {
@@ -151,6 +157,15 @@ namespace View
                     foreach (var player in players)
                     {
                         player.button.interactable = Model.DestArea.UseSha(self.model, player.model);
+                    }
+                    break;
+                case TimerType.CallSkill:
+                    var skill = GetComponent<SkillArea>().SelectedSkill.model;
+                    foreach (var player in players)
+                    {
+                        // 设置不能使用的手牌
+                        Model.Player firstDest = SelectedPlayer.Count != 0 ? SelectedPlayer[0].model : null;
+                        player.button.interactable = skill.IsValidDest(player.model, cardArea.model, firstDest);
                     }
                     break;
             }

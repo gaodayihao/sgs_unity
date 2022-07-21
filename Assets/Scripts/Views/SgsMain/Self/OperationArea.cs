@@ -26,6 +26,7 @@ namespace View
         private CardArea cardArea { get => GetComponent<CardArea>(); }
         private DestArea destArea { get => GetComponent<DestArea>(); }
         private EquipArea equipArea { get => GetComponent<EquipArea>(); }
+        private SkillArea skillArea { get => GetComponent<SkillArea>(); }
 
         private Model.TimerTask timerTask;
         public TimerType timerType { get; private set; }
@@ -49,32 +50,23 @@ namespace View
         {
             StopAllCoroutines();
 
-            List<int> cards = null;
-            // if (cardArea.SelectedCard.Count != 0)
-            // {
-            cards = new List<int>();
+            List<int> cards = new List<int>();
             foreach (var card in cardArea.SelectedCard) cards.Add(card.Id);
-            // }
 
-            List<int> players = null;
-            // if (destArea.SelectedPlayer.Count != 0)
-            // {
-            players = new List<int>();
+            List<int> players = new List<int>();
             foreach (var player in destArea.SelectedPlayer) players.Add(player.model.Position);
-            // }
 
-            List<int> equips = null;
-            // if (equipArea.SelectedCard.Count != 0)
-            // {
-            equips = new List<int>();
+            List<int> equips = new List<int>();
             foreach (var card in equipArea.SelectedCard) equips.Add(card.Id);
-            // }
+
+            string skill = "";
+            if (skillArea.SelectedSkill != null) skill = skillArea.SelectedSkill.text.text;
 
             if (timerTask.timerType == TimerType.UseWxkj)
             {
                 timerTask.SendSetWxkjResult(self.model.Position, true, cards);
             }
-            else timerTask.SendSetResult(cards, players, equips);
+            else timerTask.SendSetResult(cards, players, equips,skill);
         }
 
         /// <summary>
@@ -119,7 +111,7 @@ namespace View
                     break;
 
                 // 确定
-                case TimerType.DiscardFromHand:
+                case TimerType.SelectHandCard:
                     confirm.gameObject.SetActive(true);
                     break;
 
@@ -133,6 +125,8 @@ namespace View
             cardArea.InitCardArea(timerType);
             destArea.InitDestArea();
             equipArea.InitEquipArea(timerType);
+            skillArea.InitSkillArea(timerType);
+
             UpdateButtonArea();
             StartTimer(timerTask.second);
         }
@@ -181,7 +175,7 @@ namespace View
         public void UpdateButtonArea()
         {
             // 启用确定键
-            confirm.interactable = cardArea.IsSettled && destArea.IsSettled ? true : false;
+            confirm.interactable = cardArea.IsSettled && destArea.IsSettled;
         }
 
         public void ChangeType(TimerType timerType)
@@ -195,6 +189,7 @@ namespace View
             cardArea.InitCardArea(timerType);
             destArea.InitDestArea();
             equipArea.InitEquipArea(timerType);
+            skillArea.InitSkillArea(timerType);
 
             UpdateButtonArea();
         }

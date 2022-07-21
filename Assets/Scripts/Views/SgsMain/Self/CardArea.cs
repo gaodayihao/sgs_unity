@@ -19,6 +19,15 @@ namespace View
 
         // 被选中卡牌
         public List<Card> SelectedCard { get; private set; } = new List<Card>();
+        public List<Model.Card> model
+        {
+            get
+            {
+                var model = new List<Model.Card>();
+                foreach (var i in SelectedCard) model.Add(i.model);
+                return model;
+            }
+        }
         private int maxCount;
         private int minCount;
         // 是否已设置
@@ -86,6 +95,12 @@ namespace View
                         minCount = 3;
                         break;
 
+                    case TimerType.CallSkill:
+                        var skill = GetComponent<SkillArea>().SelectedSkill.model;
+                        maxCount = skill.MaxCard();
+                        minCount = skill.MinCard();
+                        break;
+
                     default:
                         maxCount = 0;
                         minCount = 0;
@@ -112,6 +127,15 @@ namespace View
                     {
                         // 设置不能使用的手牌
                         card.button.interactable = Model.CardArea.PerformPhase(self.model, card.Id);
+                    }
+                    break;
+
+                case TimerType.CallSkill:
+                    var skill = GetComponent<SkillArea>().SelectedSkill.model;
+                    foreach (var card in handcards.Values)
+                    {
+                        // 设置不能使用的手牌
+                        card.button.interactable = skill.IsValidCard(card.model);
                     }
                     break;
 

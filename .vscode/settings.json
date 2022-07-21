@@ -52,5 +52,6 @@
         "temp/": true,
         "Temp/": true,
         "*.csproj": true
-    }
+    },
+    "omnisharp.useModernNet": false
 }

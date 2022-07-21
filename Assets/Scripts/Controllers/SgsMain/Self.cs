@@ -11,6 +11,8 @@ namespace Controller
         private View.OperationArea operationArea;
         private View.DestArea destArea;
         private View.EquipArea equipArea;
+        private View.SkillArea skillArea;
+
         void Start()
         {
             self = GetComponent<View.Self>();
@@ -18,6 +20,7 @@ namespace Controller
             operationArea = GetComponent<View.OperationArea>();
             destArea = GetComponent<View.DestArea>();
             equipArea = GetComponent<View.EquipArea>();
+            skillArea=GetComponent<View.SkillArea>();
 
             // 阶段信息
             Model.TurnSystem.Instance.StartPhaseView += self.ShowPhase;
@@ -50,6 +53,9 @@ namespace Controller
             Model.Equipage.AddEquipView += equipArea.ShowEquipage;
             Model.Equipage.RemoveEquipView += equipArea.HideEquipage;
             Model.TimerTask.Instance.StopTimerView += equipArea.ResetEquipArea;
+
+            // 技能区
+            Model.TimerTask.Instance.StopTimerView += skillArea.ResetSkillArea;
         }
 
         private void OnDestroy()
@@ -77,6 +83,8 @@ namespace Controller
             Model.Equipage.AddEquipView -= equipArea.ShowEquipage;
             Model.Equipage.RemoveEquipView -= equipArea.HideEquipage;
             Model.TimerTask.Instance.StopTimerView -= equipArea.ResetEquipArea;
+
+            Model.TimerTask.Instance.StopTimerView -= skillArea.ResetSkillArea;
         }
     }
 }

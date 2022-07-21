@@ -14,6 +14,7 @@ namespace Controller
 
             // 添加卡牌
             Model.CardPile.Instance.DiscardView += view.AddDiscard;
+            Model.ShowCard.ActionView += view.AddDiscard;
             // Model.Discard.ActionView += view.AddDiscard;
             // Model.Card.UseCardView += view.AddDiscard;
             // Model.Equipage.AddEquipView += view.AddDiscard;
@@ -26,6 +27,7 @@ namespace Controller
         private void OnDestroy()
         {
             Model.CardPile.Instance.DiscardView -= view.AddDiscard;
+            Model.ShowCard.ActionView -= view.AddDiscard;
             // Model.LoseCard.ActionView -= view.AddDiscard;
             // Model.Card.UseCardView -= view.AddDiscard;
 

@@ -8,6 +8,8 @@ namespace View
 {
     public class DiscardArea : MonoBehaviour
     {
+        private List<GameObject> discards;
+
         public void AddDiscard(List<Model.Card> cards)
         {
             // 从assetbundle中加载卡牌预制件
@@ -23,6 +25,11 @@ namespace View
             }
 
             UpdateSpacing();
+        }
+
+        public void AddDiscard(Model.ShowCard model)
+        {
+            AddDiscard(model.Cards);
         }
 
         // 使用牌时调用
@@ -50,8 +57,6 @@ namespace View
         //     if (operation.HandCards != null) await AddDiscard(operation.HandCards);
         //     if (operation.Equipages != null) await AddDiscard(operation.Equipages);
         // }
-
-        private List<GameObject> discards;
 
         /// <summary>
         /// 清空弃牌区

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Model
 {
@@ -27,6 +28,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 获得牌
+    /// </summary>
     public class GetCard : PlayerAction<GetCard>
     {
         /// <summary>
@@ -60,6 +64,9 @@ namespace Model
         // }
     }
 
+    /// <summary>
+    /// 摸牌
+    /// </summary>
     public class GetCardFromPile : GetCard
     {
         /// <summary>
@@ -82,6 +89,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 失去牌
+    /// </summary>
     public class LoseCard : PlayerAction<LoseCard>
     {
         /// <summary>
@@ -108,6 +118,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 弃牌
+    /// </summary>
     public class Discard : LoseCard
     {
         /// <summary>
@@ -127,10 +140,13 @@ namespace Model
             await base.Execute();
         }
 
+        /// <summary>
+        /// 弃手牌
+        /// </summary>
         public static async Task DiscardFromHand(Player player, int count)
         {
             TimerTask.Instance.Hint = "请弃置" + count.ToString() + "张手牌。";
-            bool result = await TimerTask.Instance.Run(player, TimerType.DiscardFromHand, count);
+            bool result = await TimerTask.Instance.Run(player, TimerType.SelectHandCard, count);
             if (result) await new Discard(player, TimerTask.Instance.Cards).Execute();
             else
             {
@@ -261,6 +277,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 获得其他角色的牌
+    /// </summary>
     public class GetCardFromElse : GetCard
     {
         public GetCardFromElse(Player player, Player dest, List<Card> cards) : base(player, cards)
@@ -287,6 +306,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 判定
+    /// </summary>
     public class Judge
     {
         public async Task<Card> Execute()
@@ -303,6 +325,33 @@ namespace Model
         public Card JudgeCard { get; set; }
 
         public EventSet<Judge> modifyJudge = new EventSet<Judge>();
+    }
+
+    public class ShowCard : PlayerAction<ShowCard>
+    {
+        public ShowCard(Player player, List<Card> cards) : base(player)
+        {
+            Cards = cards;
+        }
+        public List<Card> Cards { get; protected set; }
+
+        public override async Task Execute()
+        {
+            actionView?.Invoke(this);
+            await Task.Yield();
+        }
+
+        /// <summary>
+        /// 展示手牌
+        /// </summary>
+        public static async Task<List<Card>> ShowCardTimer(Player player, int count = 1)
+        {
+            bool result = await TimerTask.Instance.Run(player, TimerType.SelectHandCard, count);
+            var cards = result ? TimerTask.Instance.Cards : player.HandCards.Take(count).ToList();
+            var showCard = new ShowCard(player, cards);
+            await showCard.Execute();
+            return showCard.Cards;
+        }
     }
 
     // 翻面

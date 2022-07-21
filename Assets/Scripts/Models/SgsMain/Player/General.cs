@@ -19,6 +19,7 @@ namespace Model
         // 体力上限
         public int hp_limit;
         // 技能
+        public List<string> skill;
         // 皮肤
         public List<Skin> skin;
     }

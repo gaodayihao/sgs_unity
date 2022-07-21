@@ -71,6 +71,8 @@ namespace View
             nation.sprite = Sprites.Instance.nation[player.general.nation];
 
             UpdateGeneralImage(player, player.general.skin[Random.Range(0, player.general.skin.Count)]);
+
+            if (IsSelf) GameObject.FindObjectOfType<SkillArea>().InitSkill(player.skills);
             if (!IsSelf) StartCoroutine(RandomSkin(player));
         }
 

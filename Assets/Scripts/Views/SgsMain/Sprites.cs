@@ -40,6 +40,8 @@ namespace View
         // selfseat
         // 每阶段对应sprite
         public Dictionary<Phase, Sprite> self_phase;
+        // 技能
+        // public Sprite[,,] skills;
 
         // card
         // public Sprite[] cardImage;
@@ -239,6 +241,43 @@ namespace View
             self_phase.Add(Phase.Discard, selfseat[116]);
             // 结束阶段
             self_phase.Add(Phase.End, selfseat[128]);
+
+            // 技能
+            // skills = new Sprite[4, 4, 2]
+            // {
+            //     // 主动技
+            //     {
+            //         // normal
+            //         {selfseat[0], selfseat[0]},
+            //         // highlighted
+            //         {selfseat[0], selfseat[0]},
+            //         // pressed
+            //         {selfseat[0], selfseat[0]},
+            //         // disabled
+            //         {selfseat[0], selfseat[0]}
+            //     },
+            //     {
+            //         // 锁定技
+            //         {selfseat[0], selfseat[0]},
+            //         {selfseat[0], selfseat[0]},
+            //         {selfseat[0], selfseat[0]},
+            //         {selfseat[0], selfseat[0]}
+            //     },
+            //     {
+            //         // 限定技
+            //         {selfseat[0], selfseat[0]},
+            //         {selfseat[0], selfseat[0]},
+            //         {selfseat[0], selfseat[0]},
+            //         {selfseat[0], selfseat[0]}
+            //     },
+            //     {
+            //         // 觉醒技
+            //         {selfseat[0], selfseat[0]},
+            //         {selfseat[0], selfseat[0]},
+            //         {selfseat[0], selfseat[0]},
+            //         {selfseat[0], selfseat[0]}
+            //     }
+            // };
 
 
             // cardImage = new Sprite[100];

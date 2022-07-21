@@ -21,6 +21,7 @@ namespace Model
         // 武将
         public General general { get; private set; }
         // 技能
+        public Dictionary<string, Skill> skills { get; private set; } = new Dictionary<string, Skill>();
         // 是否存活
         public bool IsAlive { get; set; } = true;
 
@@ -34,12 +35,14 @@ namespace Model
         public Player Last { get; set; }
         // 下家
         public Player Next { get; set; }
+
         // 手牌
         public List<Card> HandCards { get; set; } = new List<Card>();
         // 手牌数
         public int HandCardCount { get => HandCards.Count; }
         // 手牌上限
         public int HandCardLimit { get => Hp; }
+
         // 装备区
         public Dictionary<string, Equipage> Equipages { get; set; } = new Dictionary<string, Equipage>
         {
@@ -80,8 +83,12 @@ namespace Model
             return Mathf.Max(distance, 1);
         }
 
+        // 出杀次数
         public int ShaCount { get; set; }
 
+        /// <summary>
+        /// 按类型查找手牌(人机)
+        /// </summary>
         public T FindCard<T>() where T : Card
         {
             foreach (var card in HandCards)
@@ -91,11 +98,33 @@ namespace Model
             return null;
         }
 
-        public void LoadGeneral(General general)
+        /// <summary>
+        /// 初始化武将
+        /// </summary>
+        public void InitGeneral(General general)
         {
             this.general = general;
             HpLimit = general.hp_limit;
             Hp = HpLimit;
+            InitSkill();
+        }
+
+        /// <summary>
+        /// 初始化技能
+        /// </summary>
+        private void InitSkill()
+        {
+            foreach (var str in general.skill)
+            {
+                // Skill skill;
+                switch (str)
+                {
+                    case "义绝":
+                        skills.Add(str, new YiJue(this)); break;
+                }
+
+                // player.skills.Add(skill);
+            }
         }
     }
 }

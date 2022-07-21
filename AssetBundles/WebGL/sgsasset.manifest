@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1942488857
+CRC: 1168610490
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b859073e8a59689ffa50bae484c21385
+    Hash: fed1962b106525de8e0775a08ebcf8c1
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 49c44606e580a95bb35ae83fb0a1d733
+    Hash: 4a899a25ba8997e2cf219aed29cb795b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -31,6 +31,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: e57737c65a4cebe4d9c6c816bfa2adef, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: df5956a3fad144f4394e2e5e0835523a, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -41,12 +43,36 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
-SerializeReferenceClassIdentifiers: []
+SerializeReferenceClassIdentifiers:
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.AnimationTriggers
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ColorBlock
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.FontData
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Navigation
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Slider/SliderEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.SpriteState
 Assets:
 - Assets/Prefabs/SgsMain/Panels/RegionPanel.prefab
+- "Assets/Prefabs/SgsMain/Skill/\u89C9\u9192\u6280.prefab"
+- "Assets/Prefabs/SgsMain/Skill/\u9501\u5B9A\u6280.prefab"
+- "Assets/Prefabs/SgsMain/Skill/\u9650\u5B9A\u6280.prefab"
 - Assets/Prefabs/SgsMain/Panels/QlgPanel.prefab
 - Assets/Prefabs/SgsMain/Card.prefab
 - "Assets/Prefabs/SgsMain/\u5224\u5B9A\u724C.prefab"
+- "Assets/Prefabs/SgsMain/Skill/\u4E3B\u52A8\u6280.prefab"
 Dependencies:
-- D:/Unity/sgs/AssetBundles/WebGL/fonts
-- D:/Unity/sgs/AssetBundles/WebGL/sprite
+- /Users/wyx/Desktop/sgs_unity/AssetBundles/WebGL/fonts
+- /Users/wyx/Desktop/sgs_unity/AssetBundles/WebGL/sprite
