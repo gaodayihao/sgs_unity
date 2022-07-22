@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Model
 {
+    /// <summary>
+    /// 无懈可击
+    /// </summary>
     public class WuXieKeJi : Card
     {
         public WuXieKeJi()
@@ -41,6 +44,9 @@ namespace Model
         private bool isCountered;
     }
 
+    /// <summary>
+    /// 过河拆桥
+    /// </summary>
     public class GuoHeChaiQiao : Card
     {
         public GuoHeChaiQiao()
@@ -81,6 +87,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 顺手牵羊
+    /// </summary>
     public class ShunShouQianYang : Card
     {
         public ShunShouQianYang()
@@ -121,6 +130,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 决斗
+    /// </summary>
     public class JueDou : Card
     {
         public JueDou()
@@ -149,6 +161,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 南蛮入侵
+    /// </summary>
     public class NanManRuQin : Card
     {
         public NanManRuQin()
@@ -174,6 +189,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 万箭齐发
+    /// </summary>
     public class WanJianQiFa : Card
     {
         public WanJianQiFa()
@@ -199,6 +217,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 桃园结义
+    /// </summary>
     public class TaoYuanJieYi : Card
     {
         public TaoYuanJieYi()
@@ -224,6 +245,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 无中生有
+    /// </summary>
     public class WuZhongShengYou : Card
     {
         public WuZhongShengYou()

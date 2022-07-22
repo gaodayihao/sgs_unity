@@ -92,8 +92,16 @@ namespace Model
         public bool Convertion { get; private set; } = false;
         public List<Card> PrimiTives { get; private set; } = new List<Card>();
 
+        /// <summary>
+        /// 转化牌
+        /// </summary>
+        /// <param name="primitives">原卡牌</param>
+        /// <typeparam name="T">类型</typeparam>
         public static T Convert<T>(List<Card> primitives) where T : Card, new()
         {
+            // 二次转化
+            if (primitives[0].Convertion) return Convert<T>(primitives[0].PrimiTives);
+
             var card = new T();
             card.Convertion = true;
             card.PrimiTives = primitives;

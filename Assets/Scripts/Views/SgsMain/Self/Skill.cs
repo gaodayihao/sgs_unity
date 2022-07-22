@@ -40,7 +40,7 @@ namespace View
         }
 
         /// <summary>
-        /// 选中卡牌
+        /// 选中技能
         /// </summary>
         public void Select()
         {
@@ -63,7 +63,7 @@ namespace View
         }
 
         /// <summary>
-        /// 重置卡牌
+        /// 重置技能
         /// </summary>
         public void ResetSkill()
         {

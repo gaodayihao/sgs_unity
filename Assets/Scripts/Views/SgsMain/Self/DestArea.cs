@@ -73,7 +73,6 @@ namespace View
                     break;
 
                 case TimerType.ZBSM:
-                case TimerType.UseSha:
                     // 打出
                     if (Model.TimerTask.Instance.timerType == TimerType.UseCard)
                     {
@@ -83,16 +82,35 @@ namespace View
                     // 使用
                     else
                     {
-                        var shaDestCount = Model.DestArea.ShaDestCount(self.model);
-                        maxCount = shaDestCount[0];
-                        minCount = shaDestCount[1];
+                        maxCount = Model.DestArea.ShaMaxDest(self.model);
+                        minCount = 1;
                     }
                     break;
 
                 case TimerType.CallSkill:
                     var skill = GetComponent<SkillArea>().SelectedSkill.model;
-                    maxCount = skill.MaxCard();
-                    minCount = skill.MinCard();
+                    // 转化技
+                    if (skill is Model.Converted)
+                    {
+                        // 打出
+                        if (Model.TimerTask.Instance.timerType == TimerType.UseCard)
+                        {
+                            maxCount = 0;
+                            minCount = 0;
+                        }
+                        // 使用
+                        else
+                        {
+                            var dest = Model.DestArea.InitDestCount(self.model, (skill as Model.Converted).CardName);
+                            maxCount = dest[0];
+                            minCount = dest[1];
+                        }
+                    }
+                    else
+                    {
+                        maxCount = skill.MaxDest();
+                        minCount = skill.MinDest();
+                    }
                     break;
 
                 default:

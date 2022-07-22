@@ -57,7 +57,7 @@ namespace Model
             // 初始化牌堆
             await CardPile.Instance.Init();
 
-            await DebugCard();
+            if (Room.Instance.isSingle) await DebugCard();
 
             foreach (var player in players) await new GetCardFromPile(player, 4).Execute();
 
@@ -126,28 +126,35 @@ namespace Model
             }
 
             List<General> json = JsonList<General>.FromJson(www.downloadHandler.text);
+            // for (int i = 0; i < json.Count; i++) Debug.Log(i.ToString() + json[i].name);
 
-            // debug
-            // 关羽
-            General self = json[1];
-            json.Remove(self);
 
-            foreach (var player in players)
+            if (Room.Instance.isSingle)
             {
-                General general;
+                // debug
+                // 关羽
+                General self = json[1];
+                json.Remove(self);
 
-                if (Room.Instance.isSingle)
+                foreach (var i in players)
                 {
-                    // debug
-                    if (player.isSelf) general = self;
-                    else general = json[Random.Range(0, json.Count)];
-                }
-                else general = json[Room.Instance.RandomGeneral[player.Position]];
+                    General general;
 
-                player.InitGeneral(general);
-                Debug.Log(general.name);
-                json.Remove(general);
+                    // debug
+                    if (i.isSelf) general = self;
+
+                    else general = json[Random.Range(0, json.Count)];
+                    json.Remove(general);
+
+                    i.InitGeneral(general);
+                }
             }
+            else
+                foreach (var player in players)
+                {
+                    var general = json[Room.Instance.RandomGeneral[player.Position]];
+                    player.InitGeneral(general);
+                }
         }
     }
 }

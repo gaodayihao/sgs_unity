@@ -170,7 +170,7 @@ namespace Model
             CurrentPlayer.ShaCount = 0;
             // 重置使用技能次数
             foreach (var i in CurrentPlayer.skills.Values) if (i is Active) (i as Active).Time = 0;
-            
+
             bool performIsDone = false;
             var timerTask = TimerTask.Instance;
 
@@ -182,7 +182,7 @@ namespace Model
 
                 if (!performIsDone)
                 {
-                    if (timerTask.Skill != "")
+                    if (timerTask.Skill != "" && CurrentPlayer.skills[timerTask.Skill] is Active)
                     {
                         var skill = CurrentPlayer.skills[timerTask.Skill] as Active;
                         await skill.Execute(timerTask.Dests, timerTask.Cards, "");

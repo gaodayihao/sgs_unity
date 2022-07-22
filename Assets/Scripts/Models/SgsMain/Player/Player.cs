@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace Model
 {
@@ -116,9 +117,10 @@ namespace Model
         {
             foreach (var str in general.skill)
             {
-                // Skill skill;
                 switch (str)
                 {
+                    case "武圣":
+                        skills.Add(str, new WuSheng(this)); break;
                     case "义绝":
                         skills.Add(str, new YiJue(this)); break;
                 }
@@ -126,5 +128,15 @@ namespace Model
                 // player.skills.Add(skill);
             }
         }
+
+        // public Func<Card, bool> isUnlimited;
+        // public bool IsUnlimited(Card card)
+        // {
+        //     foreach (Func<Card, bool> i in isUnlimited.GetInvocationList())
+        //     {
+        //         if (i(card)) return true;
+        //     }
+        //     return false;
+        // }
     }
 }

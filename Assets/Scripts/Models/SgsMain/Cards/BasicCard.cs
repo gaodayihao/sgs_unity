@@ -7,6 +7,9 @@ namespace Model
 {
     public class Sha : Card
     {
+        /// <summary>
+        /// 杀
+        /// </summary>
         public Sha()
         {
             Type = "基本牌";
@@ -86,6 +89,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 闪
+    /// </summary>
     public class Shan : Card
     {
         public Shan()
@@ -137,6 +143,9 @@ namespace Model
         }
     }
 
+    /// <summary>
+    /// 桃
+    /// </summary>
     public class Tao : Card
     {
         public Tao()

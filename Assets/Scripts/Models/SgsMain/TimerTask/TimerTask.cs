@@ -68,7 +68,14 @@ namespace Model
             GivenCard = null;
             SkillName = null;
 
-            if (Equipages.Count != 0 && Equipages[0] is ZhangBaSheMao)
+            // 转化技
+                //    if(Skill!="") Debug.Log("timerTask.Skill="+Skill);
+            if (Skill != "" && player.skills[Skill] is Converted)
+            {
+                Cards = new List<Card> { (player.skills[Skill] as Converted).Execute(Cards) };
+            }
+            // 转化装备
+            else if (Equipages.Count != 0 && Equipages[0] is ZhangBaSheMao)
             {
                 Cards = new List<Card> { ((ZhangBaSheMao)Equipages[0]).ConvertSkill(Cards) };
             }

@@ -21,9 +21,8 @@ namespace Model
                 case "杀":
                 case "雷杀":
                 case "火杀":
-                    maxCount = 1;
+                    maxCount = ShaMaxDest(player);
                     minCount = 1;
-                    if (player.HandCardCount == 1 && player.Equipages["武器"] is FangTianHuaJi) maxCount += 2;
                     break;
                 case "决斗":
                 case "过河拆桥":
@@ -47,12 +46,11 @@ namespace Model
             return new int[2] { maxCount, minCount };
         }
 
-        public static int[] ShaDestCount(Player player)
+        public static int ShaMaxDest(Player player)
         {
             int maxCount = 1;
-            int minCount = 1;
             if (player.HandCardCount == 1 && player.Equipages["武器"] is FangTianHuaJi) maxCount += 2;
-            return new int[2] { maxCount, minCount };
+            return maxCount;
         }
 
         /// <summary>

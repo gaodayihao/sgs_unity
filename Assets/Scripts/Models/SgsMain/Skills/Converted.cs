@@ -4,18 +4,17 @@ using UnityEngine;
 
 namespace Model
 {
-    public class Converted
+    public abstract class Converted : Skill
     {
-        // Start is called before the first frame update
-        void Start()
+        public Converted(Player src, string name, bool passive,int timeLimit, string cardName)
+           : base(src, name, passive,timeLimit)
         {
-
+            CardName = cardName;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
+        // 转化牌名称
+        public string CardName { get; private set; }
 
-        }
+        public abstract Card Execute(List<Card> cards);
     }
 }

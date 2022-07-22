@@ -14,7 +14,6 @@ public enum TimerType
     Discard,
     SelectHandCard,
     UseCard,
-    UseSha,
     UseWxkj,
     CallEquipSkill,
     ZBSM,

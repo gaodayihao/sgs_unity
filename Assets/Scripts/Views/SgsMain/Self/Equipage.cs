@@ -45,7 +45,7 @@ namespace View
             if (name == "丈八蛇矛")
             {
                 if (operationArea.timerType == TimerType.PerformPhase ||
-                    operationArea.timerType == TimerType.UseCard || operationArea.timerType == TimerType.UseSha)
+                    operationArea.timerType == TimerType.UseCard)
                 {
                     operationArea.ChangeType(TimerType.ZBSM);
                 }

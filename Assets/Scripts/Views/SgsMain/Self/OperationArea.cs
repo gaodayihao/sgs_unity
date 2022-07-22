@@ -66,7 +66,7 @@ namespace View
             {
                 timerTask.SendSetWxkjResult(self.model.Position, true, cards);
             }
-            else timerTask.SendSetResult(cards, players, equips,skill);
+            else timerTask.SendSetResult(cards, players, equips, skill);
         }
 
         /// <summary>
