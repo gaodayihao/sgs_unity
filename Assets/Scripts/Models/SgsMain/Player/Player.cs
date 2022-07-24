@@ -94,7 +94,7 @@ namespace Model
         {
             foreach (var card in HandCards)
             {
-                if (card is T) return (T)card;
+                if (card is T && !DisabledCard(card)) return (T)card;
             }
             return null;
         }
@@ -129,14 +129,24 @@ namespace Model
             }
         }
 
-        // public Func<Card, bool> isUnlimited;
-        // public bool IsUnlimited(Card card)
-        // {
-        //     foreach (Func<Card, bool> i in isUnlimited.GetInvocationList())
-        //     {
-        //         if (i(card)) return true;
-        //     }
-        //     return false;
-        // }
+        public Func<Card, bool> unlimitedCard = (card) => false;
+        public bool UnlimitedCard(Card card)
+        {
+            foreach (Func<Card, bool> i in unlimitedCard.GetInvocationList())
+            {
+                if (i(card)) return true;
+            }
+            return false;
+        }
+
+        public Func<Card, bool> disabledCard = (card) => false;
+        public bool DisabledCard(Card card)
+        {
+            foreach (Func<Card, bool> i in disabledCard.GetInvocationList())
+            {
+                if (i(card)) return true;
+            }
+            return false;
+        }
     }
 }

@@ -81,6 +81,7 @@ namespace View
         {
             var timerTask = Model.TimerTask.Instance;
 
+            // 可选卡牌数量
             if (timerType == timerTask.timerType)
             {
                 maxCount = timerTask.maxCount;
@@ -119,37 +120,51 @@ namespace View
                 return;
             }
 
-            switch (timerType)
-            {
-                // 出牌阶段
-                case TimerType.PerformPhase:
-                    foreach (var card in handcards.Values)
-                    {
-                        // 设置不能使用的手牌
-                        card.button.interactable = Model.CardArea.PerformPhase(self.model, card.Id);
-                    }
-                    break;
-
-                case TimerType.CallSkill:
-                    var skill = GetComponent<SkillArea>().SelectedSkill.model;
-                    foreach (var card in handcards.Values)
-                    {
-                        // 设置不能使用的手牌
-                        card.button.interactable = skill.IsValidCard(card.model);
-                    }
-                    break;
-
-                // 弃牌
-                default:
-                    foreach (var card in handcards.Values) card.button.interactable = true;
-                    break;
-            }
+            // 判断每张卡牌是否可选
 
             if (Model.TimerTask.Instance.timerType == timerType && Model.TimerTask.Instance.GivenCard != null)
             {
                 foreach (var card in handcards.Values)
                 {
                     card.button.interactable = Model.TimerTask.Instance.GivenCard.Contains(card.name);
+                }
+            }
+
+            else
+            {
+                switch (timerType)
+                {
+                    // 出牌阶段
+                    case TimerType.PerformPhase:
+                        foreach (var card in handcards.Values)
+                        {
+                            // 设置不能使用的手牌
+                            card.button.interactable = Model.CardArea.PerformPhase(self.model, card.Id);
+                        }
+                        break;
+
+                    case TimerType.CallSkill:
+                        var skill = GetComponent<SkillArea>().SelectedSkill.model;
+                        foreach (var card in handcards.Values)
+                        {
+                            // 设置不能使用的手牌
+                            card.button.interactable = skill.IsValidCard(card.model);
+                        }
+                        break;
+
+                    // 弃牌
+                    default:
+                        foreach (var card in handcards.Values) card.button.interactable = true;
+                        break;
+                }
+            }
+
+            // 设置禁用卡牌
+            if (timerType == TimerType.PerformPhase || timerType == TimerType.UseCard || timerType == TimerType.UseWxkj)
+            {
+                foreach (var i in handcards.Values)
+                {
+                    if (self.model.DisabledCard(i.model)) i.button.interactable = false;
                 }
             }
 

@@ -69,7 +69,7 @@ namespace View
             if (selectCards.Count > 0)
             {
                 StopAllCoroutines();
-                Model.CardPanel.Instance.SendSetResult(new List<int> { selectCards[0].Id });
+                Model.CardPanel.Instance.SendResult(new List<int> { selectCards[0].Id }, true);
             }
         }
 
@@ -90,7 +90,7 @@ namespace View
                 yield return new WaitForSeconds(0.1f);
             }
             StopAllCoroutines();
-            Model.CardPanel.Instance.SendSetResult();
+            Model.CardPanel.Instance.SendResult();
         }
     }
 }

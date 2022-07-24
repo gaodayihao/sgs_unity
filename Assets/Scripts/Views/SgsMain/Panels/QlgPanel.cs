@@ -69,7 +69,7 @@ namespace View
                 yield return new WaitForSeconds(0.1f);
             }
             StopAllCoroutines();
-            Model.CardPanel.Instance.SetResult();
+            Model.CardPanel.Instance.SendResult();
         }
     }
 }

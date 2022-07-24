@@ -24,7 +24,7 @@ public class Connection : MonoBehaviour
     }
 
     public WebSocket websocket { get; private set; }
-    public bool IsRunning { get; set; } = true;
+    // public bool IsRunning { get; set; } = true;
     public int Count { get; set; } = 0;
 
     // Start is called before the first frame update
@@ -47,56 +47,13 @@ public class Connection : MonoBehaviour
             Debug.Log("Connection closed!");
         };
 
-        websocket.OnMessage += async (bytes) =>
+        websocket.OnMessage += (bytes) =>
         {
             // getting the message as a string
             var message = System.Text.Encoding.UTF8.GetString(bytes);
             Debug.Log("OnMessage! " + message);
 
-            WebsocketJson json = JsonUtility.FromJson<WebsocketJson>(message);
-
-            switch (json.eventname)
-            {
-                // case "create_player":
-                //     Model.Room.Instance.CreatePlayer(json);
-                //     break;
-
-                case "start_game":
-                    var startGameJson = JsonUtility.FromJson<StartGameJson>(message);
-
-                    Model.Room.Instance.InitPlayers(startGameJson);
-                    StartCoroutine(SceneManager.Instance.LoadSceneFromAB("SgsMain"));
-                    break;
-
-                case "set_result":
-                    var timerJson = JsonUtility.FromJson<TimerJson>(message);
-                    if (!await Verify(timerJson.id)) break;
-                    if (Model.TimerTask.Instance.timerType == TimerType.UseWxkj && !timerJson.result) Count--;
-
-                    Model.TimerTask.Instance.ReceiveSetResult(timerJson);
-                    break;
-
-                case "card_panel_result":
-                    var cardPanelJson = JsonUtility.FromJson<TimerJson>(message);
-                    if (!await Verify(cardPanelJson.id)) break;
-
-                    Model.CardPanel.Instance.ReceiveSetResult(cardPanelJson);
-                    break;
-
-                case "execute_phase":
-                    var phaseJson = JsonUtility.FromJson<PhaseJson>(message);
-                    if (!await Verify(phaseJson.id)) break;
-
-                    Model.TurnSystem.Instance.ReceivePhase(phaseJson);
-                    break;
-
-                case "shuffle":
-                    var cardPileJson = JsonUtility.FromJson<CardPileJson>(message);
-                    if (!await Verify(cardPileJson.id)) break;
-
-                    Model.CardPile.Instance.ReceiveShuffle(cardPileJson);
-                    break;
-            }
+            messages.Add(message);
         };
 
         // Keep sending messages at every 0.3s
@@ -106,15 +63,26 @@ public class Connection : MonoBehaviour
         await websocket.Connect();
     }
 
-    private async Task<bool> Verify(int id)
-    {
-        Debug.Log("id=" + id.ToString() + " count=" + Count.ToString());
-        if (id <= Count) return false;
-        while (IsRunning || id != Count + 1) await Task.Yield();
+    private List<string> messages = new List<string>();
 
-        IsRunning = true;
-        Count = id;
-        return true;
+    public async Task<string> PopMsg()
+    {
+        while (messages.Count == 0) await Task.Yield();
+        var msg = messages[0];
+        messages.RemoveAt(0);
+        return msg;
+    }
+
+    public async Task<string> PopSgsMsg()
+    {
+        var msg = await PopMsg();
+        var id = JsonUtility.FromJson<SgsJson>(msg).id;
+        if (id <= Count) return await PopSgsMsg();
+        else
+        {
+            Count++;
+            return msg;
+        }
     }
 
     void Update()

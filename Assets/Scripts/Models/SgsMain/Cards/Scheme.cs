@@ -8,9 +8,9 @@ namespace Model
     /// <summary>
     /// 无懈可击
     /// </summary>
-    public class WuXieKeJi : Card
+    public class 无懈可击 : Card
     {
-        public WuXieKeJi()
+        public 无懈可击()
         {
             Type = "锦囊牌";
             Name = "无懈可击";
@@ -25,7 +25,7 @@ namespace Model
             if (result)
             {
                 Debug.Log(TimerTask.Instance.Cards[0].Name);
-                var wxkj = (WuXieKeJi)TimerTask.Instance.Cards[0];
+                var wxkj = (无懈可击)TimerTask.Instance.Cards[0];
                 await wxkj.UseCard(TimerTask.Instance.player);
                 if (!wxkj.isCountered) return true;
             }
@@ -47,9 +47,9 @@ namespace Model
     /// <summary>
     /// 过河拆桥
     /// </summary>
-    public class GuoHeChaiQiao : Card
+    public class 过河拆桥 : Card
     {
-        public GuoHeChaiQiao()
+        public 过河拆桥()
         {
             Type = "锦囊牌";
             Name = "过河拆桥";
@@ -60,7 +60,7 @@ namespace Model
             await base.UseCard(src, dests);
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) continue;
+                if (await 无懈可击.Call(this, dest)) continue;
 
                 CardPanel.Instance.Title = "过河拆桥";
                 bool result = await CardPanel.Instance.Run(Src, dest, TimerType.RegionPanel);
@@ -90,9 +90,9 @@ namespace Model
     /// <summary>
     /// 顺手牵羊
     /// </summary>
-    public class ShunShouQianYang : Card
+    public class 顺手牵羊 : Card
     {
-        public ShunShouQianYang()
+        public 顺手牵羊()
         {
             Type = "锦囊牌";
             Name = "顺手牵羊";
@@ -103,7 +103,7 @@ namespace Model
             await base.UseCard(src, dests);
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) continue;
+                if (await 无懈可击.Call(this, dest)) continue;
 
                 CardPanel.Instance.Title = "顺手牵羊";
                 bool result = await CardPanel.Instance.Run(Src, dest, TimerType.RegionPanel);
@@ -133,9 +133,9 @@ namespace Model
     /// <summary>
     /// 决斗
     /// </summary>
-    public class JueDou : Card
+    public class 决斗 : Card
     {
-        public JueDou()
+        public 决斗()
         {
             Type = "锦囊牌";
             Name = "决斗";
@@ -147,7 +147,7 @@ namespace Model
 
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) continue;
+                if (await 无懈可击.Call(this, dest)) continue;
 
                 var player = dest;
                 bool done = false;
@@ -164,9 +164,9 @@ namespace Model
     /// <summary>
     /// 南蛮入侵
     /// </summary>
-    public class NanManRuQin : Card
+    public class 南蛮入侵 : Card
     {
-        public NanManRuQin()
+        public 南蛮入侵()
         {
             Type = "锦囊牌";
             Name = "南蛮入侵";
@@ -182,7 +182,7 @@ namespace Model
 
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) continue;
+                if (await 无懈可击.Call(this, dest)) continue;
 
                 if (!await Sha.Call(dest)) await new Damaged(dest, 1, src, this).Execute();
             }
@@ -192,9 +192,9 @@ namespace Model
     /// <summary>
     /// 万箭齐发
     /// </summary>
-    public class WanJianQiFa : Card
+    public class 万箭齐发 : Card
     {
-        public WanJianQiFa()
+        public 万箭齐发()
         {
             Type = "锦囊牌";
             Name = "万箭齐发";
@@ -210,7 +210,7 @@ namespace Model
 
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) continue;
+                if (await 无懈可击.Call(this, dest)) continue;
 
                 if (!await Shan.Call(dest)) await new Damaged(dest, 1, src, this).Execute();
             }
@@ -220,9 +220,9 @@ namespace Model
     /// <summary>
     /// 桃园结义
     /// </summary>
-    public class TaoYuanJieYi : Card
+    public class 桃园结义 : Card
     {
-        public TaoYuanJieYi()
+        public 桃园结义()
         {
             Type = "锦囊牌";
             Name = "桃园结义";
@@ -238,7 +238,7 @@ namespace Model
             foreach (var dest in Dests)
             {
                 if (dest.Hp >= dest.HpLimit) continue;
-                if (await WuXieKeJi.Call(this, dest)) continue;
+                if (await 无懈可击.Call(this, dest)) continue;
 
                 await new Recover(dest).Execute();
             }
@@ -248,9 +248,9 @@ namespace Model
     /// <summary>
     /// 无中生有
     /// </summary>
-    public class WuZhongShengYou : Card
+    public class 无中生有 : Card
     {
-        public WuZhongShengYou()
+        public 无中生有()
         {
             Type = "锦囊牌";
             Name = "无中生有";
@@ -265,7 +265,7 @@ namespace Model
 
             foreach (var dest in Dests)
             {
-                if (await WuXieKeJi.Call(this, dest)) continue;
+                if (await 无懈可击.Call(this, dest)) continue;
 
                 await new GetCardFromPile(dest, 2).Execute();
             }

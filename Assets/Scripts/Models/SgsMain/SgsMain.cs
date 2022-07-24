@@ -38,6 +38,7 @@ namespace Model
                 {
                     if (i.Username == User.Instance.Username) i.isSelf = true;
                     i.isAI = i.Username == "AI";
+                    AlivePlayers.Add(i);
                 }
             }
 

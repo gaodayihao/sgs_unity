@@ -26,12 +26,12 @@ namespace Model
             this.dest = dest;
             this.timerType = timerType;
 
-            if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
+            // if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
 
             waitAction = new TaskCompletionSource<bool>();
 
             startTimerView?.Invoke(this);
-            var result = await waitAction.Task;
+            var result = Room.Instance.isSingle ? await waitAction.Task : await ReceiveResult();
             stopTimerView?.Invoke(this);
 
             Hint = "";
@@ -41,53 +41,54 @@ namespace Model
 
         public void SetResult(List<int> cards)
         {
-            Debug.Log("SetResult(List<int> cards)");
             Cards = new List<Card>();
             foreach (var i in cards) Cards.Add(CardPile.Instance.cards[i]);
-            waitAction.TrySetResult(true);
         }
 
-        public void SetResult()
+        public void SendResult(List<int> cards, bool result)
         {
-            waitAction.TrySetResult(false);
-        }
-
-        public void SendSetResult(List<int> cards)
-        {
-            if (Room.Instance.isSingle) SetResult(cards);
+            if (Room.Instance.isSingle)
+            {
+                if (result) SetResult(cards);
+                waitAction.TrySetResult(result);
+            }
             // 多人模式
             else
             {
                 var json = new TimerJson();
                 json.eventname = "card_panel_result";
                 json.id = Connection.Instance.Count + 1;
-                json.result = true;
+                json.result = result;
                 json.cards = cards;
 
                 Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
             }
         }
 
-        public void SendSetResult()
+        public void SendResult()
         {
-            if (Room.Instance.isSingle) SetResult();
-            // 多人模式
-            else
-            {
-                var json = new TimerJson();
-                json.eventname = "card_panel_result";
-                json.id = Connection.Instance.Count + 1;
-                json.result = false;
+            SendResult(null, false);
+            // if (Room.Instance.isSingle) SetResult();
+            // // 多人模式
+            // else
+            // {
+            //     var json = new TimerJson();
+            //     json.eventname = "card_panel_result";
+            //     json.id = Connection.Instance.Count + 1;
+            //     json.result = false;
 
-                Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
-            }
+            //     Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+            // }
         }
 
-        public void ReceiveSetResult(TimerJson json)
+        public async Task<bool> ReceiveResult()
         {
             Debug.Log("ReceiveSetResult");
+            var msg = await Connection.Instance.PopSgsMsg();
+            var json = JsonUtility.FromJson<TimerJson>(msg);
             if (json.result) SetResult(json.cards);
-            else SetResult();
+            else SendResult();
+            return json.result;
         }
 
         private UnityAction<CardPanel> startTimerView;

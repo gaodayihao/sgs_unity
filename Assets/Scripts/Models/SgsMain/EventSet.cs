@@ -134,8 +134,8 @@ namespace Model
                 {
                     if (eventDic[player].Count == 1)
                     {
-                        var breakAsking = await eventDic[player][0](param);
-                        if (breakAsking) break;
+                        var Continue = await eventDic[player][0](param);
+                        if (!Continue) break;
                     }
                 }
                 player = player.Next;

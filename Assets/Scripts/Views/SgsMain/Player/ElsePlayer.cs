@@ -169,10 +169,10 @@ namespace View
                             case TimerType.RegionPanel:
                             case TimerType.SSQY:
                             case TimerType.QlgPanel:
-                                Model.CardPanel.Instance.SetResult();
+                                Model.CardPanel.Instance.SendResult();
                                 break;
                             default:
-                                Model.TimerTask.Instance.SetResult();
+                                Model.TimerTask.Instance.SendResult();
                                 break;
                         }
                         break;

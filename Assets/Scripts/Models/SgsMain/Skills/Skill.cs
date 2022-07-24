@@ -80,16 +80,16 @@ namespace Model
         }
 
         /// <summary>
-        /// 是否失效
+        /// 是否有效
         /// </summary>
-        public bool Disabled { get; set; } = false;
+        public int Enabled { get; set; } = 1;
 
         /// <summary>
         /// 技能是否可使用
         /// </summary>
         public virtual bool IsValid()
         {
-            return Time < TimeLimit && !Disabled;
+            return Time < TimeLimit && Enabled > 0;
         }
     }
 }

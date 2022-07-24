@@ -11,7 +11,7 @@ namespace Model
         public Mode mode;
         public List<Player> players;
 
-        public async void SendCreatePlayer()
+        public async Task StartRank()
         {
             // while (connection.websocket == null || connection.websocket.State != NativeWebSocket.WebSocketState.Open)
             // {
@@ -32,6 +32,14 @@ namespace Model
             }
 
             Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+
+            var message = await Connection.Instance.PopMsg();
+            while (JsonUtility.FromJson<WebsocketJson>(message).eventname != "start_game")
+            {
+                message = await Connection.Instance.PopMsg(); ;
+            }
+            var startGameJson = JsonUtility.FromJson<StartGameJson>(message);
+            InitPlayers(startGameJson);
             // await Connection.Instance.SendWebSocketMessage
             // (
             //     $"{{\"eventname\": \"create_player\", \"username\": \"{User.Instance.Username}\"}}"

@@ -56,10 +56,12 @@ namespace Model
 
             waitAction = new TaskCompletionSource<bool>();
 
-            startTimerView?.Invoke(this);
-            if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
 
-            var result = await waitAction.Task;
+            startTimerView?.Invoke(this);
+            // if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
+
+            // var result = await waitAction.Task;
+            var result = Room.Instance.isSingle ? await waitAction.Task : await WaitResult();
 
             stopTimerView?.Invoke(this);
 
@@ -69,7 +71,7 @@ namespace Model
             SkillName = null;
 
             // 转化技
-                //    if(Skill!="") Debug.Log("timerTask.Skill="+Skill);
+            //    if(Skill!="") Debug.Log("timerTask.Skill="+Skill);
             if (Skill != "" && player.skills[Skill] is Converted)
             {
                 Cards = new List<Card> { (player.skills[Skill] as Converted).Execute(Cards) };
@@ -100,25 +102,27 @@ namespace Model
             foreach (var id in equipages) Equipages.Add(CardPile.Instance.cards[id]);
 
             Skill = skill;
-
-            waitAction.TrySetResult(true);
         }
 
         public void SetResult()
         {
-            waitAction.TrySetResult(false);
+            if (Room.Instance.isSingle) waitAction.TrySetResult(false);
         }
 
-        public void SendSetResult(List<int> cards, List<int> dests, List<int> equipages, string skill)
+        public void SendResult(List<int> cards, List<int> dests, List<int> equipages, string skill, bool result = true)
         {
-            if (Room.Instance.isSingle) SetResult(cards, dests, equipages, skill);
+            if (Room.Instance.isSingle)
+            {
+                if (result) SetResult(cards, dests, equipages, skill);
+                waitAction.TrySetResult(result);
+            }
             // 多人模式
             else
             {
                 var json = new TimerJson();
                 json.eventname = "set_result";
                 json.id = Connection.Instance.Count + 1;
-                json.result = true;
+                json.result = result;
                 json.cards = cards;
                 json.dests = dests;
                 json.equipages = equipages;
@@ -128,31 +132,58 @@ namespace Model
             }
         }
 
-        public void SendSetResult()
+        public void SendResult()
         {
-            if (Room.Instance.isSingle) SetResult();
-            // 多人模式
-            else
-            {
-                var json = new TimerJson();
-                json.eventname = "set_result";
-                json.id = Connection.Instance.Count + 1;
-                json.result = false;
+            SendResult(null, null, null, null, false);
+            // if (Room.Instance.isSingle) SetResult();
+            // // 多人模式
+            // else
+            // {
+            //     var json = new TimerJson();
+            //     json.eventname = "set_result";
+            //     json.id = Connection.Instance.Count + 1;
+            //     json.result = false;
 
-                Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
-            }
+            //     Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+            // }
         }
 
-        public void ReceiveSetResult(TimerJson json)
+        public async Task<bool> WaitResult()
         {
             // while (Connection.Instance.IsRunning) await Task.Yield();
 
-            if (timerType != TimerType.UseWxkj)
+            var message = await Connection.Instance.PopSgsMsg();
+            var json = JsonUtility.FromJson<TimerJson>(message);
+
+            if (timerType == TimerType.UseWxkj)
             {
-                if (!json.result) SetResult();
-                else SetResult(json.cards, json.dests, json.equipages, json.skill);
+                if (json.result)
+                {
+                    player = SgsMain.Instance.players[json.src];
+                    SetResult(json.cards, new List<int>(), new List<int>(), "");
+                    // return true;
+                }
+                else
+                {
+                    wxkjDone[json.src] = true;
+                    foreach (var i in wxkjDone.Values)
+                    {
+                        if (!i)
+                        {
+                            Connection.Instance.Count--;
+                            return await WaitResult();
+                        }
+                    }
+
+                    // if (!Room.Instance.isSingle) Connection.Instance.Count++;
+                    // SetResult();
+                    // return false;
+                }
+                return json.result;
             }
-            else SetWxkjResult(json.src, json.result, json.cards, json.skill);
+
+            if (json.result) SetResult(json.cards, json.dests, json.equipages, json.skill);
+            return json.result;
         }
 
         private Dictionary<int, bool> wxkjDone;
@@ -177,9 +208,9 @@ namespace Model
             waitAction = new TaskCompletionSource<bool>();
 
             startTimerView?.Invoke(this);
-            if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
+            // if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
 
-            var result = await waitAction.Task;
+            bool result = Room.Instance.isSingle ? await waitAction.Task : await WaitResult();
 
             stopTimerView?.Invoke(this);
 
@@ -196,21 +227,18 @@ namespace Model
             {
                 player = SgsMain.Instance.players[src];
                 SetResult(cards, new List<int>(), new List<int>(), "");
+                waitAction.TrySetResult(true);
             }
             else
             {
                 wxkjDone[src] = true;
                 foreach (var i in wxkjDone.Values)
                 {
-                    if (!i)
-                    {
-                        if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
-                        return;
-                    }
+                    if (!i) return;
                 }
 
-                if (!Room.Instance.isSingle) Connection.Instance.Count++;
-                SetResult();
+                // if (!Room.Instance.isSingle) Connection.Instance.Count++;
+                if (Room.Instance.isSingle) waitAction.TrySetResult(false);
             }
         }
 

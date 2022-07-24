@@ -55,14 +55,14 @@ namespace Model
 
                     case "乐不思蜀": card = new LeBuSiShu(); break;
 
-                    case "过河拆桥": card = new GuoHeChaiQiao(); break;
-                    case "顺手牵羊": card = new ShunShouQianYang(); break;
-                    case "无懈可击": card = new WuXieKeJi(); break;
-                    case "南蛮入侵": card = new NanManRuQin(); break;
-                    case "万箭齐发": card = new WanJianQiFa(); break;
-                    case "桃园结义": card = new TaoYuanJieYi(); break;
-                    case "无中生有": card = new WuZhongShengYou(); break;
-                    case "决斗": card = new JueDou(); break;
+                    case "过河拆桥": card = new 过河拆桥(); break;
+                    case "顺手牵羊": card = new 顺手牵羊(); break;
+                    case "无懈可击": card = new 无懈可击(); break;
+                    case "南蛮入侵": card = new 南蛮入侵(); break;
+                    case "万箭齐发": card = new 万箭齐发(); break;
+                    case "桃园结义": card = new 桃园结义(); break;
+                    case "无中生有": card = new 无中生有(); break;
+                    case "决斗": card = new 决斗(); break;
 
                     default: card = new Tao(); break;
                 }
@@ -152,13 +152,15 @@ namespace Model
                 Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
 
                 // 等待消息
-                tcs = new TaskCompletionSource<CardPileJson>();
-                Connection.Instance.IsRunning = false;
-                var message = await tcs.Task;
+                // tcs = new TaskCompletionSource<CardPileJson>();
+                // Connection.Instance.IsRunning = false;
+                // var message = await tcs.Task;
+                var msg = await Connection.Instance.PopSgsMsg();
+                var newJson = JsonUtility.FromJson<CardPileJson>(msg);
 
                 // 更新牌堆
                 remainPile.Clear();
-                foreach (int i in message.cards) remainPile.Add(cards[i]);
+                foreach (int i in newJson.cards) remainPile.Add(cards[i]);
             }
         }
 

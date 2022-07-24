@@ -66,7 +66,7 @@ namespace View
             {
                 timerTask.SendSetWxkjResult(self.model.Position, true, cards);
             }
-            else timerTask.SendSetResult(cards, players, equips, skill);
+            else timerTask.SendResult(cards, players, equips, skill);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace View
             StopAllCoroutines();
             HideTimer();
             if (timerTask.timerType == TimerType.UseWxkj) timerTask.SendSetWxkjResult(self.model.Position, false);
-            else timerTask.SendSetResult();
+            else timerTask.SendResult();
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace View
         private void ClickFinishPhase()
         {
             StopAllCoroutines();
-            timerTask.SendSetResult();
+            timerTask.SendResult();
         }
 
         /// <summary>

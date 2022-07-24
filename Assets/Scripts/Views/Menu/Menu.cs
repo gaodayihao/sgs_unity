@@ -17,11 +17,11 @@ namespace View
             start_2v2.onClick.AddListener(Click_2v2);
         }
 
-        private void Click_2v2()
+        private async void Click_2v2()
         {
-            if (!Model.Room.Instance.isSingle) Model.Room.Instance.SendCreatePlayer();
+            if (!Model.Room.Instance.isSingle) await Model.Room.Instance.StartRank();
 
-            else StartCoroutine(SceneManager.Instance.LoadSceneFromAB("SgsMain"));
+            StartCoroutine(SceneManager.Instance.LoadSceneFromAB("SgsMain"));
         }
 
         // public void StartGame()

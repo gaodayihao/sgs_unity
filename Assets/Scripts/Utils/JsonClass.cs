@@ -87,6 +87,13 @@ public class StartGameJson
 }
 
 [Serializable]
+public class SgsJson
+{
+    public string eventname;
+    public int id;
+}
+
+[Serializable]
 public class TimerJson
 {
     public string eventname;

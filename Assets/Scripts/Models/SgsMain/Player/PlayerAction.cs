@@ -166,7 +166,7 @@ namespace Model
         {
             Value = value;
         }
-        public int Value { get; protected set; }
+        public int Value { get; set; }
 
         public override async Task Execute()
         {
@@ -191,11 +191,14 @@ namespace Model
                 askedPlayer = askedPlayer.Next;
             } while (askedPlayer != TurnSystem.Instance.CurrentPlayer);
 
-            if (this is Damaged) await new Die(player, ((Damaged)this).DamageSrc).Execute();
+            if (this is Damaged) await new Die(player, ((Damaged)this).Src).Execute();
             else await new Die(player, null).Execute();
         }
     }
 
+    /// <summary>
+    /// 阵亡
+    /// </summary>
     public class Die : PlayerAction<Die>
     {
         public Die(Player player, Player damageSrc) : base(player)
@@ -209,10 +212,20 @@ namespace Model
         {
             actionView?.Invoke(this);
 
+            player.skills.Clear();
             player.IsAlive = false;
             player.Next.Last = player.Last;
             player.Last.Next = player.Next;
             SgsMain.Instance.AlivePlayers.Remove(player);
+
+            // 弃置所有牌
+            List<Card> cards = new List<Card>();
+            foreach (var i in player.HandCards) cards.Add(i);
+            foreach (var i in player.Equipages.Values) if (i != null) cards.Add(i);
+            foreach (var i in player.JudgeArea) cards.Add(i);
+            // CardPile.Instance.AddToDiscard(cards);
+            foreach (var i in cards) Debug.Log(i.Id);
+            await new Discard(player, cards).Execute();
 
             if (damageSrc != null) await new GetCardFromPile(damageSrc, 3).Execute();
         }
@@ -257,17 +270,19 @@ namespace Model
         /// <param name="value">伤害量</param>
         public Damaged(Player player, int value, Player src, Card srcCard = null) : base(player, -value)
         {
-            DamageSrc = src;
+            Src = src;
+            SrcCard = srcCard;
         }
 
-        public Player DamageSrc { get; private set; }
+        public Player Src { get; private set; }
+        public Card SrcCard { get; private set; }
 
         public override async Task Execute()
         {
-            Debug.Log((player.Position + 1).ToString() + "受到了" + (-Value).ToString() + "点伤害");
-
             // 受到伤害时
             await player.playerEvents.whenDamaged.Execute(this);
+
+            Debug.Log((player.Position + 1).ToString() + "受到了" + (-Value).ToString() + "点伤害");
 
             // 受到伤害
             await base.Execute();

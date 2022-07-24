@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Threading.Tasks;
+using System;
 
 namespace Model
 {
@@ -46,8 +47,8 @@ namespace Model
             // int turnCount = 0;
 
             // 单机模式
-            if (Room.Instance.isSingle)
-            {
+            // if (Room.Instance.isSingle)
+            // {
                 while (SgsMain.Instance.players[0].IsAlive)
                 {
                     // Debug.Log("CurrentPlayer is " + CurrentPlayer.Position.ToString());
@@ -56,48 +57,77 @@ namespace Model
                     startTurnView?.Invoke(this);
                     for (CurrentPhase = Phase.Prepare; CurrentPhase <= Phase.End; CurrentPhase++)
                     {
+                        if(!Room.Instance.isSingle) await Sync();
+                        BeforeTurn?.Invoke();
                         await ExecutePhase();
+                        AfterTurn?.Invoke();
                     }
                     finishTurnView?.Invoke(this);
 
                     CurrentPlayer = CurrentPlayer.Next;
                     // turnCount++;
                 }
-            }
+            // }
             // 多人模式
-            else
-            {
-                SendPhase(CurrentPlayer, Phase.Prepare);
-                Connection.Instance.IsRunning = false;
-            }
+            // else
+            // {
+            //     SendPhase(CurrentPlayer, Phase.Prepare);
+            //     Connection.Instance.IsRunning = false;
+            // }
         }
 
-        private void SendPhase(Player player, Phase phase)
+        private async Task Sync()
         {
             PhaseJson json = new PhaseJson();
             json.eventname = "execute_phase";
             json.id = Connection.Instance.Count + 1;
-            json.player = player.Position;
-            json.phase = phase;
+            json.player = CurrentPlayer.Position;
+            json.phase = CurrentPhase;
 
             Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+            var msg = await Connection.Instance.PopSgsMsg();
+            Debug.Log(JsonUtility.FromJson<SgsJson>(msg).eventname);
         }
 
-        private void SendNextPhase()
-        {
-            if (CurrentPhase != Phase.End) SendPhase(CurrentPlayer, CurrentPhase + 1);
-            else SendPhase(CurrentPlayer.Next, Phase.Prepare);
-        }
+        // private void SendPhase(Player player, Phase phase)
+        // {
+        //     PhaseJson json = new PhaseJson();
+        //     json.eventname = "execute_phase";
+        //     json.id = Connection.Instance.Count + 1;
+        //     json.player = player.Position;
+        //     json.phase = phase;
 
-        public async void ReceivePhase(PhaseJson json)
-        {
-            CurrentPlayer = SgsMain.Instance.players[json.player];
-            CurrentPhase = json.phase;
+        //     Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+        // }
 
-            await ExecutePhase();
-            SendNextPhase();
-            Connection.Instance.IsRunning = false;
-        }
+        // private void SendNextPhase()
+        // {
+        //     if (CurrentPhase != Phase.End) SendPhase(CurrentPlayer, CurrentPhase + 1);
+        //     else SendPhase(CurrentPlayer.Next, Phase.Prepare);
+        // }
+
+        // public async void ReceivePhase(PhaseJson json)
+        // {
+        //     CurrentPlayer = SgsMain.Instance.players[json.player];
+        //     CurrentPhase = json.phase;
+
+        //     if (CurrentPhase == Phase.Prepare)
+        //     {
+        //         BeforeTurn?.Invoke();
+        //         startPhaseView(this);
+        //     }
+
+        //     await ExecutePhase();
+
+        //     if (CurrentPhase == Phase.End)
+        //     {
+        //         finishTurnView(this);
+        //         AfterTurn?.Invoke();
+        //     }
+
+        //     SendNextPhase();
+        //     Connection.Instance.IsRunning = false;
+        // }
 
         // public int PerformTimer { get; private set; }
 
@@ -234,6 +264,9 @@ namespace Model
                 finishPerformView?.Invoke(this);
             }
         }
+
+        public Action BeforeTurn;
+        public Action AfterTurn;
 
         private UnityAction<TurnSystem> startTurnView;
         private UnityAction<TurnSystem> finishTurnView;
