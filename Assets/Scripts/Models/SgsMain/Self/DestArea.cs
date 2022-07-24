@@ -49,7 +49,7 @@ namespace Model
         public static int ShaMaxDest(Player player)
         {
             int maxCount = 1;
-            if (player.HandCardCount == 1 && player.Equipages["武器"] is FangTianHuaJi) maxCount += 2;
+            if (player.HandCardCount == 1 && player.Equipages["武器"] is 方天画戟) maxCount += 2;
             return maxCount;
         }
 

@@ -153,7 +153,7 @@ namespace Model
                 bool done = false;
                 while (!done)
                 {
-                    done = !await Sha.Call(player);
+                    done = !await 杀.Call(player);
                     if (done) await new Damaged(player, 1, player == dest ? src : dest, this).Execute();
                     else player = player == dest ? src : dest;
                 }
@@ -184,7 +184,7 @@ namespace Model
             {
                 if (await 无懈可击.Call(this, dest)) continue;
 
-                if (!await Sha.Call(dest)) await new Damaged(dest, 1, src, this).Execute();
+                if (!await 杀.Call(dest)) await new Damaged(dest, 1, src, this).Execute();
             }
         }
     }
@@ -212,7 +212,7 @@ namespace Model
             {
                 if (await 无懈可击.Call(this, dest)) continue;
 
-                if (!await Shan.Call(dest)) await new Damaged(dest, 1, src, this).Execute();
+                if (!await 闪.Call(dest)) await new Damaged(dest, 1, src, this).Execute();
             }
         }
     }

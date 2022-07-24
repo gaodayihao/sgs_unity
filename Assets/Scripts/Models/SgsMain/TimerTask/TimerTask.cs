@@ -77,9 +77,9 @@ namespace Model
                 Cards = new List<Card> { (player.skills[Skill] as Converted).Execute(Cards) };
             }
             // 转化装备
-            else if (Equipages.Count != 0 && Equipages[0] is ZhangBaSheMao)
+            else if (Equipages.Count != 0 && Equipages[0] is 丈八蛇矛)
             {
-                Cards = new List<Card> { ((ZhangBaSheMao)Equipages[0]).ConvertSkill(Cards) };
+                Cards = new List<Card> { ((丈八蛇矛)Equipages[0]).ConvertSkill(Cards) };
             }
 
             return result;

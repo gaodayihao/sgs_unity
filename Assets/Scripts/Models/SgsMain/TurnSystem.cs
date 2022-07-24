@@ -228,7 +228,7 @@ namespace Model
                 {
                     foreach (var card in CurrentPlayer.HandCards)
                     {
-                        if (card is Sha)
+                        if (card is 杀)
                         {
                             var dest = CurrentPlayer.Next;
                             do

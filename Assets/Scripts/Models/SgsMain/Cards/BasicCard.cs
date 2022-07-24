@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Model
 {
-    public class Sha : Card
+    public class 杀 : Card
     {
         /// <summary>
         /// 杀
         /// </summary>
-        public Sha()
+        public 杀()
         {
             Type = "基本牌";
             Name = "杀";
@@ -20,14 +20,14 @@ namespace Model
         {
             src.ShaCount++;
 
-            if (src.ShaCount > 1 && src.weapon is ZhuGeLianNu) src.weapon.SkillView();
-            else if (dests.Count > 1 && src.weapon is FangTianHuaJi) src.weapon.SkillView();
+            if (src.ShaCount > 1 && src.weapon is 诸葛连弩) src.weapon.SkillView();
+            else if (dests.Count > 1 && src.weapon is 方天画戟) src.weapon.SkillView();
 
             await base.UseCard(src, dests);
 
             // 发动青釭剑
             bool qgj = false;
-            if (src.weapon is QingGangJian) qgj = ((QingGangJian)src.weapon).Skill(this);
+            if (src.weapon is 青缸剑) qgj = ((青缸剑)src.weapon).Skill(this);
 
             foreach (var dest in Dests)
             {
@@ -37,7 +37,7 @@ namespace Model
                 {
                     for (int i = 0; i < ShanCount; i++)
                     {
-                        if (!await Shan.Call(dest))
+                        if (!await 闪.Call(dest))
                         {
                             hit = true;
                             break;
@@ -48,20 +48,20 @@ namespace Model
                 if (hit == false)
                 {
                     // 询问青龙偃月刀
-                    if (src.weapon is QingLongYanYueDao) await ((QingLongYanYueDao)src.weapon).Skill(dest);
+                    if (src.weapon is 青龙偃月刀) await ((青龙偃月刀)src.weapon).Skill(dest);
                     // 询问贯石斧
-                    else if (src.weapon is GuanShiFu && await ((GuanShiFu)src.weapon).Skill()) hit = true;
+                    else if (src.weapon is 贯石斧 && await ((贯石斧)src.weapon).Skill()) hit = true;
                 }
 
                 if (hit == true)
                 {
-                    if (src.weapon is QiLinGong) await ((QiLinGong)src.weapon).Skill(dest);
+                    if (src.weapon is 麒麟弓) await ((麒麟弓)src.weapon).Skill(dest);
                     await new Damaged(dest, 1, Src, this).Execute();
                 }
             }
 
             // 重新激活防具
-            if (qgj) ((QingGangJian)src.weapon).ResetArmor(this);
+            if (qgj) ((青缸剑)src.weapon).ResetArmor(this);
         }
 
         public int ShanCount { get; set; } = 1;
@@ -74,7 +74,7 @@ namespace Model
 
             if (player.isAI)
             {
-                var card = player.FindCard<Sha>();
+                var card = player.FindCard<杀>();
                 if (card != null)
                 {
                     TimerTask.Instance.Cards = new List<Card> { card };
@@ -92,9 +92,9 @@ namespace Model
     /// <summary>
     /// 闪
     /// </summary>
-    public class Shan : Card
+    public class 闪 : Card
     {
-        public Shan()
+        public 闪()
         {
             Type = "基本牌";
             Name = "闪";
@@ -103,9 +103,9 @@ namespace Model
         public static async Task<bool> Call(Player player)
         {
             bool result;
-            if (player.Equipages["防具"] is BaGuaZhen)
+            if (player.Equipages["防具"] is 八卦阵)
             {
-                result = await ((BaGuaZhen)player.Equipages["防具"]).Skill();
+                result = await ((八卦阵)player.Equipages["防具"]).Skill();
                 if (result) return true;
             }
 
@@ -124,7 +124,7 @@ namespace Model
                 //         break;
                 //     }
                 // }
-                var card = player.FindCard<Shan>();
+                var card = player.FindCard<闪>();
                 if (card != null)
                 {
                     TimerTask.Instance.Cards = new List<Card> { card };
@@ -146,9 +146,9 @@ namespace Model
     /// <summary>
     /// 桃
     /// </summary>
-    public class Tao : Card
+    public class 桃 : Card
     {
-        public Tao()
+        public 桃()
         {
             Type = "基本牌";
             Name = "桃";
@@ -183,7 +183,7 @@ namespace Model
                 //         break;
                 //     }
                 // }
-                var card = player.FindCard<Tao>();
+                var card = player.FindCard<桃>();
                 if (card != null)
                 {
                     TimerTask.Instance.Cards = new List<Card> { card };

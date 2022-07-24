@@ -120,9 +120,9 @@ namespace Model
                 switch (str)
                 {
                     case "武圣":
-                        skills.Add(str, new WuSheng(this)); break;
+                        skills.Add(str, new 武圣(this)); break;
                     case "义绝":
-                        skills.Add(str, new YiJue(this)); break;
+                        skills.Add(str, new 义绝(this)); break;
                 }
 
                 // player.skills.Add(skill);

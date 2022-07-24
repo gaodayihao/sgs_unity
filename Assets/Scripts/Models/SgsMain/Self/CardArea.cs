@@ -31,7 +31,7 @@ namespace Model
         {
             // if (player.Equipages["武器"] is ZhuGeLianNu) return true;
             // return player.ShaCount < 1;
-            return player.Equipages["武器"] is ZhuGeLianNu || player.ShaCount < 1;
+            return player.Equipages["武器"] is 诸葛连弩 || player.ShaCount < 1;
         }
     }
 }

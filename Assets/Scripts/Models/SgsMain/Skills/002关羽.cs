@@ -8,13 +8,13 @@ namespace Model
     /// <summary>
     /// 武圣
     /// </summary>
-    public class WuSheng : Converted
+    public class 武圣 : Converted
     {
-        public WuSheng(Player src) : base(src, "武圣", false, int.MaxValue, "杀") { }
+        public 武圣(Player src) : base(src, "武圣", false, int.MaxValue, "杀") { }
 
         public override Card Execute(List<Card> cards)
         {
-            return Card.Convert<Sha>(cards);
+            return Card.Convert<杀>(cards);
         }
 
         public override bool IsValidCard(Card card)
@@ -55,9 +55,9 @@ namespace Model
     /// <summary>
     /// 义绝
     /// </summary>
-    public class YiJue : Active
+    public class 义绝 : Active
     {
-        public YiJue(Player src) : base(src, "义绝", false, 1) { }
+        public 义绝(Player src) : base(src, "义绝", false, 1) { }
 
         public override int MaxCard()
         {

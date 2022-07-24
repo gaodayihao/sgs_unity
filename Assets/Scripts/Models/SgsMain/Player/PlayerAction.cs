@@ -183,7 +183,7 @@ namespace Model
             Player askedPlayer = TurnSystem.Instance.CurrentPlayer;
             do
             {
-                while (await Tao.Call(askedPlayer, player))
+                while (await 桃.Call(askedPlayer, player))
                 {
                     if (player.Hp >= 1) return;
                 }

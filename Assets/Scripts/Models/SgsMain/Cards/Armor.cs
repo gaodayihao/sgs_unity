@@ -16,7 +16,7 @@ namespace Model
         }
     }
 
-    public class BaGuaZhen : Armor
+    public class 八卦阵 : Armor
     {
         public async Task<bool> Skill()
         {

@@ -31,9 +31,9 @@ namespace Model
                 Card card;
                 switch (cardJson.name)
                 {
-                    case "杀": card = new Sha(); break;
-                    case "闪": card = new Shan(); break;
-                    case "桃": card = new Tao(); break;
+                    case "杀": card = new 杀(); break;
+                    case "闪": card = new 闪(); break;
+                    case "桃": card = new 桃(); break;
 
                     case "绝影": card = new PlusHorse(); break;
                     case "大宛": card = new SubHorse(); break;
@@ -42,18 +42,18 @@ namespace Model
                     case "的卢": card = new PlusHorse(); break;
                     case "紫骍": card = new SubHorse(); break;
 
-                    case "青龙偃月刀": card = new QingLongYanYueDao(); break;
-                    case "麒麟弓": card = new QiLinGong(); break;
-                    case "雌雄双股剑": card = new CiXiongShuangGuJian(); break;
-                    case "青釭剑": card = new QingGangJian(); break;
-                    case "丈八蛇矛": card = new ZhangBaSheMao(); break;
-                    case "诸葛连弩": card = new ZhuGeLianNu(); break;
-                    case "贯石斧": card = new GuanShiFu(); break;
-                    case "方天画戟": card = new FangTianHuaJi(); break;
+                    case "青龙偃月刀": card = new 青龙偃月刀(); break;
+                    case "麒麟弓": card = new 麒麟弓(); break;
+                    case "雌雄双股剑": card = new 雌雄双股剑(); break;
+                    case "青釭剑": card = new 青缸剑(); break;
+                    case "丈八蛇矛": card = new 丈八蛇矛(); break;
+                    case "诸葛连弩": card = new 诸葛连弩(); break;
+                    case "贯石斧": card = new 贯石斧(); break;
+                    case "方天画戟": card = new 方天画戟(); break;
 
-                    case "八卦阵": card = new BaGuaZhen(); break;
+                    case "八卦阵": card = new 八卦阵(); break;
 
-                    case "乐不思蜀": card = new LeBuSiShu(); break;
+                    case "乐不思蜀": card = new 乐不思蜀(); break;
 
                     case "过河拆桥": card = new 过河拆桥(); break;
                     case "顺手牵羊": card = new 顺手牵羊(); break;
@@ -64,7 +64,7 @@ namespace Model
                     case "无中生有": card = new 无中生有(); break;
                     case "决斗": card = new 决斗(); break;
 
-                    default: card = new Tao(); break;
+                    default: card = new 桃(); break;
                 }
                 card.Id = cardJson.id;
                 card.Suit = cardJson.suit;

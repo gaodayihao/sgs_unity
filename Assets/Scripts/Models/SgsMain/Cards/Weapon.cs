@@ -21,9 +21,9 @@ namespace Model
         protected int range;
     }
 
-    public class QingLongYanYueDao : Weapon
+    public class 青龙偃月刀 : Weapon
     {
-        public QingLongYanYueDao()
+        public 青龙偃月刀()
         {
             range = 3;
         }
@@ -45,9 +45,9 @@ namespace Model
         }
     }
 
-    public class QiLinGong : Weapon
+    public class 麒麟弓 : Weapon
     {
-        public QiLinGong()
+        public 麒麟弓()
         {
             range = 5;
         }
@@ -75,22 +75,22 @@ namespace Model
         }
     }
 
-    public class CiXiongShuangGuJian : Weapon
+    public class 雌雄双股剑 : Weapon
     {
-        public CiXiongShuangGuJian()
+        public 雌雄双股剑()
         {
             range = 2;
         }
     }
 
-    public class QingGangJian : Weapon
+    public class 青缸剑 : Weapon
     {
-        public QingGangJian()
+        public 青缸剑()
         {
             range = 2;
         }
 
-        public bool Skill(Sha sha)
+        public bool Skill(杀 sha)
         {
             SkillView();
             bool result = false;
@@ -105,37 +105,37 @@ namespace Model
             return result;
         }
 
-        public void ResetArmor(Sha sha)
+        public void ResetArmor(杀 sha)
         {
             foreach (var dest in sha.Dests) if (dest.armor != null) ((Armor)dest.armor).enable = false;
         }
     }
 
-    public class ZhangBaSheMao : Weapon
+    public class 丈八蛇矛 : Weapon
     {
-        public ZhangBaSheMao()
+        public 丈八蛇矛()
         {
             range = 3;
         }
 
-        public Sha ConvertSkill(List<Card> primitives)
+        public 杀 ConvertSkill(List<Card> primitives)
         {
             SkillView();
-            return Card.Convert<Sha>(primitives);
+            return Card.Convert<杀>(primitives);
         }
     }
 
-    public class ZhuGeLianNu : Weapon
+    public class 诸葛连弩 : Weapon
     {
-        public ZhuGeLianNu()
+        public 诸葛连弩()
         {
             range = 1;
         }
     }
 
-    public class GuanShiFu : Weapon
+    public class 贯石斧 : Weapon
     {
-        public GuanShiFu()
+        public 贯石斧()
         {
             range = 3;
         }
@@ -156,9 +156,9 @@ namespace Model
         }
     }
 
-    public class FangTianHuaJi : Weapon
+    public class 方天画戟 : Weapon
     {
-        public FangTianHuaJi()
+        public 方天画戟()
         {
             range = 4;
         }

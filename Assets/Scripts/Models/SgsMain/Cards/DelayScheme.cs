@@ -54,9 +54,9 @@ namespace Model
         }
     }
 
-    public class LeBuSiShu : DelayScheme
+    public class 乐不思蜀 : DelayScheme
     {
-        public LeBuSiShu()
+        public 乐不思蜀()
         {
             Type = "延时锦囊";
             Name = "乐不思蜀";
