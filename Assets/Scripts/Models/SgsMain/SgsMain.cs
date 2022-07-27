@@ -134,7 +134,7 @@ namespace Model
             {
                 // debug
                 // zf
-                General self = json[6];
+                General self = json[9];
                 json.Remove(self);
 
                 foreach (var i in players)

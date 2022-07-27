@@ -16,10 +16,11 @@ public enum TimerType
     UseCard,
     UseWxkj,
     CallEquipSkill,
-    ZBSM,
-    QlgPanel,
+    丈八蛇矛,
+    麒麟弓,
     RegionPanel,
-    SSQY,
+    顺手牵羊,
     CallSkill,
-    Select
+    Select,
+    利驭
 }

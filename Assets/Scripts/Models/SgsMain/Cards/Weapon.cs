@@ -65,7 +65,7 @@ namespace Model
 
             SkillView();
             CardPanel.Instance.Title = "麒麟弓";
-            result = await CardPanel.Instance.Run(Owner, dest, TimerType.QlgPanel);
+            result = await CardPanel.Instance.Run(Owner, dest, TimerType.麒麟弓);
 
             Card horse;
             if (result) horse = CardPanel.Instance.Cards[0];

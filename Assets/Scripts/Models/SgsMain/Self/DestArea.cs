@@ -73,10 +73,10 @@ namespace Model
                     return UseSha(src, dest);
 
                 case "过河拆桥":
-                    return src != dest && HaveCard(dest);
+                    return src != dest && dest.HaveCard();
 
                 case "顺手牵羊":
-                    return src.GetDistance(dest) == 1 && HaveCard(dest);
+                    return src.GetDistance(dest) == 1 && dest.HaveCard();
 
                 case "借刀杀人":
                     if (firstdest == -1) return src != dest && src.weapon != null;
@@ -90,13 +90,13 @@ namespace Model
             }
         }
 
-        private static bool HaveCard(Player player)
-        {
-            if (player.HandCardCount != 0) return true;
-            foreach (var equip in player.Equipages.Values) if (equip != null) return true;
-            if (player.JudgeArea.Count != 0) return true;
-            return false;
-        }
+        // private static bool HaveCard(Player player)
+        // {
+        //     if (player.HandCardCount != 0) return true;
+        //     foreach (var equip in player.Equipages.Values) if (equip != null) return true;
+        //     if (player.JudgeArea.Count != 0) return true;
+        //     return false;
+        // }
 
         public static bool UseSha(Player src, Player dest)
         {

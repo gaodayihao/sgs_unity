@@ -18,6 +18,7 @@ namespace Model
         public Player GivenDest { get; set; }
         public List<string> GivenCard { get; set; }
         public string GivenSkill { get; set; }
+        public string Extra { get; set; }
 
         public int second
         {
@@ -39,7 +40,7 @@ namespace Model
         public List<Card> Cards { get; private set; }
         public List<Card> Equipages { get; private set; }
         public List<Player> Dests { get; private set; }
-        public string Skill { get; private set; } = "";
+        public string Skill { get; private set; }
 
         /// <summary>
         /// 暂停主线程，并通过服务器或view开始计时
@@ -74,7 +75,8 @@ namespace Model
             Hint = "";
             GivenDest = null;
             GivenCard = null;
-            GivenSkill = null;
+            GivenSkill = "";
+            Extra = "";
 
             // 转化技
             //    if(Skill!="") Debug.Log("timerTask.Skill="+Skill);

@@ -167,8 +167,8 @@ namespace View
                         switch (timerType)
                         {
                             case TimerType.RegionPanel:
-                            case TimerType.SSQY:
-                            case TimerType.QlgPanel:
+                            case TimerType.顺手牵羊:
+                            case TimerType.麒麟弓:
                                 Model.CardPanel.Instance.SendResult();
                                 break;
                             default:

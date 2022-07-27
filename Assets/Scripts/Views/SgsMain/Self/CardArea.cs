@@ -91,7 +91,7 @@ namespace View
             {
                 switch (timerType)
                 {
-                    case TimerType.ZBSM:
+                    case TimerType.丈八蛇矛:
                         maxCount = 3;
                         minCount = 3;
                         break;

@@ -42,7 +42,7 @@ namespace View
                         equipages["武器"].button.interactable = true;
                     }
                     break;
-                case TimerType.ZBSM:
+                case TimerType.丈八蛇矛:
                     equipages["武器"].button.interactable = true;
                     break;
                 case TimerType.CallSkill:

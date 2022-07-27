@@ -21,9 +21,8 @@ namespace Model
 
         public async Task<bool> Execute(Damaged damaged)
         {
-            TimerTask.Instance.GivenSkill = Name;
-            TimerTask.Instance.Hint = "是否发动奸雄？";
-            var result = await TimerTask.Instance.Run(Src, TimerType.CallSkill, 0);
+            var result = await base.Execute();
+            if (!result) return true;
 
             var srcCard = damaged.SrcCard;
             List<Card> cards;

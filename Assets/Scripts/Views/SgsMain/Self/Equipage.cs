@@ -47,9 +47,9 @@ namespace View
                 if (operationArea.timerType == TimerType.PerformPhase ||
                     operationArea.timerType == TimerType.UseCard)
                 {
-                    operationArea.ChangeType(TimerType.ZBSM);
+                    operationArea.ChangeType(TimerType.丈八蛇矛);
                 }
-                else if (operationArea.timerType == TimerType.ZBSM)
+                else if (operationArea.timerType == TimerType.丈八蛇矛)
                 {
                     operationArea.ChangeType(Model.TimerTask.Instance.timerType);
                     Select();

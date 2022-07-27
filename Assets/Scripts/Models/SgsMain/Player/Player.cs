@@ -84,6 +84,17 @@ namespace Model
             return Mathf.Max(distance, 1);
         }
 
+        /// <summary>
+        /// 判断区域内是否有牌
+        /// </summary>
+        public bool HaveCard()
+        {
+            if (HandCardCount != 0) return true;
+            foreach (var i in Equipages.Values) if (i != null) return true;
+            if (JudgeArea.Count != 0) return true;
+            return false;
+        }
+
         // 出杀次数
         public int ShaCount { get; set; }
 
@@ -124,6 +135,8 @@ namespace Model
                     case "咆哮": skills.Add(str, new 咆哮(this)); break;
                     case "制衡": skills.Add(str, new 制衡(this)); break;
                     case "奸雄": skills.Add(str, new 奸雄(this)); break;
+                    case "无双": skills.Add(str, new 无双(this)); break;
+                    case "利驭": skills.Add(str, new 利驭(this)); break;
                 }
 
                 // player.skills.Add(skill);

@@ -72,7 +72,7 @@ namespace View
                     minCount = destCount[1];
                     break;
 
-                case TimerType.ZBSM:
+                case TimerType.丈八蛇矛:
                     // 打出
                     if (Model.TimerTask.Instance.timerType == TimerType.UseCard)
                     {
@@ -112,6 +112,11 @@ namespace View
                         maxCount = skill.MaxDest();
                         minCount = skill.MinDest();
                     }
+                    break;
+
+                case TimerType.利驭:
+                    maxCount = 1;
+                    minCount = 1;
                     break;
 
                 default:
@@ -172,7 +177,7 @@ namespace View
                         player.button.interactable = enable;
                     }
                     break;
-                case TimerType.ZBSM:
+                case TimerType.丈八蛇矛:
                     foreach (var player in players)
                     {
                         player.button.interactable = Model.DestArea.UseSha(self.model, player.model);
@@ -182,9 +187,16 @@ namespace View
                     var skill = GetComponent<SkillArea>().SelectedSkill.model;
                     foreach (var player in players)
                     {
-                        // 设置不能使用的手牌
+                        // 设置不能指定的目标
                         Model.Player firstDest = SelectedPlayer.Count != 0 ? SelectedPlayer[0].model : null;
                         player.button.interactable = skill.IsValidDest(player.model, cardArea.model, firstDest);
+                    }
+                    break;
+                case TimerType.利驭:
+                    var src = Model.SgsMain.Instance.players[System.Int32.Parse(Model.TimerTask.Instance.Extra)];
+                    foreach (var i in players)
+                    {
+                        i.button.interactable = i.model != src && i.model != self.model;
                     }
                     break;
             }

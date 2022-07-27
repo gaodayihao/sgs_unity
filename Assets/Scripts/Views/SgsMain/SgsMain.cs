@@ -64,10 +64,10 @@ namespace View
             switch (model.timerType)
             {
                 case TimerType.RegionPanel:
-                case TimerType.SSQY:
+                case TimerType.顺手牵羊:
                     ShowRegion(model);
                     break;
-                case TimerType.QlgPanel:
+                case TimerType.麒麟弓:
                     ShowQlg(model);
                     break;
             }
