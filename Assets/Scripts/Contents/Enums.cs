@@ -21,5 +21,5 @@ public enum TimerType
     RegionPanel,
     SSQY,
     CallSkill,
-    ActiveSkill
+    Select
 }

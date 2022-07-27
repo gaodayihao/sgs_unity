@@ -201,7 +201,7 @@ namespace View
             int count = SelectedCard.Count + equipArea.SelectedCard.Count;
             foreach (var card in equipArea.SelectedCard)
             {
-                if (card.name == Model.TimerTask.Instance.SkillName)
+                if (card.name == Model.TimerTask.Instance.GivenSkill)
                 {
                     count--;
                     break;
@@ -212,7 +212,7 @@ namespace View
             while (count > maxCount)
             {
                 if (SelectedCard.Count > 0) SelectedCard[0].Unselect();
-                else if (equipArea.SelectedCard[0].name != Model.TimerTask.Instance.SkillName)
+                else if (equipArea.SelectedCard[0].name != Model.TimerTask.Instance.GivenSkill)
                 {
                     equipArea.SelectedCard[0].Unselect();
                 }

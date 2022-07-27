@@ -128,18 +128,19 @@ namespace Model
             if (eventDic == null) return;
 
             Player player = TurnSystem.Instance.CurrentPlayer;
-            do
+            while (true)
             {
                 if (eventDic.ContainsKey(player))
                 {
-                    if (eventDic[player].Count == 1)
+                    foreach (var i in eventDic[player])
                     {
-                        var Continue = await eventDic[player][0](param);
-                        if (!Continue) break;
+                        var Continue = await i(param);
+                        if (!Continue) return;
                     }
                 }
                 player = player.Next;
-            } while (player != TurnSystem.Instance.CurrentPlayer);
+                if (player == TurnSystem.Instance.CurrentPlayer) break;
+            }
         }
     }
 }

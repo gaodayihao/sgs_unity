@@ -88,6 +88,7 @@ namespace View
                     break;
 
                 case TimerType.CallSkill:
+                    if (!cardArea.IsSettled) return;
                     var skill = GetComponent<SkillArea>().SelectedSkill.model;
                     // 转化技
                     if (skill is Model.Converted)

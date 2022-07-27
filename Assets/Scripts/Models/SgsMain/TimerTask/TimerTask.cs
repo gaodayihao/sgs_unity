@@ -17,7 +17,7 @@ namespace Model
         public string Hint { get; set; }
         public Player GivenDest { get; set; }
         public List<string> GivenCard { get; set; }
-        public string SkillName { get; set; }
+        public string GivenSkill { get; set; }
 
         public int second
         {
@@ -25,7 +25,7 @@ namespace Model
             {
                 switch (timerType)
                 {
-                    case TimerType.PerformPhase: return 10;
+                    case TimerType.PerformPhase: return 15;
                     case TimerType.SelectHandCard: return 5 + maxCount;
                     case TimerType.UseWxkj: return 5;
                     default: return 10;
@@ -33,10 +33,13 @@ namespace Model
             }
         }
 
-        public List<Card> Cards { get; set; }
+        // public List<Card> Cards { get; private set; } = new List<Card>();
+        // public List<Card> Equipages { get; private set; } = new List<Card>();
+        // public List<Player> Dests { get; private set; } = new List<Player>();
+        public List<Card> Cards { get; private set; }
         public List<Card> Equipages { get; private set; }
         public List<Player> Dests { get; private set; }
-        public string Skill { get; private set; }
+        public string Skill { get; private set; } = "";
 
         /// <summary>
         /// 暂停主线程，并通过服务器或view开始计时
@@ -49,6 +52,9 @@ namespace Model
             this.maxCount = maxCount;
             this.minCount = maxCount;
 
+            // Cards.Clear();
+            // Equipages.Clear();
+            // Dests.Clear();
             Cards = new List<Card>();
             Equipages = new List<Card>();
             Dests = new List<Player>();
@@ -68,7 +74,7 @@ namespace Model
             Hint = "";
             GivenDest = null;
             GivenCard = null;
-            SkillName = null;
+            GivenSkill = null;
 
             // 转化技
             //    if(Skill!="") Debug.Log("timerTask.Skill="+Skill);
@@ -77,7 +83,8 @@ namespace Model
                 Cards = new List<Card> { (player.skills[Skill] as Converted).Execute(Cards) };
             }
             // 转化装备
-            else if (Equipages.Count != 0 && Equipages[0] is 丈八蛇矛)
+            else if (Equipages.Count != 0 && Equipages[0] is 丈八蛇矛
+                && (timerType == TimerType.UseCard || timerType == TimerType.PerformPhase))
             {
                 Cards = new List<Card> { ((丈八蛇矛)Equipages[0]).ConvertSkill(Cards) };
             }
@@ -242,7 +249,7 @@ namespace Model
             }
         }
 
-        public void SendSetWxkjResult(int src, bool result, List<int> cards = null, string skill = "")
+        public void SendWxkjResult(int src, bool result, List<int> cards = null, string skill = "")
         {
             if (Room.Instance.isSingle) SetWxkjResult(src, result, cards, skill);
             // 多人模式

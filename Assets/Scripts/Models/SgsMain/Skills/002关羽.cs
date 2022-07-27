@@ -22,6 +22,11 @@ namespace Model
             return (card.Suit == "红桃" || card.Suit == "方片") && base.IsValidCard(card);
         }
 
+        public override bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
+        {
+            return cards[0].Suit == "方片" ? true : DestArea.UseSha(Src, dest);
+        }
+
         public override int MaxCard()
         {
             return 1;
@@ -93,15 +98,25 @@ namespace Model
             await new Discard(Src, cards).Execute();
             // 展示手牌
             var showCard = (await ShowCard.ShowCardTimer(Dest));
+
             // 红色
             if (showCard[0].Suit == "红桃" || showCard[0].Suit == "方片")
             {
+                // 获得牌
                 await new GetCardFromElse(Src, Dest, showCard).Execute();
+                // 回复体力
+                if (Dest.Hp < Dest.HpLimit)
+                {
+                    TimerTask.Instance.Hint = "是否让" + (Dest.Position + 1).ToString() + "号位回复一点体力？";
+                    bool result = await TimerTask.Instance.Run(Src, TimerType.Select, 0);
+                    if (result) await new Recover(Dest).Execute();
+                }
             }
+            // 黑色
             else
             {
                 Dest.disabledCard += DisabledCard;
-                foreach (var i in Dest.skills.Values) if (!i.Passive) i.Enabled--;
+                foreach (var i in Dest.skills.Values) if (!i.Passive) i.SetActive(false);
                 TurnSystem.Instance.AfterTurn += Reset;
                 Dest.playerEvents.whenDamaged.AddEvent(Src, WhenDamaged);
             }

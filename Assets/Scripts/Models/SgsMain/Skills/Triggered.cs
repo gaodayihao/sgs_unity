@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Triggered : MonoBehaviour
+namespace Model
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Triggered : Skill
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public Triggered(Player src, string name, bool passive, int timeLimit = int.MaxValue)
+            : base(src, name, passive, timeLimit) { }
     }
 }

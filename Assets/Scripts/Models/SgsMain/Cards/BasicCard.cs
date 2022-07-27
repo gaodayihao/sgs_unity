@@ -77,7 +77,7 @@ namespace Model
                 var card = player.FindCard<杀>();
                 if (card != null)
                 {
-                    TimerTask.Instance.Cards = new List<Card> { card };
+                    TimerTask.Instance.Cards.Add(card);
                     result = true;
                 }
             }
@@ -127,7 +127,7 @@ namespace Model
                 var card = player.FindCard<闪>();
                 if (card != null)
                 {
-                    TimerTask.Instance.Cards = new List<Card> { card };
+                    TimerTask.Instance.Cards.Add(card);
                     result = true;
                 }
             }
@@ -186,7 +186,7 @@ namespace Model
                 var card = player.FindCard<桃>();
                 if (card != null)
                 {
-                    TimerTask.Instance.Cards = new List<Card> { card };
+                    TimerTask.Instance.Cards.Add(card);
                     result = true;
                 }
             }

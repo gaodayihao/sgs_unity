@@ -20,18 +20,19 @@ namespace Model
                     return player.Hp < player.HpLimit;
 
                 case "杀":
-                    return UseSha(player);
+                    return UseSha(player, card);
 
                 default:
                     return true;
             }
         }
 
-        public static bool UseSha(Player player)
+        public static bool UseSha(Player player, Card card = null)
         {
             // if (player.Equipages["武器"] is ZhuGeLianNu) return true;
             // return player.ShaCount < 1;
-            return player.Equipages["武器"] is 诸葛连弩 || player.ShaCount < 1;
+            if (card is null) card = Card.Convert<杀>(new List<Card>());
+            return player.ShaCount < 1 || player.UnlimitedCard(card);
         }
     }
 }

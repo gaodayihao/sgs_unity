@@ -119,10 +119,11 @@ namespace Model
             {
                 switch (str)
                 {
-                    case "武圣":
-                        skills.Add(str, new 武圣(this)); break;
-                    case "义绝":
-                        skills.Add(str, new 义绝(this)); break;
+                    case "武圣": skills.Add(str, new 武圣(this)); break;
+                    case "义绝": skills.Add(str, new 义绝(this)); break;
+                    case "咆哮": skills.Add(str, new 咆哮(this)); break;
+                    case "制衡": skills.Add(str, new 制衡(this)); break;
+                    case "奸雄": skills.Add(str, new 奸雄(this)); break;
                 }
 
                 // player.skills.Add(skill);
@@ -137,6 +138,10 @@ namespace Model
                 if (i(card)) return true;
             }
             return false;
+        }
+        public bool UnlimitedSha()
+        {
+            return UnlimitedCard(Card.Convert<杀>(new List<Card>()));
         }
 
         public Func<Card, bool> disabledCard = (card) => false;

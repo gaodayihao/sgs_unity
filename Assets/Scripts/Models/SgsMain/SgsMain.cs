@@ -98,7 +98,7 @@ namespace Model
         {
             List<string> list = new List<string>
             {
-                "决斗","桃园结义","无中生有","的卢","无懈可击","无懈可击"
+                "决斗","无中生有","无懈可击","无懈可击","丈八蛇矛"
             };
 
             while (list.Count > 0)
@@ -133,8 +133,8 @@ namespace Model
             if (Room.Instance.isSingle)
             {
                 // debug
-                // 关羽
-                General self = json[1];
+                // zf
+                General self = json[6];
                 json.Remove(self);
 
                 foreach (var i in players)

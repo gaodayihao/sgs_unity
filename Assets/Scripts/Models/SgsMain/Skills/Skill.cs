@@ -26,6 +26,8 @@ namespace Model
             Name = name;
             Passive = passive;
             TimeLimit = timeLimit;
+
+            SetActive(true);
         }
 
         /// <summary>
@@ -82,10 +84,31 @@ namespace Model
         /// <summary>
         /// 是否有效
         /// </summary>
-        public int Enabled { get; set; } = 1;
+        public int Enabled { get; set; } = 0;
+
+        public void SetActive(bool valid)
+        {
+            if (valid)
+            {
+                if (Enabled > 0) return;
+                Enabled++;
+                if (Enabled > 0) OnEnabled();
+            }
+            else
+            {
+                if (Enabled <= 0) return;
+                Enabled--;
+                if (Enabled <= 0) OnDisabled();
+            }
+
+        }
+
+        public virtual void OnEnabled() { }
+
+        public virtual void OnDisabled() { }
 
         /// <summary>
-        /// 技能是否可使用
+        /// 技能是否满足条件
         /// </summary>
         public virtual bool IsValid()
         {

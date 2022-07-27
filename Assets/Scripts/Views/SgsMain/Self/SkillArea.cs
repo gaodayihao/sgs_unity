@@ -53,11 +53,16 @@ namespace View
                     foreach (var i in Skills.Values)
                     {
                         if (i != SelectedSkill) i.button.interactable = false;
+                        if(i.name==Model.TimerTask.Instance.GivenSkill) i.Select();
                     }
                     break;
 
                 default:
-                    foreach (var i in Skills.Values) i.button.interactable = i.model.IsValid();
+                    foreach (var i in Skills.Values)
+                    {
+                        i.button.interactable = i.model.IsValid() &&
+                            (i.model is Model.Active || i.model is Model.Converted);
+                    }
                     break;
             }
         }

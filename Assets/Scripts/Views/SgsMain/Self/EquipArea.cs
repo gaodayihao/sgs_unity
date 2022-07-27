@@ -51,11 +51,11 @@ namespace View
                     break;
             }
 
-            if (Model.TimerTask.Instance.SkillName != null)
+            if (Model.TimerTask.Instance.GivenSkill != null)
             {
                 foreach (var card in equipages.Values)
                 {
-                    if (card.name == Model.TimerTask.Instance.SkillName)
+                    if (card.name == Model.TimerTask.Instance.GivenSkill)
                     {
                         card.button.Select();
                         card.button.interactable = false;

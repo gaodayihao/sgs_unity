@@ -100,7 +100,7 @@ namespace Model
         public static T Convert<T>(List<Card> primitives) where T : Card, new()
         {
             // 二次转化
-            if (primitives[0].Convertion) return Convert<T>(primitives[0].PrimiTives);
+            if (primitives.Count > 0 && primitives[0].Convertion) return Convert<T>(primitives[0].PrimiTives);
 
             var card = new T();
             card.Convertion = true;

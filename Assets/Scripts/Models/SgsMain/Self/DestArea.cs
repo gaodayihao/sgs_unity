@@ -66,6 +66,10 @@ namespace Model
                 case "杀":
                 case "火杀":
                 case "雷杀":
+                    // if (card.Suit == "方片") foreach (var i in src.skills.Keys)
+                    //     {
+                    //         if (i == "武圣") return true;
+                    //     }
                     return UseSha(src, dest);
 
                 case "过河拆桥":

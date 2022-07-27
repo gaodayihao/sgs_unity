@@ -52,14 +52,16 @@ namespace View
                 else if (operationArea.timerType == TimerType.ZBSM)
                 {
                     operationArea.ChangeType(Model.TimerTask.Instance.timerType);
+                    Select();
                 }
             }
-
+            
             // 选中卡牌
             if (!IsSelected) Select();
             else Unselect();
             GetComponentInParent<CardArea>().UpdateCardArea();
             GetComponentInParent<OperationArea>().UpdateButtonArea();
+
         }
 
         /// <summary>

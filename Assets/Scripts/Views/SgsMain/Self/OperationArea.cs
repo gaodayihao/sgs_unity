@@ -64,7 +64,7 @@ namespace View
 
             if (timerTask.timerType == TimerType.UseWxkj)
             {
-                timerTask.SendSetWxkjResult(self.model.Position, true, cards);
+                timerTask.SendWxkjResult(self.model.Position, true, cards);
             }
             else timerTask.SendResult(cards, players, equips, skill);
         }
@@ -76,7 +76,7 @@ namespace View
         {
             StopAllCoroutines();
             HideTimer();
-            if (timerTask.timerType == TimerType.UseWxkj) timerTask.SendSetWxkjResult(self.model.Position, false);
+            if (timerTask.timerType == TimerType.UseWxkj) timerTask.SendWxkjResult(self.model.Position, false);
             else timerTask.SendResult();
         }
 
@@ -122,10 +122,10 @@ namespace View
                     break;
             }
 
+            skillArea.InitSkillArea(timerType);
             cardArea.InitCardArea(timerType);
             destArea.InitDestArea();
             equipArea.InitEquipArea(timerType);
-            skillArea.InitSkillArea(timerType);
 
             UpdateButtonArea();
             StartTimer(timerTask.second);
