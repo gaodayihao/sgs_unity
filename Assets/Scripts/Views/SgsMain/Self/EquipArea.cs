@@ -78,6 +78,20 @@ namespace View
             ResetEquipArea();
         }
 
+        public void MoveSeat(Model.Player model)
+        {
+            foreach (var i in model.Equipages)
+            {
+                var equip = equipages[i.Key];
+                if (i.Value is null) equip.gameObject.SetActive(false);
+                else
+                {
+                    equip.gameObject.SetActive(true);
+                    equip.Init(i.Value);
+                }
+            }
+        }
+
         public void ShowEquipage(Model.Equipage card)
         {
             if (card.Src != self.model) return;

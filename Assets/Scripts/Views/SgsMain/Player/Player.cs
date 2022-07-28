@@ -65,25 +65,25 @@ namespace View
             positionImage.sprite = Sprites.Instance.position[model.Position];
         }
 
-        public async void InitGeneral(Model.Player player)
+        public async void InitGeneral()
         {
-            if (model != player) return;
+            // if (this.model != model) return;
 
-            generalName.text = player.general.name;
-            nationBack.sprite = Sprites.Instance.nationBack[player.general.nation];
-            nation.sprite = Sprites.Instance.nation[player.general.nation];
+            generalName.text = model.general.name;
+            nationBack.sprite = Sprites.Instance.nationBack[model.general.nation];
+            nation.sprite = Sprites.Instance.nation[model.general.nation];
 
-            await InitSkin(player);
+            await InitSkin();
 
-            UpdateSkin(player, skins[Random.Range(0, skins.Count)]);
+            UpdateSkin(model, skins[Random.Range(0, skins.Count)]);
 
-            if (IsSelf) GameObject.FindObjectOfType<SkillArea>().InitSkill(player.skills);
-            if (!IsSelf) StartCoroutine(RandomSkin(player));
+            if (IsSelf) GameObject.FindObjectOfType<SkillArea>().InitSkill(model);
+            StartCoroutine(RandomSkin(model));
         }
 
-        public async Task InitSkin(Model.Player player)
+        public async Task InitSkin()
         {
-            string url = Urls.STATIC_URL + "json/skin/" + player.general.id.ToString().PadLeft(3, '0') + ".json";
+            string url = Urls.STATIC_URL + "json/skin/" + model.general.id.ToString().PadLeft(3, '0') + ".json";
             UnityWebRequest www = UnityWebRequest.Get(url);
             www.SendWebRequest();
 
@@ -148,19 +148,19 @@ namespace View
         /// <summary>
         /// 更新体力上限
         /// </summary>
-        public void UpdateHpLimit(Model.Player player)
+        public void UpdateHpLimit()
         {
-            if (model != player) return;
+            // if (this.model != model) return;
 
             // 若体力上限<=5，用阴阳鱼表示
-            if (player.HpLimit <= 5)
+            if (model.HpLimit <= 5)
             {
                 imageGroup.SetActive(true);
                 numberGroup.SetActive(false);
 
                 for (int i = 0; i < 5; i++)
                 {
-                    if (player.HpLimit > i) yinYangYu[i].gameObject.SetActive(true);
+                    if (model.HpLimit > i) yinYangYu[i].gameObject.SetActive(true);
                     else yinYangYu[i].gameObject.SetActive(false);
                 }
             }
@@ -170,7 +170,7 @@ namespace View
                 imageGroup.SetActive(false);
                 numberGroup.SetActive(true);
 
-                hpLimit.text = player.HpLimit.ToString();
+                hpLimit.text = model.HpLimit.ToString();
             }
         }
 
@@ -182,25 +182,23 @@ namespace View
         /// <summary>
         /// 更新体力
         /// </summary>
-        public void UpdateHp(Model.Player player)
+        public void UpdateHp()
         {
-            if (model != player) return;
-
             // 阴阳鱼或数字颜色
-            int colorIndex = GetColorIndex(player.Hp, player.HpLimit);
+            int colorIndex = GetColorIndex(model.Hp, model.HpLimit);
 
-            if (player.HpLimit <= 5)
+            if (model.HpLimit <= 5)
             {
-                for (int i = 0; i < player.HpLimit; i++)
+                for (int i = 0; i < model.HpLimit; i++)
                 {
-                    if (player.Hp > i) yinYangYu[i].sprite = Sprites.Instance.yinYangYu[colorIndex];
+                    if (model.Hp > i) yinYangYu[i].sprite = Sprites.Instance.yinYangYu[colorIndex];
                     // 以损失体力设为黑色
                     else yinYangYu[i].sprite = Sprites.Instance.yinYangYu[0];
                 }
             }
             else
             {
-                hp.text = Mathf.Max(player.Hp, 0).ToString();
+                hp.text = Mathf.Max(model.Hp, 0).ToString();
 
                 hp.color = hpColor[colorIndex];
                 slash.color = hpColor[colorIndex];
@@ -209,12 +207,13 @@ namespace View
             }
 
             // 是否进入濒死状态
-            nearDeath.gameObject.SetActive(player.Hp < 1);
+            nearDeath.gameObject.SetActive(model.Hp < 1);
         }
 
         public void UpdateHp(Model.UpdateHp operation)
         {
-            UpdateHp(operation.player);
+            if (operation.player != model) return;
+            UpdateHp();
         }
 
         /// <summary>

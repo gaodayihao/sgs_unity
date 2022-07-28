@@ -14,7 +14,7 @@ public enum TimerType
     Discard,
     SelectHandCard,
     UseCard,
-    UseWxkj,
+    无懈可击,
     CallEquipSkill,
     丈八蛇矛,
     麒麟弓,

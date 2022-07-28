@@ -66,13 +66,13 @@ namespace View
             {
                 players[i].GetComponent<Player>().Init(model[i]);
             }
-            self = players[0].GetComponent<Player>();
+            // self = players[0].GetComponent<Player>();
 
             foreach (var i in players)
             {
                 if (i.GetComponent<Player>().model.isSelf)
                 {
-                    UpdatePos(i.GetComponent<Player>().model);
+                    MoveSeat(i.GetComponent<Player>().model);
                     break;
                 }
             }
@@ -97,16 +97,22 @@ namespace View
         /// 更新座位
         /// </summary>
         /// <param name="model">self</param>
-        public void UpdatePos(Model.Player model)
+        public void MoveSeat(Model.Player model)
         {
-            self.transform.Find("其他角色").gameObject.SetActive(true);
+            if (self != null)
+            {
+                if (self.model == model) return;
+                self.transform.Find("其他角色").gameObject.SetActive(true);
+            }
+
             self = players[model.Position].GetComponent<Player>();
             self.transform.Find("其他角色").gameObject.SetActive(false);
 
-            SelfPos(players[model.Position]);
-            RightPos(players[model.Next.Position]);
-            TopPos(players[model.Next.Next.Position]);
-            LeftPos(players[model.Next.Next.Next.Position]);
+            int i = model.Position;
+            SelfPos(players[i++]);
+            RightPos(players[i++ % 4]);
+            TopPos(players[i++ % 4]);
+            LeftPos(players[i % 4]);
         }
 
         public void SelfPos(GameObject player)
@@ -114,6 +120,7 @@ namespace View
             RectTransform rectTransform = player.GetComponent<RectTransform>();
             rectTransform.anchorMax = new Vector2(1, 0);
             rectTransform.anchorMin = new Vector2(1, 0);
+            rectTransform.pivot = new Vector2(1, 0);
             rectTransform.anchoredPosition = new Vector2(-10, 24);
         }
         public void RightPos(GameObject player)
@@ -121,6 +128,7 @@ namespace View
             RectTransform rectTransform = player.GetComponent<RectTransform>();
             rectTransform.anchorMax = new Vector2(1, 0.5f);
             rectTransform.anchorMin = new Vector2(1, 0.5f);
+            rectTransform.pivot = new Vector2(1, 0.5f);
             rectTransform.anchoredPosition = new Vector2(-10, 150);
         }
         public void TopPos(GameObject player)
@@ -128,6 +136,7 @@ namespace View
             RectTransform rectTransform = player.GetComponent<RectTransform>();
             rectTransform.anchorMax = new Vector2(0.5f, 1);
             rectTransform.anchorMin = new Vector2(0.5f, 1);
+            rectTransform.pivot = new Vector2(0.5f, 1);
             rectTransform.anchoredPosition = new Vector2(0, -15);
         }
         public void LeftPos(GameObject player)
@@ -135,6 +144,7 @@ namespace View
             RectTransform rectTransform = player.GetComponent<RectTransform>();
             rectTransform.anchorMax = new Vector2(0, 0.5f);
             rectTransform.anchorMin = new Vector2(0, 0.5f);
+            rectTransform.pivot = new Vector2(0, 0.5f);
             rectTransform.anchoredPosition = new Vector2(10, 150);
         }
 

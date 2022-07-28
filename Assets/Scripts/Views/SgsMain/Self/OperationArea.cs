@@ -63,11 +63,16 @@ namespace View
             string skill = "";
             if (skillArea.SelectedSkill != null) skill = skillArea.SelectedSkill.text.text;
 
-            if (timerTask.timerType == TimerType.UseWxkj)
+            if (timerTask.timerType != TimerType.无懈可击)
             {
-                timerTask.SendWxkjResult(self.model.Position, true, cards);
+                timerTask.SendResult(cards, players, skill);
             }
-            else timerTask.SendResult(cards, players, skill);
+            else
+            {
+
+                bool isSelf = self.model.HandCards.Contains(Model.CardPile.Instance.cards[cards[0]]);
+                timerTask.SendWxkjResult((isSelf ? self.model : self.model.Teammate).Position, true, cards);
+            }
         }
 
         /// <summary>
@@ -77,8 +82,12 @@ namespace View
         {
             StopAllCoroutines();
             HideTimer();
-            if (timerTask.timerType == TimerType.UseWxkj) timerTask.SendWxkjResult(self.model.Position, false);
-            else timerTask.SendResult();
+            if (timerTask.timerType != TimerType.无懈可击) timerTask.SendResult();
+            else
+            {
+                timerTask.SendWxkjResult(self.model.Position, false);
+                timerTask.SendWxkjResult(self.model.Teammate.Position, false);
+            }
         }
 
         /// <summary>
@@ -95,7 +104,7 @@ namespace View
         /// </summary>
         public void ShowTimer(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
+            if (timerTask.timerType != TimerType.无懈可击 && self.model != timerTask.player) return;
 
             this.timerTask = timerTask;
             timerType = timerTask.timerType;
@@ -147,7 +156,7 @@ namespace View
 
         public void HideTimer(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
+            if (timerTask.timerType != TimerType.无懈可击 && self.model != timerTask.player) return;
             HideTimer();
         }
 
@@ -181,11 +190,11 @@ namespace View
 
         public void ChangeType(TimerType timerType)
         {
-            this.timerType = timerType;
-
             cardArea.ResetCardArea();
             destArea.ResetDestArea();
             equipArea.ResetEquipArea();
+
+            this.timerType = timerType;
 
             cardArea.InitCardArea(timerType);
             destArea.InitDestArea();

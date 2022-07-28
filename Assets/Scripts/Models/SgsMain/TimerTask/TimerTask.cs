@@ -28,7 +28,7 @@ namespace Model
                 {
                     case TimerType.PerformPhase: return 15;
                     case TimerType.SelectHandCard: return 5 + maxCount;
-                    case TimerType.UseWxkj: return 5;
+                    case TimerType.无懈可击: return 5;
                     default: return 10;
                 }
             }
@@ -63,14 +63,14 @@ namespace Model
 
             waitAction = new TaskCompletionSource<bool>();
 
-
-            startTimerView?.Invoke(this);
+            if (player.isSelf) moveSeat(player);
+            startTimerView(this);
             // if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
 
             // var result = await waitAction.Task;
             var result = Room.Instance.isSingle ? await waitAction.Task : await WaitResult();
 
-            stopTimerView?.Invoke(this);
+            stopTimerView(this);
 
             Hint = "";
             GivenDest = null;
@@ -179,7 +179,7 @@ namespace Model
             var message = await Connection.Instance.PopSgsMsg();
             var json = JsonUtility.FromJson<TimerJson>(message);
 
-            if (timerType == TimerType.UseWxkj)
+            if (timerType == TimerType.无懈可击)
             {
                 if (json.result)
                 {
@@ -214,7 +214,7 @@ namespace Model
 
         public async Task<bool> RunWxkj()
         {
-            this.timerType = TimerType.UseWxkj;
+            this.timerType = TimerType.无懈可击;
             this.maxCount = 1;
             this.minCount = 1;
             GivenCard = new List<string> { "无懈可击" };
@@ -286,6 +286,7 @@ namespace Model
 
         private UnityAction<TimerTask> startTimerView;
         private UnityAction<TimerTask> stopTimerView;
+        private UnityAction<Player> moveSeat;
 
         /// <summary>
         /// 开始计时触发事件
@@ -302,6 +303,11 @@ namespace Model
         {
             add => stopTimerView += value;
             remove => stopTimerView -= value;
+        }
+        public event UnityAction<Player> MoveSeat
+        {
+            add => moveSeat += value;
+            remove => moveSeat -= value;
         }
     }
 }

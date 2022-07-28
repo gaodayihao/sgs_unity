@@ -150,7 +150,7 @@ namespace View
 
         public void ResetDestArea(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
+            if (timerTask.timerType != TimerType.无懈可击 && self.model != timerTask.player) return;
 
             ResetDestArea();
         }

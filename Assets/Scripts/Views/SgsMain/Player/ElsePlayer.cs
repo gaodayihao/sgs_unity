@@ -48,7 +48,7 @@ namespace View
         public void ShowTimer(Model.TimerTask timerTask)
         {
             if (!gameObject.activeSelf) return;
-            if (timerTask.timerType != TimerType.UseWxkj && timerTask.player != model) return;
+            if (timerTask.timerType != TimerType.无懈可击 && timerTask.player != model) return;
             ShowTimer(timerTask.timerType, timerTask.second);
         }
 
@@ -70,7 +70,7 @@ namespace View
 
         public void HideTimer(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.UseWxkj && timerTask.player != model) return;
+            if (timerTask.timerType != TimerType.无懈可击 && timerTask.player != model) return;
             HideTimer();
         }
 
@@ -145,7 +145,7 @@ namespace View
         /// </summary>
         private IEnumerator UpdateTimer(TimerType timerType, int second)
         {
-            if (timerType == TimerType.UseWxkj)
+            if (timerType == TimerType.无懈可击)
             {
                 bool done = false;
                 while (timer.value > 0)

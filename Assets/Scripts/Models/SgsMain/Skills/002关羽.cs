@@ -119,8 +119,11 @@ namespace Model
                 foreach (var i in Dest.skills.Values) if (!i.Passive) i.SetActive(false);
                 TurnSystem.Instance.AfterTurn += Reset;
                 Dest.playerEvents.whenDamaged.AddEvent(Src, WhenDamaged);
+                isDone = false;
             }
         }
+
+        private bool isDone;
 
         Player Dest;
 
@@ -131,11 +134,13 @@ namespace Model
 
         public async Task<bool> WhenDamaged(Damaged damaged)
         {
+            if (isDone) return true;
             await Task.Yield();
             if (damaged.Src == Src && damaged.SrcCard.Suit == "红桃")
             {
                 damaged.Value--;
-                Dest.playerEvents.whenDamaged.RemoveEvent(Src, WhenDamaged);
+                isDone = true;
+                // Dest.playerEvents.whenDamaged.RemoveEvent(Src, WhenDamaged);
             }
             return true;
         }

@@ -18,11 +18,12 @@ namespace Model
 
         public bool isSelf { get; set; } = false;
         public bool isAI { get; set; }
+        public Player Teammate { get; set; }
 
         // 武将
         public General general { get; private set; }
         // 皮肤
-        public List<Skin> skins{get;private set;}
+        public List<Skin> skins { get; private set; }
         // 技能
         public Dictionary<string, Skill> skills { get; private set; } = new Dictionary<string, Skill>();
         // 是否存活

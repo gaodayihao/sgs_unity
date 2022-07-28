@@ -41,8 +41,7 @@ namespace View
         /// </summary>
         public void AddHandCard(Model.GetCard operation)
         {
-            var player = operation.player;
-            if (self.model != operation.player) return;
+            if (!operation.player.isSelf) return;
 
             // 所有新获得手牌的id
             var cards = operation.Cards;
@@ -52,13 +51,22 @@ namespace View
             var card = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("Card");
 
             // 实例化新卡牌，添加到手牌区，并根据卡牌id初始化
+            bool active = operation.player == self.model;
             foreach (var i in cards)
             {
+                if (handcards.ContainsKey(i.Id)) continue;
                 var instance = Instantiate(card);
+                instance.SetActive(active);
                 instance.transform.SetParent(handCardArea.transform, false);
                 handcards.Add(i.Id, instance.GetComponent<Card>());
                 handcards[i.Id].Init(i);
             }
+        }
+
+        public void MoveSeat(Model.Player model)
+        {
+            foreach (var i in handcards.Values) i.gameObject.SetActive(model.HandCards.Contains(i.model));
+            // UpdateSpacing();
         }
 
         /// <summary>
@@ -66,8 +74,7 @@ namespace View
         /// </summary>
         public void RemoveHandCard(Model.LoseCard operation)
         {
-            if (self.model != operation.player) return;
-            if (operation.Cards is null) return;
+            if (!operation.player.isSelf) return;
 
             foreach (var i in operation.Cards)
             {
@@ -113,22 +120,31 @@ namespace View
 
             if (maxCount == 0)
             {
-                foreach (var card in handcards.Values)
+                foreach (var i in handcards.Values)
                 {
-                    card.button.interactable = false;
-                    card.AddShadow();
+                    if (!i.gameObject.activeSelf) continue;
+                    i.button.interactable = false;
+                    i.AddShadow();
                 }
                 IsSettled = true;
                 return;
+            }
+
+            // 无懈可击
+            if (timerType == TimerType.无懈可击)
+            {
+                foreach (var i in handcards.Values) i.gameObject.SetActive(i.name == "无懈可击");
+                UpdateSpacing();
             }
 
             // 判断每张卡牌是否可选
 
             if (Model.TimerTask.Instance.timerType == timerType && Model.TimerTask.Instance.GivenCard != null)
             {
-                foreach (var card in handcards.Values)
+                foreach (var i in handcards.Values)
                 {
-                    card.button.interactable = Model.TimerTask.Instance.GivenCard.Contains(card.name);
+                    if (!i.gameObject.activeSelf) continue;
+                    i.button.interactable = Model.TimerTask.Instance.GivenCard.Contains(i.name);
                 }
             }
 
@@ -147,10 +163,11 @@ namespace View
 
                     case TimerType.CallSkill:
                         var skill = GetComponent<SkillArea>().SelectedSkill.model;
-                        foreach (var card in handcards.Values)
+                        foreach (var i in handcards.Values)
                         {
+                            if (!i.gameObject.activeSelf) continue;
                             // 设置不能使用的手牌
-                            card.button.interactable = skill.IsValidCard(card.model);
+                            i.button.interactable = skill.IsValidCard(i.model);
                         }
                         break;
 
@@ -162,7 +179,7 @@ namespace View
             }
 
             // 设置禁用卡牌
-            if (timerType == TimerType.PerformPhase || timerType == TimerType.UseCard || timerType == TimerType.UseWxkj)
+            if (timerType == TimerType.PerformPhase || timerType == TimerType.UseCard || timerType == TimerType.无懈可击)
             {
                 foreach (var i in handcards.Values)
                 {
@@ -171,7 +188,7 @@ namespace View
             }
 
             // 对已禁用的手牌设置阴影
-            foreach (var card in handcards.Values) card.AddShadow();
+            foreach (var card in handcards.Values) if (card.gameObject.activeSelf) card.AddShadow();
         }
 
         /// <summary>
@@ -179,16 +196,20 @@ namespace View
         /// </summary>
         public void ResetCardArea()
         {
-            Debug.Log("重置手牌状态");
             // 重置手牌状态
-            foreach (var card in handcards.Values) card.ResetCard();
+            foreach (var card in handcards.Values) if (card.gameObject.activeSelf) card.ResetCard();
+            if (GetComponent<OperationArea>().timerType == TimerType.无懈可击)
+            {
+                foreach (var i in handcards.Values) i.gameObject.SetActive(self.model.HandCards.Contains(i.model));
+                UpdateSpacing();
+            }
 
             IsSettled = false;
         }
 
         public void ResetCardArea(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
+            if (timerTask.timerType != TimerType.无懈可击 && self.model != timerTask.player) return;
 
             ResetCardArea();
         }
@@ -226,27 +247,27 @@ namespace View
         /// <summary>
         /// 更新手牌数与手牌上限信息
         /// </summary>
-        private void UpdateHandCardText(Model.Player player)
+        public void UpdateHandCardText(Model.Player player)
         {
-            // 若目标玩家不是自己，直接返回
-            if (self.model != player) return;
-
             handCardText.text = player.HandCardCount.ToString() + "/" + player.HandCardLimit.ToString();
             UpdateSpacing();
         }
 
         public void UpdateHandCardText(Model.GetCard operation)
         {
+            if (self.model != operation.player) return;
             UpdateHandCardText(operation.player);
         }
 
         public void UpdateHandCardText(Model.LoseCard operation)
         {
+            if (self.model != operation.player) return;
             UpdateHandCardText(operation.player);
         }
 
         public void UpdateHandCardText(Model.UpdateHp operation)
         {
+            if (self.model != operation.player) return;
             UpdateHandCardText(operation.player);
         }
 
@@ -256,7 +277,8 @@ namespace View
         /// <param name="count"></param>
         private void UpdateSpacing()
         {
-            int count = handcards.Count;
+            int count = 0;
+            foreach (var i in handcards.Values) if (i.gameObject.activeSelf) count++;
 
             // 若手牌数小于7，则不用设置负间距，直接返回
             if (count < 8)

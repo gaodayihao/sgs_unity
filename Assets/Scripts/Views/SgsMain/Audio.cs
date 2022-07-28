@@ -8,7 +8,7 @@ namespace View
 {
     public class Audio : MonoBehaviour
     {
-        public AudioSource effect;
+        // public AudioSource effect;
         // private Dictionary<string, int> urls;
         private Dictionary<System.Type, int> urls;
 

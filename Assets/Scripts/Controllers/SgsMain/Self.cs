@@ -20,7 +20,7 @@ namespace Controller
             operationArea = GetComponent<View.OperationArea>();
             destArea = GetComponent<View.DestArea>();
             equipArea = GetComponent<View.EquipArea>();
-            skillArea=GetComponent<View.SkillArea>();
+            skillArea = GetComponent<View.SkillArea>();
 
             // 阶段信息
             Model.TurnSystem.Instance.StartPhaseView += self.ShowPhase;
@@ -56,6 +56,12 @@ namespace Controller
 
             // 技能区
             Model.TimerTask.Instance.StopTimerView += skillArea.ResetSkillArea;
+
+            // 移动座位
+            Model.TimerTask.Instance.MoveSeat += cardArea.MoveSeat;
+            Model.TimerTask.Instance.MoveSeat += cardArea.UpdateHandCardText;
+            Model.TimerTask.Instance.MoveSeat += equipArea.MoveSeat;
+            Model.TimerTask.Instance.MoveSeat += skillArea.MoveSeat;
         }
 
         private void OnDestroy()
@@ -85,6 +91,11 @@ namespace Controller
             Model.TimerTask.Instance.StopTimerView -= equipArea.ResetEquipArea;
 
             Model.TimerTask.Instance.StopTimerView -= skillArea.ResetSkillArea;
+
+            Model.TimerTask.Instance.MoveSeat -= cardArea.MoveSeat;
+            Model.TimerTask.Instance.MoveSeat -= cardArea.UpdateHandCardText;
+            Model.TimerTask.Instance.MoveSeat -= equipArea.MoveSeat;
+            Model.TimerTask.Instance.MoveSeat -= skillArea.MoveSeat;
         }
     }
 }

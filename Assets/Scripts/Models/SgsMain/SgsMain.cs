@@ -30,8 +30,8 @@ namespace Model
                 // self
                 players[0].isSelf = true;
                 players[0].isAI = false;
-                // players[3].isSelf = true;
-                // players[3].isAI = false;
+                players[3].isSelf = true;
+                players[3].isAI = false;
             }
             else
             {
@@ -44,6 +44,11 @@ namespace Model
                 }
             }
 
+            players[0].Teammate=players[3];
+            players[1].Teammate=players[2];
+            players[2].Teammate=players[1];
+            players[3].Teammate=players[0];
+
             for (int i = 0; i < PlayersCount; i++) players[i].Position = i;
             for (int i = 1; i < PlayersCount; i++) players[i].Last = players[i - 1];
             for (int i = 0; i < PlayersCount - 1; i++) players[i].Next = players[i + 1];
@@ -55,7 +60,8 @@ namespace Model
 
             // 初始化武将
             await InitGeneral();
-            foreach (var player in players) generalView?.Invoke(player);
+            // foreach (var player in players) generalView?.Invoke(player);
+            generalView();
 
             // 初始化牌堆
             await CardPile.Instance.Init();
@@ -89,8 +95,8 @@ namespace Model
             remove => positionView -= value;
         }
 
-        private UnityAction<Player> generalView;
-        public event UnityAction<Player> GeneralView
+        private UnityAction generalView;
+        public event UnityAction GeneralView
         {
             add => generalView += value;
             remove => generalView -= value;
@@ -144,7 +150,7 @@ namespace Model
                     General general;
 
                     // debug
-                    if (i.isSelf) general = self;
+                    if (i.Position == 0) general = self;
 
                     else general = json[Random.Range(0, json.Count)];
                     json.Remove(general);

@@ -9,15 +9,15 @@ namespace Controller
         private Model.SgsMain model;
         private View.SgsMain view;
 
-//         private void Awake()
-//         {
-// #if UNITY_EDITOR
-//             ABManager.Instance.LoadSgsMain();
-// #else
-//             ABManager.Instance.LoadAssetBundle("sgsasset");
-// #endif
+        //         private void Awake()
+        //         {
+        // #if UNITY_EDITOR
+        //             ABManager.Instance.LoadSgsMain();
+        // #else
+        //             ABManager.Instance.LoadAssetBundle("sgsasset");
+        // #endif
 
-//         }
+        //         }
 
         // Start is called before the first frame update
         void Start()
@@ -30,6 +30,8 @@ namespace Controller
             Model.CardPanel.Instance.StartTimerView += view.ShowPanel;
             Model.CardPanel.Instance.StopTimerView += view.HidePanel;
 
+            Model.TimerTask.Instance.MoveSeat += view.MoveSeat;
+
             model = Model.SgsMain.Instance;
             Model.Mode mode = new Model.Mode();
             mode.playerCount = 4;
@@ -40,9 +42,11 @@ namespace Controller
         private void OnDestroy()
         {
             Model.SgsMain.Instance.PositionView -= view.InitPlayers;
-            
+
             Model.CardPanel.Instance.StartTimerView -= view.ShowPanel;
             Model.CardPanel.Instance.StopTimerView -= view.HidePanel;
+
+            Model.TimerTask.Instance.MoveSeat -= view.MoveSeat;
         }
 
     }
