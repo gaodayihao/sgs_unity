@@ -60,6 +60,7 @@ namespace View
             if (!IsSelected) Select();
             else Unselect();
             GetComponentInParent<CardArea>().UpdateCardArea();
+            GetComponentInParent<DestArea>().InitDestArea();
             GetComponentInParent<OperationArea>().UpdateButtonArea();
 
         }
@@ -74,6 +75,7 @@ namespace View
             IsSelected = true;
             GetComponent<RectTransform>().anchoredPosition += new Vector2(20, 0);
             equipArea.SelectedCard.Add(this);
+            // Debug.Log(equipArea.SelectedCard.Count);
         }
 
         /// <summary>

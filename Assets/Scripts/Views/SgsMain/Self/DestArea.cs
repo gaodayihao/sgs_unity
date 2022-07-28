@@ -15,18 +15,16 @@ namespace View
                 if (players is null)
                 {
                     players = new List<PlayerButton>();
-
-                    players.Add(transform.Find("Player").GetComponent<PlayerButton>());
-                    foreach (Transform player in GameObject.Find("ElsePlayers").transform)
+                    foreach (var i in FindObjectOfType<SgsMain>().players)
                     {
-                        players.Add(player.GetComponent<PlayerButton>());
+                        players.Add(i.GetComponent<PlayerButton>());
                     }
                 }
                 return players;
             }
         }
 
-        private Self self { get => GetComponent<Self>(); }
+        private Player self { get => FindObjectOfType<SgsMain>().self; }
         private CardArea cardArea { get => GetComponent<CardArea>(); }
         private OperationArea operationArea { get => GetComponent<OperationArea>(); }
 

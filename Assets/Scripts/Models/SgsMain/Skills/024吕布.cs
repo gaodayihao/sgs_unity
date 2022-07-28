@@ -11,21 +11,42 @@ namespace Model
 
         public override void OnEnabled()
         {
-            Src.playerEvents.afterUseCard.AddEvent(Src, Execute);
+            Src.playerEvents.afterUseCard.AddEvent(Src, Execute杀);
+            foreach (var i in SgsMain.Instance.AlivePlayers)
+            {
+                i.playerEvents.afterUseCard.AddEvent(Src, Execute决斗);
+            }
         }
 
         public override void OnDisabled()
         {
-            Src.playerEvents.afterUseCard.RemoveEvent(Src, Execute);
+            Src.playerEvents.afterUseCard.RemoveEvent(Src, Execute杀);
+            foreach (var i in SgsMain.Instance.AlivePlayers)
+            {
+                i.playerEvents.afterUseCard.RemoveEvent(Src, Execute决斗);
+            }
         }
 
-        public async Task<bool> Execute(Card card)
+        public async Task<bool> Execute杀(Card card)
         {
             if (!(card is 杀)) return true;
             if ((card as 杀).ShanCount != 1) return true;
 
             await Task.Yield();
+            Execute();
             (card as 杀).ShanCount = 2;
+            return true;
+        }
+
+        public async Task<bool> Execute决斗(Card card)
+        {
+            if (!(card is 决斗)) return true;
+            if (card.Src != Src && !card.Dests.Contains(Src)) return true;
+
+            await Task.Yield();
+            Execute();
+            if (card.Src == Src) (card as 决斗).DestShaCount = 2;
+            else (card as 决斗).SrcShaCount = 2;
             return true;
         }
     }
@@ -58,7 +79,8 @@ namespace Model
             if (damaged.Src != Src || !(damaged.SrcCard is 杀)) return true;
             if (!dest.HaveCard()) return true;
 
-            if (!await base.Execute()) return true;
+            if (!await base.ShowTimer()) return true;
+            Execute();
 
             // 选择一张牌
             bool result = await CardPanel.Instance.Run(Src, damaged.player, TimerType.RegionPanel);

@@ -22,7 +22,7 @@ namespace View
         // 回合结束键
         public Button finishPhase;
 
-        private Self self { get => GetComponent<Self>(); }
+        private Player self { get => GameObject.FindObjectOfType<SgsMain>().self; }
         private CardArea cardArea { get => GetComponent<CardArea>(); }
         private DestArea destArea { get => GetComponent<DestArea>(); }
         private EquipArea equipArea { get => GetComponent<EquipArea>(); }
@@ -52,12 +52,13 @@ namespace View
 
             List<int> cards = new List<int>();
             foreach (var card in cardArea.SelectedCard) cards.Add(card.Id);
+            foreach (var card in equipArea.SelectedCard) cards.Add(card.Id);
 
             List<int> players = new List<int>();
             foreach (var player in destArea.SelectedPlayer) players.Add(player.model.Position);
 
-            List<int> equips = new List<int>();
-            foreach (var card in equipArea.SelectedCard) equips.Add(card.Id);
+            // List<int> equips = new List<int>();
+            // foreach (var card in equipArea.SelectedCard) equips.Add(card.Id);
 
             string skill = "";
             if (skillArea.SelectedSkill != null) skill = skillArea.SelectedSkill.text.text;
@@ -66,7 +67,7 @@ namespace View
             {
                 timerTask.SendWxkjResult(self.model.Position, true, cards);
             }
-            else timerTask.SendResult(cards, players, equips, skill);
+            else timerTask.SendResult(cards, players, skill);
         }
 
         /// <summary>

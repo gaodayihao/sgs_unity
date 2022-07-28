@@ -24,7 +24,7 @@ namespace Model
 
         public override bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
         {
-            return cards[0].Suit == "方片" ? true : DestArea.UseSha(Src, dest);
+            return cards[0].Suit == "方片" || DestArea.UseSha(Src, dest);
         }
 
         public override int MaxCard()

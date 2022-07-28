@@ -10,6 +10,7 @@ namespace View
         public Dictionary<string, Skill> Skills { get; private set; } = new Dictionary<string, Skill>();
         // 已选技能
         public Skill SelectedSkill { get; set; }
+        private Player self { get => GameObject.FindObjectOfType<SgsMain>().self; }
 
         public Transform Long;
         public Transform Short;
@@ -19,6 +20,7 @@ namespace View
         /// </summary>
         public void InitSkill(Dictionary<string, Model.Skill> model)
         {
+            Debug.Log("init skill");
             // 实例化预制件，添加到技能区
             foreach (var i in model)
             {
@@ -72,7 +74,7 @@ namespace View
         /// </summary>
         public void ResetSkillArea(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.UseWxkj && GetComponent<Self>().model != timerTask.player) return;
+            if (timerTask.timerType != TimerType.UseWxkj && self.model != timerTask.player) return;
 
             foreach (var i in Skills.Values) i.ResetSkill();
         }

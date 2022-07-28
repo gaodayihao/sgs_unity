@@ -47,12 +47,14 @@ namespace View
 
         public void ShowTimer(Model.TimerTask timerTask)
         {
+            if (!gameObject.activeSelf) return;
             if (timerTask.timerType != TimerType.UseWxkj && timerTask.player != model) return;
             ShowTimer(timerTask.timerType, timerTask.second);
         }
 
         public void ShowTimer(Model.CardPanel cardPanel)
         {
+            if (!gameObject.activeSelf) return;
             if (cardPanel.player != model) return;
             ShowTimer(cardPanel.timerType, cardPanel.second);
         }

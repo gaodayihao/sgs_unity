@@ -21,13 +21,21 @@ namespace Model
         // 技能
         public List<string> skill;
         // 皮肤
-        public List<Skin> skin;
+        // public List<int> /skin;
     }
 
     [Serializable]
     public class Skin
     {
-        public string name;
         public int id;
+        public string name;
+        public List<Voice> voice;
+    }
+
+    [Serializable]
+    public class Voice
+    {
+        public string name;
+        public List<string> url;
     }
 }

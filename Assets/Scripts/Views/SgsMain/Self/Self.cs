@@ -8,7 +8,7 @@ namespace View
 {
     public class Self : MonoBehaviour
     {
-        public Model.Player model { get => GetComponentInChildren<Player>().model; }
+        private Model.Player model { get => GameObject.FindObjectOfType<SgsMain>().self.model; }
 
         // 阶段信息
         public Image currentPhase;

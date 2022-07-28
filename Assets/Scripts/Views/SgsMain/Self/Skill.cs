@@ -13,8 +13,8 @@ namespace View
 
         public Model.Skill model { get; set; }
         public bool IsSelected { get; private set; }
-        public OperationArea operationArea { get => GetComponentInParent<OperationArea>(); }
-        public SkillArea skillArea { get => GetComponentInParent<SkillArea>(); }
+        public OperationArea operationArea { get => FindObjectOfType<OperationArea>(); }
+        public SkillArea skillArea { get => FindObjectOfType<SkillArea>(); }
 
         // Start is called before the first frame update
         void Start()

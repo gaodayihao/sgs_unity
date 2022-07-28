@@ -15,7 +15,8 @@ namespace View
         // 手牌
         public Dictionary<int, Card> handcards = new Dictionary<int, Card>();
 
-        private Self self { get => GetComponent<Self>(); }
+        private Player self { get => GameObject.FindObjectOfType<SgsMain>().self; }
+        private EquipArea equipArea { get => GetComponent<EquipArea>(); }
 
         // 被选中卡牌
         public List<Card> SelectedCard { get; private set; } = new List<Card>();
@@ -23,9 +24,10 @@ namespace View
         {
             get
             {
-                var model = new List<Model.Card>();
-                foreach (var i in SelectedCard) model.Add(i.model);
-                return model;
+                var m = new List<Model.Card>();
+                foreach (var i in SelectedCard) m.Add(i.model);
+                foreach (var i in equipArea.SelectedCard) m.Add(i.model);
+                return m;
             }
         }
         private int maxCount;
@@ -196,8 +198,6 @@ namespace View
         /// </summary>
         public void UpdateCardArea()
         {
-            var equipArea = GetComponent<EquipArea>();
-
             int count = SelectedCard.Count + equipArea.SelectedCard.Count;
             foreach (var card in equipArea.SelectedCard)
             {

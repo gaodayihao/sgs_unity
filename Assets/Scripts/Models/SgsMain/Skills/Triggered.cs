@@ -10,7 +10,7 @@ namespace Model
         public Triggered(Player src, string name, bool passive, int timeLimit = int.MaxValue)
             : base(src, name, passive, timeLimit) { }
 
-        public async Task<bool> Execute()
+        public async Task<bool> ShowTimer()
         {
             TimerTask.Instance.GivenSkill = Name;
             TimerTask.Instance.Hint = "是否发动" + Name + "？";

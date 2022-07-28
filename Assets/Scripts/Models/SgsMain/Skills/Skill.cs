@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Model
 {
@@ -113,6 +114,18 @@ namespace Model
         public virtual bool IsValid()
         {
             return Time < TimeLimit && Enabled > 0;
+        }
+
+        public void Execute()
+        {
+            useSkillView(this);
+        }
+
+        private static UnityAction<Skill> useSkillView;
+        public static event UnityAction<Skill> UseSkillView
+        {
+            add => useSkillView += value;
+            remove => useSkillView -= value;
         }
     }
 }

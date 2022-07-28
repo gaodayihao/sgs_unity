@@ -72,8 +72,10 @@ namespace Model
         /// </summary>
         public async Task Put(Player player)
         {
+            Src = player;
             string cardInfo = Convertion ? "" : "【" + Suit + Weight.ToString() + "】";
             Debug.Log((player.Position + 1).ToString() + "号位打出了" + Name + cardInfo);
+            useCardView?.Invoke(this);
 
             // 使用者失去此手牌
             if (!Convertion)

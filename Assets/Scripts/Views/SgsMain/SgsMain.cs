@@ -1,13 +1,20 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Threading.Tasks;
+using UnityEngine.Networking;
 
 namespace View
 {
     public class SgsMain : SceneBase
     {
-        private GameObject self;
-        private GameObject elsePlayers;
+        // public Self self;
+        // private GameObject elsePlayers;
+
+        public GameObject[] players;
+        public Player self { get; private set; }
+
+        public AudioSource bgm;
 
         private void Awake()
         {
@@ -25,38 +32,117 @@ namespace View
             // StartCoroutine(SetBackgroundImage(Urls.TEST_BACKGROUND_IMAGE));
             SetBackgroundImage(Urls.TEST_BACKGROUND_IMAGE);
 
-            self = transform.Find("Self").gameObject;
-            elsePlayers = transform.Find("ElsePlayers").gameObject;
+            // self = transform.Find("Self").gameObject;
+            // elsePlayers = transform.Find("ElsePlayers").gameObject;
+
+            LoadBgm();
+        }
+
+        private async void LoadBgm()
+        {
+            string url = Urls.AUDIO_URL + "bgm/bgm_1.mp3";
+            UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG);
+            www.SendWebRequest();
+
+            while (!www.isDone) await Task.Yield();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+                return;
+            }
+
+            bgm.clip = DownloadHandlerAudioClip.GetContent(www);
+            bgm.Play();
         }
 
         /// <summary>
         /// 初始化每个View.Player
         /// </summary>
-        public void InitPlayers(Model.Player[] players)
+        public void InitPlayers(Model.Player[] model)
         {
-            int i;
-            for (i = 0; i < 4; i++)
+            // int i;
+            for (int i = 0; i < 4; i++)
             {
-                if (players[i].isSelf)
+                players[i].GetComponent<Player>().Init(model[i]);
+            }
+            self = players[0].GetComponent<Player>();
+
+            foreach (var i in players)
+            {
+                if (i.GetComponent<Player>().model.isSelf)
                 {
-                    self.GetComponentInChildren<Player>().Init(players[i]);
-                    // players[i].IsSelf = true;
+                    UpdatePos(i.GetComponent<Player>().model);
                     break;
                 }
             }
-            int j = 2, k = i;
-            for (i = (i + 1) % 4; i != k; i = (i + 1) % 4)
-            {
-                elsePlayers.transform.Find("Player" + j.ToString()).GetComponent<Player>().Init(players[i]);
-                j++;
-            }
+            // for (i = 0; i < 4; i++)
+            // {
+            //     if (model[i].isSelf)
+            //     {
+            //         self.GetComponentInChildren<Player>().Init(model[i]);
+            //         // players[i].IsSelf = true;
+            //         break;
+            //     }
+            // }
+            // int j = 2, k = i;
+            // for (i = (i + 1) % 4; i != k; i = (i + 1) % 4)
+            // {
+            //     elsePlayers.transform.Find("Player" + j.ToString()).GetComponent<Player>().Init(model[i]);
+            //     j++;
+            // }
+        }
+
+        /// <summary>
+        /// 更新座位
+        /// </summary>
+        /// <param name="model">self</param>
+        public void UpdatePos(Model.Player model)
+        {
+            self.transform.Find("其他角色").gameObject.SetActive(true);
+            self = players[model.Position].GetComponent<Player>();
+            self.transform.Find("其他角色").gameObject.SetActive(false);
+
+            SelfPos(players[model.Position]);
+            RightPos(players[model.Next.Position]);
+            TopPos(players[model.Next.Next.Position]);
+            LeftPos(players[model.Next.Next.Next.Position]);
+        }
+
+        public void SelfPos(GameObject player)
+        {
+            RectTransform rectTransform = player.GetComponent<RectTransform>();
+            rectTransform.anchorMax = new Vector2(1, 0);
+            rectTransform.anchorMin = new Vector2(1, 0);
+            rectTransform.anchoredPosition = new Vector2(-10, 24);
+        }
+        public void RightPos(GameObject player)
+        {
+            RectTransform rectTransform = player.GetComponent<RectTransform>();
+            rectTransform.anchorMax = new Vector2(1, 0.5f);
+            rectTransform.anchorMin = new Vector2(1, 0.5f);
+            rectTransform.anchoredPosition = new Vector2(-10, 150);
+        }
+        public void TopPos(GameObject player)
+        {
+            RectTransform rectTransform = player.GetComponent<RectTransform>();
+            rectTransform.anchorMax = new Vector2(0.5f, 1);
+            rectTransform.anchorMin = new Vector2(0.5f, 1);
+            rectTransform.anchoredPosition = new Vector2(0, -15);
+        }
+        public void LeftPos(GameObject player)
+        {
+            RectTransform rectTransform = player.GetComponent<RectTransform>();
+            rectTransform.anchorMax = new Vector2(0, 0.5f);
+            rectTransform.anchorMin = new Vector2(0, 0.5f);
+            rectTransform.anchoredPosition = new Vector2(10, 150);
         }
 
         private GameObject panel;
 
         public void ShowPanel(Model.CardPanel model)
         {
-            if (self.GetComponent<Self>().model != model.player) return;
+            if (self.model != model.player) return;
 
             // if (model.Title == "过河拆桥" || model.Title == "顺手牵羊") ShowRegion(model);
             // else if (model.Title == "麒麟弓") ShowQlg(model);
@@ -91,7 +177,7 @@ namespace View
 
         public void HidePanel(Model.CardPanel model)
         {
-            if (self.GetComponent<Self>().model != model.player) return;
+            if (self.model != model.player) return;
             Destroy(panel);
         }
     }

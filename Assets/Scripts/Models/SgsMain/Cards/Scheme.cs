@@ -151,14 +151,28 @@ namespace Model
 
                 var player = dest;
                 bool done = false;
+                int shaCount = 0;
                 while (!done)
                 {
                     done = !await 杀.Call(player);
+
                     if (done) await new Damaged(player, 1, player == dest ? src : dest, this).Execute();
-                    else player = player == dest ? src : dest;
+                    else
+                    {
+                        shaCount++;
+
+                        if (shaCount >= (player == src ? SrcShaCount : DestShaCount))
+                        {
+                            player = player == dest ? src : dest;
+                            shaCount = 0;
+                        }
+                    }
                 }
             }
         }
+
+        public int SrcShaCount { get; set; } = 1;
+        public int DestShaCount { get; set; } = 1;
     }
 
     /// <summary>

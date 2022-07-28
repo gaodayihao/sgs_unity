@@ -38,7 +38,7 @@ namespace Model
         // public List<Card> Equipages { get; private set; } = new List<Card>();
         // public List<Player> Dests { get; private set; } = new List<Player>();
         public List<Card> Cards { get; private set; }
-        public List<Card> Equipages { get; private set; }
+        // public List<Card> Equipages { get; private set; }
         public List<Player> Dests { get; private set; }
         public string Skill { get; private set; }
 
@@ -57,7 +57,7 @@ namespace Model
             // Equipages.Clear();
             // Dests.Clear();
             Cards = new List<Card>();
-            Equipages = new List<Card>();
+            // Equipages = new List<Card>();
             Dests = new List<Player>();
             Skill = "";
 
@@ -80,16 +80,32 @@ namespace Model
 
             // 转化技
             //    if(Skill!="") Debug.Log("timerTask.Skill="+Skill);
-            if (Skill != "" && player.skills[Skill] is Converted)
+            if (Skill != "")
             {
-                Cards = new List<Card> { (player.skills[Skill] as Converted).Execute(Cards) };
+                if (player.skills[Skill] is Converted)
+                {
+                    player.skills[Skill].Execute();
+                    Cards = new List<Card> { (player.skills[Skill] as Converted).Execute(Cards) };
+                }
             }
             // 转化装备
-            else if (Equipages.Count != 0 && Equipages[0] is 丈八蛇矛
-                && (timerType == TimerType.UseCard || timerType == TimerType.PerformPhase))
+            else if ((timerType == TimerType.UseCard || timerType == TimerType.PerformPhase)
+                && Cards.Count == 3)
             {
-                Cards = new List<Card> { ((丈八蛇矛)Equipages[0]).ConvertSkill(Cards) };
+                foreach (var i in Cards)
+                {
+                    if (i is 丈八蛇矛)
+                    {
+                        Cards = new List<Card> { (i as 丈八蛇矛).Execute(Cards) };
+                        break;
+                    }
+                }
             }
+            // else if (Equipages.Count != 0 && Equipages[0] is 丈八蛇矛
+            //     && (timerType == TimerType.UseCard || timerType == TimerType.PerformPhase))
+            // {
+            //     Cards = new List<Card> { ((丈八蛇矛)Equipages[0]).Execute(Cards) };
+            // }
 
             return result;
         }
@@ -102,13 +118,13 @@ namespace Model
         /// <summary>
         /// 传入已选中的卡牌与目标，通过设置TaskCompletionSource返回值，继续主线程
         /// </summary>
-        public void SetResult(List<int> cards, List<int> dests, List<int> equipages, string skill)
+        public void SetResult(List<int> cards, List<int> dests, string skill)
         {
             foreach (var id in cards) Cards.Add(CardPile.Instance.cards[id]);
 
             foreach (var id in dests) Dests.Add(SgsMain.Instance.players[id]);
 
-            foreach (var id in equipages) Equipages.Add(CardPile.Instance.cards[id]);
+            // foreach (var id in equipages) Equipages.Add(CardPile.Instance.cards[id]);
 
             Skill = skill;
         }
@@ -118,11 +134,11 @@ namespace Model
             if (Room.Instance.isSingle) waitAction.TrySetResult(false);
         }
 
-        public void SendResult(List<int> cards, List<int> dests, List<int> equipages, string skill, bool result = true)
+        public void SendResult(List<int> cards, List<int> dests, string skill, bool result = true)
         {
             if (Room.Instance.isSingle)
             {
-                if (result) SetResult(cards, dests, equipages, skill);
+                if (result) SetResult(cards, dests, skill);
                 waitAction.TrySetResult(result);
             }
             // 多人模式
@@ -134,7 +150,6 @@ namespace Model
                 json.result = result;
                 json.cards = cards;
                 json.dests = dests;
-                json.equipages = equipages;
                 json.skill = skill;
 
                 Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
@@ -143,7 +158,7 @@ namespace Model
 
         public void SendResult()
         {
-            SendResult(null, null, null, null, false);
+            SendResult(null, null, null, false);
             // if (Room.Instance.isSingle) SetResult();
             // // 多人模式
             // else
@@ -169,7 +184,7 @@ namespace Model
                 if (json.result)
                 {
                     player = SgsMain.Instance.players[json.src];
-                    SetResult(json.cards, new List<int>(), new List<int>(), "");
+                    SetResult(json.cards, new List<int>(), "");
                     // return true;
                 }
                 else
@@ -191,7 +206,7 @@ namespace Model
                 return json.result;
             }
 
-            if (json.result) SetResult(json.cards, json.dests, json.equipages, json.skill);
+            if (json.result) SetResult(json.cards, json.dests, json.skill);
             return json.result;
         }
 
@@ -205,7 +220,7 @@ namespace Model
             GivenCard = new List<string> { "无懈可击" };
 
             Cards = new List<Card>();
-            Equipages = new List<Card>();
+            // Equipages = new List<Card>();
             Dests = new List<Player>();
 
             wxkjDone = new Dictionary<int, bool>();
@@ -235,7 +250,7 @@ namespace Model
             if (result)
             {
                 player = SgsMain.Instance.players[src];
-                SetResult(cards, new List<int>(), new List<int>(), "");
+                SetResult(cards, new List<int>(), "");
                 waitAction.TrySetResult(true);
             }
             else

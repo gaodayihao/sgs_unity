@@ -45,6 +45,9 @@ namespace View
         #endregion
 
         public Model.Player model { get; private set; }
+        private List<Model.Skin> skins;
+        public Model.Skin CurrentSkin { get; private set; }
+        public Dictionary<int, Dictionary<string, List<string>>> voices;
 
         private void Start()
         {
@@ -62,7 +65,7 @@ namespace View
             positionImage.sprite = Sprites.Instance.position[model.Position];
         }
 
-        public void InitGeneral(Model.Player player)
+        public async void InitGeneral(Model.Player player)
         {
             if (model != player) return;
 
@@ -70,18 +73,49 @@ namespace View
             nationBack.sprite = Sprites.Instance.nationBack[player.general.nation];
             nation.sprite = Sprites.Instance.nation[player.general.nation];
 
-            UpdateGeneralImage(player, player.general.skin[Random.Range(0, player.general.skin.Count)]);
+            await InitSkin(player);
+
+            UpdateSkin(player, skins[Random.Range(0, skins.Count)]);
 
             if (IsSelf) GameObject.FindObjectOfType<SkillArea>().InitSkill(player.skills);
             if (!IsSelf) StartCoroutine(RandomSkin(player));
         }
 
-        public async void UpdateGeneralImage(Model.Player player, Model.Skin skin)
+        public async Task InitSkin(Model.Player player)
+        {
+            string url = Urls.STATIC_URL + "json/skin/" + player.general.id.ToString().PadLeft(3, '0') + ".json";
+            UnityWebRequest www = UnityWebRequest.Get(url);
+            www.SendWebRequest();
+
+            while (!www.isDone) await Task.Yield();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+                return;
+            }
+
+            skins = JsonList<Model.Skin>.FromJson(www.downloadHandler.text);
+
+            voices = new Dictionary<int, Dictionary<string, List<string>>>();
+            foreach (var i in skins)
+            {
+                voices.Add(i.id, new Dictionary<string, List<string>>());
+                foreach (var j in i.voice)
+                {
+                    voices[i.id].Add(j.name, new List<string>());
+                    foreach (var k in j.url) voices[i.id][j.name].Add(k);
+                }
+            }
+        }
+
+        public async void UpdateSkin(Model.Player player, Model.Skin skin)
         {
             if (model != player) return;
+            CurrentSkin = skin;
 
             string url = Urls.GENERAL_IMAGE + player.general.id.ToString().PadLeft(3, '0') + "/" + skin.id + ".png";
-            Debug.Log(url);
+            // Debug.Log(url);
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
             www.SendWebRequest();
 
@@ -105,7 +139,7 @@ namespace View
                 float r = Random.Range(0, 1.0f);
                 if (r > 0.8f)
                 {
-                    UpdateGeneralImage(player, player.general.skin[Random.Range(0, player.general.skin.Count)]);
+                    UpdateSkin(player, skins[Random.Range(0, skins.Count)]);
                 }
             }
         }

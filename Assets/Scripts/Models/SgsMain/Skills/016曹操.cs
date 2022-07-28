@@ -21,8 +21,8 @@ namespace Model
 
         public async Task<bool> Execute(Damaged damaged)
         {
-            var result = await base.Execute();
-            if (!result) return true;
+            if (!await base.ShowTimer()) return true;
+            Execute();
 
             var srcCard = damaged.SrcCard;
             List<Card> cards;

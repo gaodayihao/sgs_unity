@@ -30,6 +30,8 @@ namespace Model
                 // self
                 players[0].isSelf = true;
                 players[0].isAI = false;
+                // players[3].isSelf = true;
+                // players[3].isAI = false;
             }
             else
             {
@@ -98,7 +100,7 @@ namespace Model
         {
             List<string> list = new List<string>
             {
-                "决斗","无中生有","无懈可击","无懈可击","丈八蛇矛"
+                "决斗","无中生有","无懈可击","爪黄飞电","丈八蛇矛"
             };
 
             while (list.Count > 0)
@@ -134,7 +136,7 @@ namespace Model
             {
                 // debug
                 // zf
-                General self = json[9];
+                General self = json[0];
                 json.Remove(self);
 
                 foreach (var i in players)

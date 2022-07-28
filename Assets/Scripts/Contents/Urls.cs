@@ -30,7 +30,9 @@ public static class Urls
     // 图片文件地址
     public const string IMAGE_URL = STATIC_URL + "image/";
     public const string GENERAL_IMAGE = IMAGE_URL + "general/";
+    
     // 音频文件地址
+    public const string AUDIO_URL = STATIC_URL + "audio/";
 
     public const string TEST_BACKGROUND_IMAGE = "https://web.sanguosha.com/220/h5/res/runtime/pc/wallpaper/bg/10.jpg";
 }

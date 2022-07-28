@@ -9,7 +9,7 @@ namespace View
         private Dictionary<string, Equipage> equipages;
         public List<Equipage> SelectedCard { get; private set; } = new List<Equipage>();
 
-        private Self self { get => GetComponent<Self>(); }
+        private Player self { get => GameObject.FindObjectOfType<SgsMain>().self; }
 
         void Start()
         {

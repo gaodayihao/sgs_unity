@@ -118,7 +118,7 @@ namespace Model
             range = 3;
         }
 
-        public 杀 ConvertSkill(List<Card> primitives)
+        public 杀 Execute(List<Card> primitives)
         {
             SkillView();
             return Card.Convert<杀>(primitives);
@@ -163,9 +163,9 @@ namespace Model
             bool result = await TimerTask.Instance.Run(Owner, TimerType.Discard, 2);
             if (result)
             {
-                var list = TimerTask.Instance.Cards.Union(TimerTask.Instance.Equipages).ToList();
-                list.Remove(this);
-                await new Discard(Owner, list).Execute();
+                // var list = TimerTask.Instance.Cards.Union(TimerTask.Instance.Equipages).ToList();
+                TimerTask.Instance.Cards.Remove(this);
+                await new Discard(Owner, TimerTask.Instance.Cards).Execute();
                 return true;
             }
             else return false;

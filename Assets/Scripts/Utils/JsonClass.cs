@@ -101,7 +101,6 @@ public class TimerJson
     public bool result;
     public List<int> cards;
     public List<int> dests;
-    public List<int> equipages;
     public string skill;
     public int src;
 }
