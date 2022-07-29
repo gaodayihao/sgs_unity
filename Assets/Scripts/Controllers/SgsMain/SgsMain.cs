@@ -6,7 +6,6 @@ namespace Controller
 {
     public class SgsMain : SingletonCtrl<SgsMain>
     {
-        private Model.SgsMain model;
         private View.SgsMain view;
 
         //         private void Awake()
@@ -25,6 +24,8 @@ namespace Controller
 
             view = GetComponent<View.SgsMain>();
 
+            Model.SgsMain.Instance.GameOverView += view.GameOver;
+
             Model.SgsMain.Instance.PositionView += view.InitPlayers;
 
             Model.CardPanel.Instance.StartTimerView += view.ShowPanel;
@@ -32,15 +33,13 @@ namespace Controller
 
             Model.TimerTask.Instance.MoveSeat += view.MoveSeat;
 
-            model = Model.SgsMain.Instance;
-            Model.Mode mode = new Model.Mode();
-            mode.playerCount = 4;
-            mode.performTimer = 10;
-            model.StartGame(mode);
+            // Model.SgsMain.Instance.StartGame();
         }
 
         private void OnDestroy()
         {
+            Model.SgsMain.Instance.GameOverView -= view.GameOver;
+
             Model.SgsMain.Instance.PositionView -= view.InitPlayers;
 
             Model.CardPanel.Instance.StartTimerView -= view.ShowPanel;

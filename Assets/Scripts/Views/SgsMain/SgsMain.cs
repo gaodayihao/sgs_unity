@@ -14,8 +14,6 @@ namespace View
         public GameObject[] players;
         public Player self { get; private set; }
 
-        public AudioSource bgm;
-
         private void Awake()
         {
 #if UNITY_EDITOR
@@ -34,26 +32,6 @@ namespace View
 
             // self = transform.Find("Self").gameObject;
             // elsePlayers = transform.Find("ElsePlayers").gameObject;
-
-            LoadBgm();
-        }
-
-        private async void LoadBgm()
-        {
-            string url = Urls.AUDIO_URL + "bgm/bgm_1.mp3";
-            UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG);
-            www.SendWebRequest();
-
-            while (!www.isDone) await Task.Yield();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-                return;
-            }
-
-            bgm.clip = DownloadHandlerAudioClip.GetContent(www);
-            bgm.Play();
         }
 
         /// <summary>
@@ -76,21 +54,13 @@ namespace View
                     break;
                 }
             }
-            // for (i = 0; i < 4; i++)
-            // {
-            //     if (model[i].isSelf)
-            //     {
-            //         self.GetComponentInChildren<Player>().Init(model[i]);
-            //         // players[i].IsSelf = true;
-            //         break;
-            //     }
-            // }
-            // int j = 2, k = i;
-            // for (i = (i + 1) % 4; i != k; i = (i + 1) % 4)
-            // {
-            //     elsePlayers.transform.Find("Player" + j.ToString()).GetComponent<Player>().Init(model[i]);
-            //     j++;
-            // }
+        }
+
+        public void GameOver()
+        {
+            Debug.Log("gameover");
+            string scene = Model.Room.Instance.IsSingle ? "Login" : "Menu";
+            StartCoroutine(SceneManager.Instance.LoadSceneFromAB(scene));
         }
 
         /// <summary>

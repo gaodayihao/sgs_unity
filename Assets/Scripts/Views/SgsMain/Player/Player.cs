@@ -20,6 +20,7 @@ namespace View
         public Image nationBack;
         public Image nation;
         public Material gray;
+        public Image camp;
 
         // 体力
         public GameObject imageGroup;
@@ -35,6 +36,7 @@ namespace View
         public Image nearDeath;
         // 阵亡
         public Image death;
+        public Image deadText;
 
         // 回合内边框
         public Image turnBorder;
@@ -63,6 +65,7 @@ namespace View
             model = player;
             IsSelf = model.isSelf;
             positionImage.sprite = Sprites.Instance.position[model.Position];
+            camp.sprite = Sprites.Instance.camp[IsSelf ? 0 : 1];
         }
 
         public async void InitGeneral()
@@ -238,6 +241,7 @@ namespace View
             nearDeath.gameObject.SetActive(false);
             generalImage.material = gray;
             death.gameObject.SetActive(true);
+            deadText.sprite = Sprites.Instance.deadText[IsSelf ? 0 : 1];
         }
 
         #region 回合内

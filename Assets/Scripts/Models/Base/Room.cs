@@ -7,8 +7,8 @@ namespace Model
 {
     public class Room : Singleton<Room>
     {
-        public bool isSingle = true;
-        public Mode mode;
+        public bool IsSingle { get; set;} = true;
+        // public Mode mode;
         public List<Player> players;
 
         public async Task StartRank()

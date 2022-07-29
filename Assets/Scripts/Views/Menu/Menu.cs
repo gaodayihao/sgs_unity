@@ -19,7 +19,7 @@ namespace View
 
         private async void Click_2v2()
         {
-            if (!Model.Room.Instance.isSingle) await Model.Room.Instance.StartRank();
+            if (!Model.Room.Instance.IsSingle) await Model.Room.Instance.StartRank();
 
             StartCoroutine(SceneManager.Instance.LoadSceneFromAB("SgsMain"));
         }

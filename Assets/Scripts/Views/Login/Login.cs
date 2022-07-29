@@ -98,8 +98,7 @@ namespace View
 
         public void ClickSingleMode()
         {
-            Model.Room.Instance.isSingle = true;
-            StartCoroutine(SceneManager.Instance.LoadSceneFromAB("Menu"));
+            StartCoroutine(SceneManager.Instance.LoadSceneFromAB("SgsMain"));
         }
 
     }

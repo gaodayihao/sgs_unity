@@ -1761,6 +1761,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 920516925}
   yinYangYu:
   - {fileID: 518985692}
@@ -1780,6 +1781,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 710184356}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &121027187
@@ -3107,6 +3109,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 1736520255}
   yinYangYu:
   - {fileID: 2143913931}
@@ -3126,6 +3129,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 676066817}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &218379316
@@ -4434,11 +4438,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8986772208004820241, guid: 39e2023014c6b7149a8d9a3267d6c7f1, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1599.9999
+      value: 1600
       objectReference: {fileID: 0}
     - target: {fileID: 8986772208004820241, guid: 39e2023014c6b7149a8d9a3267d6c7f1, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 959.99994
+      value: 900
       objectReference: {fileID: 0}
     - target: {fileID: 8986772208004820241, guid: 39e2023014c6b7149a8d9a3267d6c7f1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5521,7 +5525,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5704870050914040767, guid: 7aa0d41b34374f441a44009d6f467975, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: Player1
       objectReference: {fileID: 0}
     - target: {fileID: 6040270987503403681, guid: 7aa0d41b34374f441a44009d6f467975, type: 3}
       propertyPath: m_IsActive
@@ -5821,6 +5825,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 572592998}
   yinYangYu:
   - {fileID: 1294786397}
@@ -5840,6 +5845,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 281225450}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &430251273
@@ -7263,6 +7269,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 1007035473}
   yinYangYu:
   - {fileID: 598348803}
@@ -7282,6 +7289,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 1606782140}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &548674586
@@ -7507,6 +7515,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 1098444093}
   yinYangYu:
   - {fileID: 500111119}
@@ -7526,6 +7535,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 894537438}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &559078707
@@ -7671,6 +7681,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 133863519}
   yinYangYu:
   - {fileID: 1067541839}
@@ -7690,6 +7701,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 1436094785}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &567555490
@@ -8873,6 +8885,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 1213225393}
   yinYangYu:
   - {fileID: 830374085}
@@ -8892,6 +8905,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 946054638}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &644181745
@@ -13297,6 +13311,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 351427368}
   yinYangYu:
   - {fileID: 801017006}
@@ -13316,6 +13331,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 830616813}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &975815696
@@ -16032,6 +16048,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 1818076040}
   yinYangYu:
   - {fileID: 284316097}
@@ -16051,6 +16068,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 1846066033}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1158267099
@@ -16734,6 +16752,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 2106930453}
   yinYangYu:
   - {fileID: 2109809836}
@@ -16753,6 +16772,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 767220531}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1218867518
@@ -17349,6 +17369,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 1147267409}
   yinYangYu:
   - {fileID: 173532423}
@@ -17368,6 +17389,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 694176387}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1285378108
@@ -18791,6 +18813,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 791637794}
   yinYangYu:
   - {fileID: 1110431311}
@@ -18810,6 +18833,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 1507815436}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1421436994
@@ -19107,6 +19131,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 1008717010}
   yinYangYu:
   - {fileID: 878491836}
@@ -19126,6 +19151,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 833283971}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1457933895
@@ -21226,6 +21252,7 @@ MonoBehaviour:
   nationBack: {fileID: 0}
   nation: {fileID: 0}
   gray: {fileID: 2100000, guid: 01b7784ac4ab6154ab7e886643d22fba, type: 2}
+  camp: {fileID: 0}
   imageGroup: {fileID: 689160986}
   yinYangYu:
   - {fileID: 595667803}
@@ -21245,6 +21272,7 @@ MonoBehaviour:
   yinYangYuSingle: {fileID: 1735340380}
   nearDeath: {fileID: 0}
   death: {fileID: 0}
+  deadText: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1676435795
@@ -21920,10 +21948,14 @@ GameObject:
   - component: {fileID: 1737497582}
   - component: {fileID: 1737497581}
   - component: {fileID: 1737497580}
-  - component: {fileID: 1737497584}
   - component: {fileID: 1737497585}
   - component: {fileID: 1737497586}
   - component: {fileID: 1737497587}
+  - component: {fileID: 1737497588}
+  - component: {fileID: 1737497592}
+  - component: {fileID: 1737497591}
+  - component: {fileID: 1737497590}
+  - component: {fileID: 1737497589}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -22024,20 +22056,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1737497584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1737497579}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96e17c4e33f89d6429733c7160f048a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chat: {fileID: 5626828086892724783}
-  tuoguan: {fileID: 7026320477927221660}
 --- !u!114 &1737497585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22055,7 +22073,6 @@ MonoBehaviour:
   - {fileID: 849701336}
   - {fileID: 462180951}
   - {fileID: 240217277}
-  bgm: {fileID: 313612883}
 --- !u!114 &1737497586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22076,6 +22093,66 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1737497579}
   m_Enabled: 1
+--- !u!114 &1737497588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737497579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca5e289649e40844bc88d366a25ad7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1737497589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737497579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad11f95d69f3dc943a82c1d7ed67987c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1737497590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737497579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9f756e63bb598b41b15a81d9738e739, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1737497591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737497579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 631e391c8f3c59844b723e6a93861418, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1737497592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737497579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75b02141b0f84ef419eaa6552ca330c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1788143748
 GameObject:
   m_ObjectHideFlags: 0
@@ -25141,6 +25218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3f5759dfc7c49cbb24f13406ba798c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bgm: {fileID: 313612883}
   effect: {fileID: 1493636156}
 --- !u!114 &2133445294
 MonoBehaviour:

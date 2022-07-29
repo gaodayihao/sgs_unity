@@ -8,7 +8,8 @@ namespace View
 {
     public class Audio : MonoBehaviour
     {
-        // public AudioSource effect;
+        public AudioSource bgm;
+        public AudioSource effect;
         // private Dictionary<string, int> urls;
         private Dictionary<System.Type, int> urls;
 
@@ -56,6 +57,26 @@ namespace View
                 { typeof(Model.SubHorse), 17 },
                 { typeof(Model.PlusHorse), 17 }
             };
+
+            LoadBgm();
+        }
+
+        private async void LoadBgm()
+        {
+            string url = Urls.AUDIO_URL + "bgm/bgm_1.mp3";
+            UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG);
+            www.SendWebRequest();
+
+            while (!www.isDone) await Task.Yield();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log(www.error);
+                return;
+            }
+
+            bgm.clip = DownloadHandlerAudioClip.GetContent(www);
+            bgm.Play();
         }
 
         public async void CardVoice(Model.Card card)
@@ -80,6 +101,8 @@ namespace View
                 url += "spell" + urls[card.GetType()] + "_" + gender + ".mp3";
             }
 
+            // Debug.Log("audio " + url);
+
             UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG);
             www.SendWebRequest();
 
@@ -91,11 +114,7 @@ namespace View
                 return;
             }
 
-            var audioSource = gameObject.AddComponent<AudioSource>();
-            var clip = DownloadHandlerAudioClip.GetContent(www);
-            audioSource.clip = clip;
-            audioSource.Play();
-            Destroy(audioSource, clip.length);
+            effect.PlayOneShot(DownloadHandlerAudioClip.GetContent(www));
         }
 
         public async void Damage(Model.UpdateHp model)
@@ -113,11 +132,7 @@ namespace View
                 return;
             }
 
-            var audioSource = gameObject.AddComponent<AudioSource>();
-            var clip = DownloadHandlerAudioClip.GetContent(www);
-            audioSource.clip = clip;
-            audioSource.Play();
-            Destroy(audioSource, clip.length);
+            effect.PlayOneShot(DownloadHandlerAudioClip.GetContent(www));
         }
 
         public async void SkillVoice(Model.Skill model)
@@ -138,21 +153,7 @@ namespace View
                 return;
             }
 
-            var audioSource = gameObject.AddComponent<AudioSource>();
-            var clip = DownloadHandlerAudioClip.GetContent(www);
-            audioSource.clip = clip;
-            audioSource.Play();
-            Destroy(audioSource, clip.length);
-
-            // effect.clip = DownloadHandlerAudioClip.GetContent(www);
-            // effect.Play();
+            effect.PlayOneShot(DownloadHandlerAudioClip.GetContent(www));
         }
-
-        // private IEnumerable AutoDestroy(AudioSource audioSource)
-        // {
-        //     var s=audioSource.clip.length;
-        //     yield return new WaitForSeconds(s);
-        //     Destroy(audioSource,);
-        // }
     }
 }

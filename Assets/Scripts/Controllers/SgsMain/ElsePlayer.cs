@@ -35,6 +35,8 @@ namespace Controller
 
         private void OnDestroy()
         {
+            if (elsePlayer is null) return;
+
             Model.TurnSystem.Instance.StartPhaseView -= elsePlayer.ShowPhase;
             Model.TurnSystem.Instance.FinishPhaseView -= elsePlayer.HidePhase;
 

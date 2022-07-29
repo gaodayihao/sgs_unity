@@ -36,6 +36,10 @@ namespace View
         public Dictionary<string, Sprite> nationBack;
         // 势力
         public Dictionary<string, Sprite> nation;
+        // 身份
+        public Sprite[] camp;
+        // 阵亡
+        public Sprite[] deadText;
 
         // selfseat
         // 每阶段对应sprite
@@ -224,6 +228,9 @@ namespace View
                 {"魏", seat[69]},
                 {"群", seat[68]}
             };
+
+            camp = new Sprite[] { seat[57], seat[131] };
+            deadText = new Sprite[] { seat[3], seat[16] };
 
             // self
 

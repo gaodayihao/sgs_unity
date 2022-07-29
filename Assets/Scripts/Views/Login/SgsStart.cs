@@ -32,7 +32,7 @@ namespace View
 
         private void ClickStart()
         {
-            Model.Room.Instance.isSingle = false;
+            Model.Room.Instance.IsSingle = false;
             StartCoroutine(SceneManager.Instance.LoadSceneFromAB("Menu"));
         }
 
