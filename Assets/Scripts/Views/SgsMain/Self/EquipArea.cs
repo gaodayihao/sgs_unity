@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace View
 {
-    public class EquipArea : MonoBehaviour
+    public class EquipArea : SingletonMono<EquipArea>
     {
         private Dictionary<string, Equipage> equipages;
         public List<Equipage> SelectedCard { get; private set; } = new List<Equipage>();
 
-        private Player self { get => GameObject.FindObjectOfType<SgsMain>().self; }
+        private Player self { get => SgsMain.Instance.self; }
 
         void Start()
         {
@@ -46,7 +46,7 @@ namespace View
                     equipages["武器"].button.interactable = true;
                     break;
                 case TimerType.CallSkill:
-                    var skill = GetComponent<SkillArea>().SelectedSkill.model;
+                    var skill = SkillArea.Instance.SelectedSkill.model;
                     foreach (var card in equipages.Values) card.button.interactable = skill.IsValidCard(card.model);
                     break;
             }

@@ -15,8 +15,8 @@ namespace View
         public Button button;
         public bool IsSelected { get; private set; }
 
-        public EquipArea equipArea { get => GetComponentInParent<EquipArea>(); }
-        public OperationArea operationArea { get => GetComponentInParent<OperationArea>(); }
+        public EquipArea equipArea { get => EquipArea.Instance; }
+        public OperationArea operationArea { get => OperationArea.Instance; }
         public Model.Card model { get => Model.CardPile.Instance.cards[Id]; }
 
         void Start()
@@ -59,9 +59,9 @@ namespace View
             // 选中卡牌
             if (!IsSelected) Select();
             else Unselect();
-            GetComponentInParent<CardArea>().UpdateCardArea();
-            GetComponentInParent<DestArea>().InitDestArea();
-            GetComponentInParent<OperationArea>().UpdateButtonArea();
+            CardArea.Instance.UpdateCardArea();
+            DestArea.Instance.InitDestArea();
+            OperationArea.Instance.UpdateButtonArea();
 
         }
 
@@ -75,7 +75,6 @@ namespace View
             IsSelected = true;
             GetComponent<RectTransform>().anchoredPosition += new Vector2(20, 0);
             equipArea.SelectedCard.Add(this);
-            // Debug.Log(equipArea.SelectedCard.Count);
         }
 
         /// <summary>

@@ -5,7 +5,7 @@ using UnityEngine;
 public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
 {
     public static T Instance { get; private set; }
-    void Awake()
+    protected virtual void Awake()
     {
         Instance = this as T;
     }

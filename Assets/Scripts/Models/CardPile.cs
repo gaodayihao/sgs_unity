@@ -10,18 +10,8 @@ namespace Model
     {
         public async Task Init()
         {
-            UnityWebRequest www = UnityWebRequest.Get(Urls.JSON_URL + "card.json");
-            www.SendWebRequest();
-
-            while (!www.isDone) await Task.Yield();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-                return;
-            }
-
-            List<CardJson> cardJsons = JsonList<CardJson>.FromJson(www.downloadHandler.text);
+            string url = Urls.JSON_URL + "card.json";
+            List<CardJson> cardJsons = JsonList<CardJson>.FromJson(await WebRequest.GetString(url));
 
             cards = new List<Card>();
             remainPile = new List<Card>();

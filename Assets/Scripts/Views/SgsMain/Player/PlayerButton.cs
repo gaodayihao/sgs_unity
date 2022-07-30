@@ -15,9 +15,9 @@ namespace View
         // 是否被选中
         public bool IsSelected { get; private set; }
 
-        private DestArea destArea { get => FindObjectOfType<DestArea>(); }
+        private DestArea destArea { get => DestArea.Instance; }
         public Model.Player model { get => GetComponent<Player>().model; }
-        
+
         void Start()
         {
             button.onClick.AddListener(ClickPlayer);
@@ -30,7 +30,7 @@ namespace View
             else Unselect();
 
             destArea.UpdateDestArea();
-            FindObjectOfType<OperationArea>().UpdateButtonArea();
+            OperationArea.Instance.UpdateButtonArea();
         }
 
         /// <summary>

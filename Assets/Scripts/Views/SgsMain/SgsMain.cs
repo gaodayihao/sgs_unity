@@ -6,33 +6,43 @@ using UnityEngine.Networking;
 
 namespace View
 {
-    public class SgsMain : SceneBase
+    public class SgsMain : SceneBase<SgsMain>
     {
         // public Self self;
         // private GameObject elsePlayers;
+        public RawImage backgroundImage;
 
         public GameObject[] players;
         public Player self { get; private set; }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
 #if UNITY_EDITOR
             ABManager.Instance.LoadSgsMain();
-            // #else
-            //             StartCoroutine(ABManager.Instance.LoadAssetBundle("sgsasset"));
 #endif
         }
 
         void Start()
         {
-            // gameObject.AddComponent<Model.Connection>();
-            // 加载背景图片
-            // StartCoroutine(SetBackgroundImage(Urls.TEST_BACKGROUND_IMAGE));
             SetBackgroundImage(Urls.TEST_BACKGROUND_IMAGE);
-
-            // self = transform.Find("Self").gameObject;
-            // elsePlayers = transform.Find("ElsePlayers").gameObject;
+            LoadBgm(Urls.AUDIO_URL + "bgm/bgm_1.mp3");
         }
+
+        public async void SetBackgroundImage(string url)
+        {
+            backgroundImage.texture = await WebRequest.GetTexture(url);
+            // 调整原始图像大小，以使其像素精准。
+            backgroundImage.SetNativeSize();
+
+            // 适应屏幕
+            Texture texture = backgroundImage.texture;
+            Vector2 canvasSize = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>().sizeDelta;
+            float radio = Mathf.Max(canvasSize.x / texture.width, canvasSize.y / texture.height);
+            backgroundImage.rectTransform.sizeDelta *= radio;
+        }
+        // 适配屏幕
+        // AdaptScreen();
 
         /// <summary>
         /// 初始化每个View.Player
@@ -60,7 +70,7 @@ namespace View
         {
             Debug.Log("gameover");
             string scene = Model.Room.Instance.IsSingle ? "Login" : "Menu";
-            StartCoroutine(SceneManager.Instance.LoadSceneFromAB(scene));
+            SceneManager.Instance.LoadSceneFromAB(scene);
         }
 
         /// <summary>

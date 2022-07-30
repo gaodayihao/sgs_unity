@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 namespace View
 {
-    public class SgsStart : SceneBase
+    public class SgsStart : SceneBase<SgsStart>
     {
         public GameObject startPanel;
         public GameObject login;
@@ -28,12 +28,13 @@ namespace View
             logout.onClick.AddListener(ClickLogout);
 
             Getinfo();
+            LoadBgm(Urls.AUDIO_URL + "bgm/outbgm_2.mp3");
         }
 
         private void ClickStart()
         {
             Model.Room.Instance.IsSingle = false;
-            StartCoroutine(SceneManager.Instance.LoadSceneFromAB("Menu"));
+            SceneManager.Instance.LoadSceneFromAB("Menu");
         }
 
         private void ClickLogout()
@@ -43,58 +44,60 @@ namespace View
 
         private async void LogoutAsync()
         {
-            UnityWebRequest www = UnityWebRequest.Get(Urls.LOGIN_URL + "logout/");
-            www.SendWebRequest();
-            while (!www.isDone) await Task.Yield();
+            // UnityWebRequest www = UnityWebRequest.Get(Urls.LOGIN_URL + "logout/");
+            // www.SendWebRequest();
+            // while (!www.isDone) await Task.Yield();
 
-            if (www.result != UnityWebRequest.Result.Success)
+            // if (www.result != UnityWebRequest.Result.Success)
+            // {
+            //     Debug.Log(www.error);
+            // }
+            // else
+            // {
+            var json = await WebRequest.GetString(Urls.LOGIN_URL + "logout/");
+            var getinfoResponse = JsonUtility.FromJson<ResultResponse>(json);
+            if (getinfoResponse.result == "success")
             {
-                Debug.Log(www.error);
+                // 显示登录面板
+                startPanel.SetActive(false);
+                login.SetActive(true);
             }
-            else
-            {
-                var getinfoResponse = JsonUtility.FromJson<ResultResponse>(www.downloadHandler.text);
-                if (getinfoResponse.result == "success")
-                {
-                    // 显示登录面板
-                    startPanel.SetActive(false);
-                    login.SetActive(true);
-                }
-            }
+            // }
         }
 
 
         public async void Getinfo()
         {
-            Debug.Log("getinfo");
-            UnityWebRequest www = UnityWebRequest.Get(Urls.LOGIN_URL + "getinfo/");
-            www.SendWebRequest();
-            while (!www.isDone) await Task.Yield();
+            // Debug.Log("getinfo");
+            // UnityWebRequest www = UnityWebRequest.Get(Urls.LOGIN_URL + "getinfo/");
+            // www.SendWebRequest();
+            // while (!www.isDone) await Task.Yield();
 
-            if (www.result != UnityWebRequest.Result.Success)
+            // if (www.result != UnityWebRequest.Result.Success)
+            // {
+            //     Debug.Log(www.error);
+
+            //     // 显示登录面板
+            //     login.SetActive(true);
+            // }
+            // else
+            // {
+            string json = await WebRequest.GetString(Urls.LOGIN_URL + "getinfo/");
+            var getinfoResponse = JsonUtility.FromJson<GetinfoResponse>(json);
+            if (getinfoResponse.result == "success")
             {
-                Debug.Log(www.error);
-
-                // 显示登录面板
-                login.SetActive(true);
+                // 初始化用户信息到本地
+                Model.User.Instance.Init(getinfoResponse);
+                // 显示开始面板
+                startPanel.SetActive(true);
+                playerName.text = Model.User.Instance.Username;
             }
             else
             {
-                var getinfoResponse = JsonUtility.FromJson<GetinfoResponse>(www.downloadHandler.text);
-                if (getinfoResponse.result == "success")
-                {
-                    // 初始化用户信息到本地
-                    Model.User.Instance.Init(getinfoResponse);
-                    // 显示开始面板
-                    startPanel.SetActive(true);
-                    playerName.text = Model.User.Instance.Username;
-                }
-                else
-                {
-                    // 显示登录面板
-                    login.SetActive(true);
-                }
+                // 显示登录面板
+                login.SetActive(true);
             }
+            // }
         }
 
     }

@@ -25,7 +25,7 @@ namespace View
         public bool IsSelected { get; private set; }
 
         // 手牌区
-        private CardArea cardArea { get => GetComponentInParent<CardArea>(); }
+        private CardArea cardArea { get => CardArea.Instance; }
 
         public Model.Card model { get => Model.CardPile.Instance.cards[Id]; }
 
@@ -38,15 +38,6 @@ namespace View
             name = model.Name;
 
             var sprites = Sprites.Instance;
-            // while (sprites.cardImage[Id] is null || sprites.cardSuit[Id] is null || sprites.cardWeight[Id] is null)
-            // {
-            //     await Task.Yield();
-            // }
-
-            // // 初始化sprite
-            // image.sprite = sprites.cardImage[Id];
-            // suit.sprite = sprites.cardSuit[Id];
-            // weight.sprite = sprites.cardWeight[Id];
             while (sprites.cardImage is null) await Task.Yield();
 
             // 初始化sprite
@@ -68,9 +59,9 @@ namespace View
             else Unselect();
 
             cardArea.UpdateCardArea();
-            GetComponentInParent<DestArea>().ResetDestArea();
-            GetComponentInParent<DestArea>().InitDestArea();
-            GetComponentInParent<OperationArea>().UpdateButtonArea();
+            DestArea.Instance.ResetDestArea();
+            DestArea.Instance.InitDestArea();
+            OperationArea.Instance.UpdateButtonArea();
         }
 
         /// <summary>

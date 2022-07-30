@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace View
 {
-    public class OperationArea : MonoBehaviour
+    public class OperationArea : SingletonMono<OperationArea>
     {
         // 操作区
         public GameObject operationArea;
@@ -23,10 +23,10 @@ namespace View
         public Button finishPhase;
 
         private Player self { get => GameObject.FindObjectOfType<SgsMain>().self; }
-        private CardArea cardArea { get => GetComponent<CardArea>(); }
-        private DestArea destArea { get => GetComponent<DestArea>(); }
-        private EquipArea equipArea { get => GetComponent<EquipArea>(); }
-        private SkillArea skillArea { get => GetComponent<SkillArea>(); }
+        private CardArea cardArea { get => CardArea.Instance; }
+        private DestArea destArea { get => DestArea.Instance; }
+        private EquipArea equipArea { get => EquipArea.Instance; }
+        private SkillArea skillArea { get => SkillArea.Instance; }
 
         private Model.TimerTask timerTask;
         public TimerType timerType { get; private set; }

@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace View
 {
-    public class SkillArea : MonoBehaviour
+    public class SkillArea : SingletonMono<SkillArea>
     {
         // 技能表
         public List<Skill> Skills { get; private set; } = new List<Skill>();
         // 已选技能
         public Skill SelectedSkill { get; set; }
-        private Player self { get => GameObject.FindObjectOfType<SgsMain>().self; }
+        private Player self { get => SgsMain.Instance.self; }
 
         public Transform Long;
         public Transform Short;

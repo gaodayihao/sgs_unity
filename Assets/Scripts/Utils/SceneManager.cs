@@ -22,13 +22,10 @@ public class SceneManager : Singleton<SceneManager>
 
     private string localScene = "Login";
 
-    public IEnumerator LoadSceneFromAB(string sceneName)
+    public async void LoadSceneFromAB(string sceneName)
     {
         // 若场景正在加载，则直接返回
-        if (!isDone)
-        {
-            yield return null;
-        }
+        if (!isDone) return;
         else
         {
             isDone = false;
@@ -50,8 +47,8 @@ public class SceneManager : Singleton<SceneManager>
             {
                 // 加载包含场景资源的AssetBundle
                 string abName = sceneMap[sceneName];
-                yield return ABManager.Instance.LoadAssetBundle(abName);
-                if (abName == "sgsmain") yield return ABManager.Instance.LoadAssetBundle("sgsasset");
+                await ABManager.Instance.LoadAssetBundle(abName);
+                if (abName == "sgsmain") await ABManager.Instance.LoadAssetBundle("sgsasset");
                 // debug
                 Debug.Log("load " + abName);
                 // 获取场景路径

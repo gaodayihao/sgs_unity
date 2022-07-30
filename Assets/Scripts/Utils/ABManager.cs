@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Events;
+using System.Threading.Tasks;
 
 public class ABManager : Singleton<ABManager>
 {
@@ -42,7 +43,7 @@ public class ABManager : Singleton<ABManager>
     /// 从服务端获取AssetBundle并加入ABs字典
     /// </summary>
     /// <param name="abName">Assetbundle name</param>
-    private IEnumerator GetABFromServer(string abName)
+    private async Task GetABFromServer(string abName)
     {
         UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(ABUrl + abName);
         www.SendWebRequest();
@@ -50,7 +51,7 @@ public class ABManager : Singleton<ABManager>
         while (!www.isDone)
         {
             progressEvent?.Invoke(www.downloadProgress);
-            yield return new WaitForSeconds(.1f);
+            await Task.Yield();
         }
 
         if (www.result != UnityWebRequest.Result.Success)
@@ -68,7 +69,7 @@ public class ABManager : Singleton<ABManager>
     /// <summary>
     /// 初始化manifest
     /// </summary>
-    private IEnumerator LoadManifest()
+    private async Task LoadManifest()
     {
         string mainABName =
 #if UNITY_EDITOR
@@ -80,7 +81,7 @@ public class ABManager : Singleton<ABManager>
         "StandaloneWindows";
 #endif
         // 下载主包
-        yield return GetABFromServer(mainABName);
+        await GetABFromServer(mainABName);
 
         manifest = ABMap[mainABName].LoadAsset<AssetBundleManifest>("AssetBundleManifest");
     }
@@ -90,24 +91,24 @@ public class ABManager : Singleton<ABManager>
     /// 从外部下载AssetBundle
     /// </summary>
     /// <param name="abName">AssetBundle name</param>
-    public IEnumerator LoadAssetBundle(string abName)
+    public async Task LoadAssetBundle(string abName)
     {
         if (!ABMap.ContainsKey(abName))
         {
             // 获取所有依赖项
             if (manifest == null)
-                yield return LoadManifest();
+                await LoadManifest();
 
             string[] dependencies = manifest.GetAllDependencies(abName);
             foreach (string i in dependencies)
             {
                 if (!ABMap.ContainsKey(i))
                 {
-                    yield return GetABFromServer(i);
+                    await GetABFromServer(i);
                 }
             }
             // 加载目标资源包
-            yield return GetABFromServer(abName);
+            await GetABFromServer(abName);
         }
         // else
         //     yield return null;

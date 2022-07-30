@@ -116,18 +116,21 @@ namespace Model
         /// </summary>
         private async Task InitGeneral()
         {
-            UnityWebRequest www = UnityWebRequest.Get(Urls.JSON_URL + "general.json");
-            www.SendWebRequest();
+            // UnityWebRequest www = UnityWebRequest.Get(Urls.JSON_URL + "general.json");
+            // www.SendWebRequest();
 
-            while (!www.isDone) await Task.Yield();
+            // while (!www.isDone) await Task.Yield();
 
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-                return;
-            }
+            // if (www.result != UnityWebRequest.Result.Success)
+            // {
+            //     Debug.Log(www.error);
+            //     return;
+            // }
 
-            List<General> json = JsonList<General>.FromJson(www.downloadHandler.text);
+            // List<General> json = JsonList<General>.FromJson(www.downloadHandler.text);
+
+            string url = Urls.JSON_URL + "general.json";
+            List<General> json = JsonList<General>.FromJson(await WebRequest.GetString(url));
             // for (int i = 0; i < json.Count; i++) Debug.Log(i.ToString() + json[i].name);
 
 

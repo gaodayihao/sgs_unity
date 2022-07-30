@@ -53,35 +53,20 @@ namespace View
 
         private async void RegisterAsync()
         {
-            // List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-            // formData.Add(new MultipartFormDataSection("username", username));
-            // formData.Add(new MultipartFormFileSection("password", password));
-
-            // UnityWebRequest www = UnityWebRequest.Post(Urls.LOGIN_URL + "login", formData);
             string url = Urls.LOGIN_URL + "register?username=" + username.text + "&password=" +
                 password.text + "&confirmPassword=" + confirmPassword.text;
-            UnityWebRequest www = UnityWebRequest.Get(url);
-            www.SendWebRequest();
-            while (!www.isDone) await Task.Yield();
 
-            if (www.result != UnityWebRequest.Result.Success)
+            var loginResponse = JsonUtility.FromJson<ResultResponse>(await WebRequest.GetString(url));
+            if (loginResponse.result == "success")
             {
-                Debug.Log(www.error);
+                // SgsStart.Instance.startPanel.gameObject.SetActive(true);
+                this.gameObject.SetActive(false);
+                GetComponentInParent<SgsStart>().Getinfo();
+                // Register.Hide();
             }
             else
             {
-                var loginResponse = JsonUtility.FromJson<ResultResponse>(www.downloadHandler.text);
-                if (loginResponse.result == "success")
-                {
-                    // SgsStart.Instance.startPanel.gameObject.SetActive(true);
-                    this.gameObject.SetActive(false);
-                    GetComponentInParent<SgsStart>().Getinfo();
-                    // Register.Hide();
-                }
-                else
-                {
-                    UpdateErrorMessage(loginResponse.result);
-                }
+                UpdateErrorMessage(loginResponse.result);
             }
         }
 

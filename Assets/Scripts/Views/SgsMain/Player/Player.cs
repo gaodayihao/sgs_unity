@@ -87,18 +87,7 @@ namespace View
         public async Task InitSkin()
         {
             string url = Urls.STATIC_URL + "json/skin/" + model.general.id.ToString().PadLeft(3, '0') + ".json";
-            UnityWebRequest www = UnityWebRequest.Get(url);
-            www.SendWebRequest();
-
-            while (!www.isDone) await Task.Yield();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-                return;
-            }
-
-            skins = JsonList<Model.Skin>.FromJson(www.downloadHandler.text);
+            skins = JsonList<Model.Skin>.FromJson(await WebRequest.GetString(url));
 
             voices = new Dictionary<int, Dictionary<string, List<string>>>();
             foreach (var i in skins)
@@ -118,19 +107,7 @@ namespace View
             CurrentSkin = skin;
 
             string url = Urls.GENERAL_IMAGE + player.general.id.ToString().PadLeft(3, '0') + "/" + skin.id + ".png";
-            // Debug.Log(url);
-            UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
-            www.SendWebRequest();
-
-            while (!www.isDone) await Task.Yield();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(www.error);
-                return;
-            }
-
-            var texture = DownloadHandlerTexture.GetContent(www);
+            var texture = await WebRequest.GetTexture(url);
             generalImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
         }
 

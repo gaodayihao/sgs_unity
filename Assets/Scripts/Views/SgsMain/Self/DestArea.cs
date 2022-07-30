@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace View
 {
-    public class DestArea : MonoBehaviour
+    public class DestArea : SingletonMono<DestArea>
     {
         private List<PlayerButton> players;
 
@@ -15,7 +15,7 @@ namespace View
                 if (players is null)
                 {
                     players = new List<PlayerButton>();
-                    foreach (var i in FindObjectOfType<SgsMain>().players)
+                    foreach (var i in SgsMain.Instance.players)
                     {
                         players.Add(i.GetComponent<PlayerButton>());
                     }
@@ -24,9 +24,9 @@ namespace View
             }
         }
 
-        private Player self { get => FindObjectOfType<SgsMain>().self; }
-        private CardArea cardArea { get => GetComponent<CardArea>(); }
-        private OperationArea operationArea { get => GetComponent<OperationArea>(); }
+        private Player self { get => SgsMain.Instance.self; }
+        private CardArea cardArea { get => CardArea.Instance; }
+        private OperationArea operationArea { get => OperationArea.Instance; }
 
         public List<PlayerButton> SelectedPlayer { get; private set; } = new List<PlayerButton>();
         private int maxCount;
@@ -182,7 +182,7 @@ namespace View
                     }
                     break;
                 case TimerType.CallSkill:
-                    var skill = GetComponent<SkillArea>().SelectedSkill.model;
+                    var skill = SkillArea.Instance.SelectedSkill.model;
                     foreach (var player in players)
                     {
                         // 设置不能指定的目标

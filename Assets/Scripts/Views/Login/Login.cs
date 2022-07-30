@@ -22,7 +22,8 @@ namespace View
         // 错误信息
         public Text errorMessage;
 
-        void Start() {
+        void Start()
+        {
             // 登录按键
             login.onClick.AddListener(ClickLogin);
             // 注册按键
@@ -55,35 +56,19 @@ namespace View
 
         private async void LoginAsync()
         {
-            // List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-            // formData.Add(new MultipartFormDataSection("username", username));
-            // formData.Add(new MultipartFormFileSection("password", password));
-
-            // UnityWebRequest www = UnityWebRequest.Post(Urls.LOGIN_URL + "login", formData);
             string url = Urls.LOGIN_URL + "login?username=" + username.text + "&password=" + password.text;
-            UnityWebRequest www = UnityWebRequest.Get(url);
-            www.SendWebRequest();
-            while (!www.isDone) await Task.Yield();
-
-            if (www.result != UnityWebRequest.Result.Success)
+            var loginResponse = JsonUtility.FromJson<ResultResponse>(await WebRequest.GetString(url));
+            if (loginResponse.result == "success")
             {
-                Debug.Log(www.error);
+                // SgsStart.Instance.startPanel.gameObject.SetActive(true);
+                gameObject.SetActive(false);
+                GetComponentInParent<SgsStart>().Getinfo();
+                // Debug.Log("done");
+                // Login.Hide();
             }
             else
             {
-                var loginResponse = JsonUtility.FromJson<ResultResponse>(www.downloadHandler.text);
-                if (loginResponse.result == "success")
-                {
-                    // SgsStart.Instance.startPanel.gameObject.SetActive(true);
-                    gameObject.SetActive(false);
-                    GetComponentInParent<SgsStart>().Getinfo();
-                    // Debug.Log("done");
-                    // Login.Hide();
-                }
-                else
-                {
-                    UpdateErrorMessage(loginResponse.result);
-                }
+                UpdateErrorMessage(loginResponse.result);
             }
         }
 
@@ -98,7 +83,7 @@ namespace View
 
         public void ClickSingleMode()
         {
-            StartCoroutine(SceneManager.Instance.LoadSceneFromAB("SgsMain"));
+            SceneManager.Instance.LoadSceneFromAB("SgsMain");
         }
 
     }

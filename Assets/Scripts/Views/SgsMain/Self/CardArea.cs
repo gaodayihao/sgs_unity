@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace View
 {
-    public class CardArea : MonoBehaviour
+    public class CardArea : SingletonMono<CardArea>
     {
         // 手牌区
         public GameObject handCardArea;
@@ -15,8 +15,8 @@ namespace View
         // 手牌
         public Dictionary<int, Card> handcards = new Dictionary<int, Card>();
 
-        private Player self { get => GameObject.FindObjectOfType<SgsMain>().self; }
-        private EquipArea equipArea { get => GetComponent<EquipArea>(); }
+        private Player self { get => SgsMain.Instance.self; }
+        private EquipArea equipArea { get => EquipArea.Instance; }
 
         // 被选中卡牌
         public List<Card> SelectedCard { get; private set; } = new List<Card>();
@@ -106,7 +106,7 @@ namespace View
                         break;
 
                     case TimerType.CallSkill:
-                        var skill = GetComponent<SkillArea>().SelectedSkill.model;
+                        var skill = SkillArea.Instance.SelectedSkill.model;
                         maxCount = skill.MaxCard();
                         minCount = skill.MinCard();
                         break;
@@ -162,7 +162,7 @@ namespace View
                         break;
 
                     case TimerType.CallSkill:
-                        var skill = GetComponent<SkillArea>().SelectedSkill.model;
+                        var skill = SkillArea.Instance.SelectedSkill.model;
                         foreach (var i in handcards.Values)
                         {
                             if (!i.gameObject.activeSelf) continue;
@@ -198,7 +198,7 @@ namespace View
         {
             // 重置手牌状态
             foreach (var card in handcards.Values) if (card.gameObject.activeSelf) card.ResetCard();
-            if (GetComponent<OperationArea>().timerType == TimerType.无懈可击)
+            if (OperationArea.Instance.timerType == TimerType.无懈可击)
             {
                 foreach (var i in handcards.Values) i.gameObject.SetActive(self.model.HandCards.Contains(i.model));
                 UpdateSpacing();
