@@ -98,6 +98,7 @@ namespace Model
                 {
                     if (i is 丈八蛇矛)
                     {
+                        Cards.Remove(i);
                         Cards = new List<Card> { (i as 丈八蛇矛).Execute(Cards) };
                         break;
                     }
@@ -148,13 +149,13 @@ namespace Model
             {
                 var json = new TimerJson();
                 json.eventname = "set_result";
-                json.id = Connection.Instance.Count + 1;
+                json.id = Wss.Instance.Count + 1;
                 json.result = result;
                 json.cards = cards;
                 json.dests = dests;
                 json.skill = skill;
 
-                Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+                Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
             }
         }
 
@@ -178,7 +179,7 @@ namespace Model
         {
             // while (Connection.Instance.IsRunning) await Task.Yield();
 
-            var message = await Connection.Instance.PopSgsMsg();
+            var message = await Wss.Instance.PopSgsMsg();
             var json = JsonUtility.FromJson<TimerJson>(message);
 
             if (timerType == TimerType.无懈可击)
@@ -196,7 +197,7 @@ namespace Model
                     {
                         if (!i)
                         {
-                            Connection.Instance.Count--;
+                            Wss.Instance.Count--;
                             return await WaitResult();
                         }
                     }
@@ -276,12 +277,12 @@ namespace Model
             {
                 var json = new TimerJson();
                 json.eventname = "set_result";
-                json.id = Connection.Instance.Count + 1;
+                json.id = Wss.Instance.Count + 1;
                 json.result = result;
                 json.cards = cards;
                 json.src = src;
 
-                Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+                Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
             }
         }
 

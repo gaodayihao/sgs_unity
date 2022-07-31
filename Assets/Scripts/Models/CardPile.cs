@@ -76,7 +76,7 @@ namespace Model
         // 牌堆
         private List<Card> remainPile;
         // 弃牌堆
-        private List<Card> discardPile;
+        public List<Card> discardPile;
 
         // 牌堆数
         public int PileCount { get => remainPile.Count; }
@@ -136,16 +136,16 @@ namespace Model
                 // 发送洗牌请求
                 var json = new CardPileJson();
                 json.eventname = "shuffle";
-                json.id = Connection.Instance.Count + 1;
+                json.id = Wss.Instance.Count + 1;
                 json.cards = new List<int>();
                 foreach (var i in remainPile) json.cards.Add(i.Id);
-                Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+                Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
 
                 // 等待消息
                 // tcs = new TaskCompletionSource<CardPileJson>();
                 // Connection.Instance.IsRunning = false;
                 // var message = await tcs.Task;
-                var msg = await Connection.Instance.PopSgsMsg();
+                var msg = await Wss.Instance.PopSgsMsg();
                 var newJson = JsonUtility.FromJson<CardPileJson>(msg);
 
                 // 更新牌堆

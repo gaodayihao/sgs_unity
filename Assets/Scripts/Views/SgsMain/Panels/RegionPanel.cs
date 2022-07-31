@@ -13,7 +13,7 @@ namespace View
         // 装备区
         public GameObject equips;
         // 判定区
-        public GameObject judges;
+        // public GameObject judges;
 
         public List<Card> selectCards = new List<Card>();
 
@@ -56,7 +56,7 @@ namespace View
             foreach (var i in model.dest.JudgeArea)
             {
                 var instance = Instantiate(card);
-                instance.transform.SetParent(judges.transform, false);
+                instance.transform.SetParent(equips.transform, false);
                 instance.GetComponent<Card>().InitInRegion(i);
             }
             // }

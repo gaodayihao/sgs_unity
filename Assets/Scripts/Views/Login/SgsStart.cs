@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 namespace View
 {
-    public class SgsStart : SceneBase<SgsStart>
+    public class SgsStart : SingletonMono<SgsStart>
     {
         public GameObject startPanel;
         public GameObject login;
@@ -28,7 +28,7 @@ namespace View
             logout.onClick.AddListener(ClickLogout);
 
             Getinfo();
-            LoadBgm(Urls.AUDIO_URL + "bgm/outbgm_2.mp3");
+            Bgm.Instance.Load(Urls.AUDIO_URL + "bgm/outbgm_2.mp3");
         }
 
         private void ClickStart()

@@ -57,11 +57,11 @@ namespace Model
             {
                 var json = new TimerJson();
                 json.eventname = "card_panel_result";
-                json.id = Connection.Instance.Count + 1;
+                json.id = Wss.Instance.Count + 1;
                 json.result = result;
                 json.cards = cards;
 
-                Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+                Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
             }
         }
 
@@ -84,7 +84,7 @@ namespace Model
         public async Task<bool> ReceiveResult()
         {
             Debug.Log("ReceiveSetResult");
-            var msg = await Connection.Instance.PopSgsMsg();
+            var msg = await Wss.Instance.PopSgsMsg();
             var json = JsonUtility.FromJson<TimerJson>(msg);
             if (json.result) SetResult(json.cards);
             else SendResult();

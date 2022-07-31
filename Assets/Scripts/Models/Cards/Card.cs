@@ -30,7 +30,7 @@ namespace Model
         {
             Src = src;
             Dests = dests;
-            string cardInfo = Convertion ? "" : "【" + Suit + Weight.ToString() + "】";
+            string cardInfo = IsConvert ? "" : "【" + Suit + Weight.ToString() + "】";
             Debug.Log((Src.Position + 1).ToString() + "号位使用了" + Name + cardInfo);
             useCardView?.Invoke(this);
 
@@ -50,7 +50,7 @@ namespace Model
             }
 
             // 使用者失去此手牌
-            if (!Convertion)
+            if (!IsConvert)
             {
                 if (!(this is Equipage)) CardPile.Instance.AddToDiscard(this);
                 await new LoseCard(Src, new List<Card> { this }).Execute();
@@ -73,12 +73,12 @@ namespace Model
         public async Task Put(Player player)
         {
             Src = player;
-            string cardInfo = Convertion ? "" : "【" + Suit + Weight.ToString() + "】";
+            string cardInfo = IsConvert ? "" : "【" + Suit + Weight.ToString() + "】";
             Debug.Log((player.Position + 1).ToString() + "号位打出了" + Name + cardInfo);
             useCardView?.Invoke(this);
 
             // 使用者失去此手牌
-            if (!Convertion)
+            if (!IsConvert)
             {
                 if (!(this is Equipage)) CardPile.Instance.AddToDiscard(this);
                 await new LoseCard(player, new List<Card> { this }).Execute();
@@ -91,7 +91,7 @@ namespace Model
         }
 
         #region 转化牌
-        public bool Convertion { get; private set; } = false;
+        public bool IsConvert { get; private set; } = false;
         public List<Card> PrimiTives { get; private set; } = new List<Card>();
 
         /// <summary>
@@ -102,10 +102,10 @@ namespace Model
         public static T Convert<T>(List<Card> primitives) where T : Card, new()
         {
             // 二次转化
-            if (primitives.Count > 0 && primitives[0].Convertion) return Convert<T>(primitives[0].PrimiTives);
+            if (primitives.Count > 0 && primitives[0].IsConvert) return Convert<T>(primitives[0].PrimiTives);
 
             var card = new T();
-            card.Convertion = true;
+            card.IsConvert = true;
             card.PrimiTives = primitives;
 
             if (primitives.Count == 0) return card;
@@ -148,6 +148,28 @@ namespace Model
             return card;
         }
         #endregion
+
+        /// <summary>
+        /// 判断此牌是否在弃牌堆
+        /// </summary>
+        /// <returns></returns>
+        public List<Card> InDiscardPile()
+        {
+            if (!IsConvert)
+            {
+                if (CardPile.Instance.discardPile.Contains(this)) return new List<Card> { this };
+                else return null;
+            }
+
+            if (PrimiTives.Count == 0) return null;
+
+            var list = new List<Card>();
+            foreach (var i in PrimiTives)
+            {
+                if (CardPile.Instance.discardPile.Contains(i)) list.Add(i);
+            }
+            return list;
+        }
 
         private static UnityAction<Card> useCardView;
         public static event UnityAction<Card> UseCardView

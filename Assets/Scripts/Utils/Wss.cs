@@ -5,10 +5,10 @@ using UnityEngine;
 using System.Threading.Tasks;
 using NativeWebSocket;
 
-public class Connection : MonoBehaviour
+public class Wss : MonoBehaviour
 {
-    private static Connection instance;
-    public static Connection Instance
+    private static Wss instance;
+    public static Wss Instance
     {
         get
         {
@@ -17,7 +17,7 @@ public class Connection : MonoBehaviour
                 GameObject obj = new GameObject("Connection");
                 obj = Instantiate(obj);
                 DontDestroyOnLoad(obj);
-                instance = obj.AddComponent<Connection>();
+                instance = obj.AddComponent<Wss>();
             }
             return instance;
         }
@@ -28,7 +28,7 @@ public class Connection : MonoBehaviour
     public int Count { get; set; } = 0;
 
     // Start is called before the first frame update
-    async void Start()
+    void Start()
     {
         websocket = new WebSocket("wss://app931.acapp.acwing.com.cn/wss/multiplayer/");
 
@@ -53,13 +53,22 @@ public class Connection : MonoBehaviour
             var message = System.Text.Encoding.UTF8.GetString(bytes);
             Debug.Log("OnMessage! " + message);
 
-            messages.Add(message);
+            if (JsonUtility.FromJson<WebsocketJson>(message).eventname == "start_game")
+            {
+                View.Menu.Instance.StartGame(JsonUtility.FromJson<StartGameJson>(message));
+            }
+            else messages.Add(message);
         };
 
         // Keep sending messages at every 0.3s
         // InvokeRepeating("SendWebSocketMessage", 0.0f, 0.3f);
 
         // waiting for messages
+        // await websocket.Connect();
+    }
+
+    public async void Connect()
+    {
         await websocket.Connect();
     }
 

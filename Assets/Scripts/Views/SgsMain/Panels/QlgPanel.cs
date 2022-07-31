@@ -10,7 +10,7 @@ namespace View
         // 装备区
         public GameObject equips;
 
-        public Card selectCard;
+        public Card SelectCard { get; set; }
 
         // 进度条
         public Slider slider;
@@ -45,10 +45,10 @@ namespace View
 
         public void UpdatePanel()
         {
-            if (selectCard != null)
+            if (SelectCard != null)
             {
                 StopAllCoroutines();
-                Model.CardPanel.Instance.SetResult(new List<int> { selectCard.Id });
+                Model.CardPanel.Instance.SetResult(new List<int> { SelectCard.Id });
             }
         }
 

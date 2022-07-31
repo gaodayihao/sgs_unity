@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 743058657
+CRC: 2233571606
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 93d10343c4c35787d29a37ceb6eb89eb
+    Hash: fe7baa134e6faea888b3677f447a1a22
   TypeTreeHash:
     serializedVersion: 2
     Hash: 47ffb18a6075deb783c78c90b1a96334
@@ -121,6 +121,5 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Scenes/SgsMain.unity
 Dependencies:
-- /Users/wyx/Desktop/sgs_unity/AssetBundles/WebGL/base
 - /Users/wyx/Desktop/sgs_unity/AssetBundles/WebGL/fonts
 - /Users/wyx/Desktop/sgs_unity/AssetBundles/WebGL/sprite

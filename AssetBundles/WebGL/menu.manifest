@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 588140247
+CRC: 3508511109
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5e54d4fe598de2898bfdf4e8a0d6fec8
+    Hash: 5038f223341c8d773e337678f9fc4846
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 9c7fc41fc09ebcaa576a3a70fd55a77c
+    Hash: ed9f3341c292890487f56e0c8bacb01a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -18,6 +18,8 @@ ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 48
+  Script: {instanceID: 0}
+- Class: 81
   Script: {instanceID: 0}
 - Class: 104
   Script: {instanceID: 0}
@@ -61,5 +63,4 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Scenes/Menu.unity
 Dependencies:
-- /Users/wyx/Desktop/sgs_unity/AssetBundles/WebGL/base
 - /Users/wyx/Desktop/sgs_unity/AssetBundles/WebGL/fonts

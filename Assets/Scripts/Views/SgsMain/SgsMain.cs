@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 
 namespace View
 {
-    public class SgsMain : SceneBase<SgsMain>
+    public class SgsMain : SingletonMono<SgsMain>
     {
         // public Self self;
         // private GameObject elsePlayers;
@@ -26,7 +26,7 @@ namespace View
         void Start()
         {
             SetBackgroundImage(Urls.TEST_BACKGROUND_IMAGE);
-            LoadBgm(Urls.AUDIO_URL + "bgm/bgm_1.mp3");
+            Bgm.Instance.Load(Urls.AUDIO_URL + "bgm/bgm_1.mp3");
         }
 
         public async void SetBackgroundImage(string url)

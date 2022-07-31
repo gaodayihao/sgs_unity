@@ -81,12 +81,12 @@ namespace Model
         {
             PhaseJson json = new PhaseJson();
             json.eventname = "execute_phase";
-            json.id = Connection.Instance.Count + 1;
+            json.id = Wss.Instance.Count + 1;
             json.player = CurrentPlayer.Position;
             json.phase = CurrentPhase;
 
-            Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
-            var msg = await Connection.Instance.PopSgsMsg();
+            Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+            var msg = await Wss.Instance.PopSgsMsg();
             Debug.Log(JsonUtility.FromJson<SgsJson>(msg).eventname);
         }
 

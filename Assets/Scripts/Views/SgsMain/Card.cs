@@ -159,7 +159,7 @@ namespace View
         {
             var panel = GetComponentInParent<QlgPanel>();
 
-            panel.selectCard = this;
+            panel.SelectCard = this;
             panel.UpdatePanel();
         }
     }
