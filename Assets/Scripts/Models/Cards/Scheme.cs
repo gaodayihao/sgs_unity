@@ -263,4 +263,33 @@ namespace Model
             }
         }
     }
+
+    public class 借刀杀人 : Card
+    {
+        public 借刀杀人()
+        {
+            Type = "锦囊牌";
+            Name = "借刀杀人";
+        }
+
+        public Player ShaDest { get; private set; }
+
+        public override async Task UseCard(Player src, List<Player> dests = null)
+        {
+            ShaDest = dests[1];
+            dests.RemoveAt(1);
+            await base.UseCard(src, dests);
+
+            if (await 无懈可击.Call(this, dests[0])) return;
+
+            TimerTask.Instance.GivenCard = new List<string> { "杀", "火杀", "雷杀" };
+            TimerTask.Instance.GivenDest = ShaDest;
+            var result = await TimerTask.Instance.Run(dests[0], TimerType.UseCard);
+            if (result)
+            {
+                await TimerTask.Instance.Cards[0].UseCard(dests[0], TimerTask.Instance.Dests);
+            }
+            else await new GetCardFromElse(Src, dests[0], new List<Card> { dests[0].weapon }).Execute();
+        }
+    }
 }

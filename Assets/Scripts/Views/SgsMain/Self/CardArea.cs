@@ -80,8 +80,12 @@ namespace View
             {
                 if (handcards.ContainsKey(i.Id))
                 {
-                    Destroy(handcards[i.Id].gameObject);
-                    handcards.Remove(i.Id);
+                    if (!self.model.Teammate.HandCards.Contains(i))
+                    {
+                        Destroy(handcards[i.Id].gameObject);
+                        handcards.Remove(i.Id);
+                    }
+                    else handcards[i.Id].gameObject.SetActive(false);
                 }
             }
         }

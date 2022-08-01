@@ -53,6 +53,7 @@ namespace Model
                     case "桃园结义": card = new 桃园结义(); break;
                     case "无中生有": card = new 无中生有(); break;
                     case "决斗": card = new 决斗(); break;
+                    case "借刀杀人": card = new 借刀杀人(); break;
 
                     default: card = new 桃(); break;
                 }

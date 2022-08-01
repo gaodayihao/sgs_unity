@@ -101,7 +101,7 @@ namespace Model
         {
             List<string> list = new List<string>
             {
-                "决斗","无中生有","诸葛连弩","爪黄飞电","丈八蛇矛"
+                "决斗","无中生有","诸葛连弩","借刀杀人","丈八蛇矛"
             };
 
             while (list.Count > 0)
