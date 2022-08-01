@@ -27,27 +27,25 @@ namespace Model
             }
         }
 
-        public async Task<bool> Execute杀(Card card)
+        public async Task Execute杀(Card card)
         {
-            if (!(card is 杀)) return true;
-            if ((card as 杀).ShanCount != 1) return true;
+            if (!(card is 杀)) return;
+            if ((card as 杀).ShanCount != 1) return;
 
             await Task.Yield();
             Execute();
             (card as 杀).ShanCount = 2;
-            return true;
         }
 
-        public async Task<bool> Execute决斗(Card card)
+        public async Task Execute决斗(Card card)
         {
-            if (!(card is 决斗)) return true;
-            if (card.Src != Src && !card.Dests.Contains(Src)) return true;
+            if (!(card is 决斗)) return;
+            if (card.Src != Src && !card.Dests.Contains(Src)) return;
 
             await Task.Yield();
             Execute();
             if (card.Src == Src) (card as 决斗).DestShaCount = 2;
             else (card as 决斗).SrcShaCount = 2;
-            return true;
         }
     }
 
@@ -71,30 +69,19 @@ namespace Model
             }
         }
 
-        public async Task<bool> Execute(Damaged damaged)
+        public async Task Execute(Damaged damaged)
         {
             var dest = damaged.player;
 
             // 触发条件
-            if (damaged.Src != Src || !(damaged.SrcCard is 杀)) return true;
-            if (!dest.HaveCard()) return true;
+            if (damaged.Src != Src || !(damaged.SrcCard is 杀)) return;
+            if (!dest.HaveCard()) return;
 
-            if (!await base.ShowTimer()) return true;
+            if (!await base.ShowTimer()) return;
             Execute();
 
-            // 选择一张牌
-            bool result = await CardPanel.Instance.Run(Src, damaged.player, TimerType.RegionPanel);
-            Card card;
-            if (!result)
-            {
-                if (dest.armor != null) card = dest.armor;
-                else if (dest.plusHorse != null) card = dest.plusHorse;
-                else if (dest.weapon != null) card = dest.weapon;
-                else if (dest.subHorse != null) card = dest.subHorse;
-                else if (dest.HandCardCount != 0) card = dest.HandCards[0];
-                else card = dest.JudgeArea[0];
-            }
-            else card = CardPanel.Instance.Cards[0];
+            CardPanel.Instance.Hint = "对" + (dest.Position + 1).ToString() + "号位发动利驭，获得其一张牌";
+            var card = await CardPanel.Instance.SelectCard(Src, damaged.player);
 
             // 获得牌
             await new GetCardFromElse(Src, dest, new List<Card> { card }).Execute();
@@ -102,11 +89,12 @@ namespace Model
             // 若为装备牌
             if (card is Equipage)
             {
-                if (SgsMain.Instance.AlivePlayers.Count <= 2) return true;
+                if (SgsMain.Instance.AlivePlayers.Count <= 2) return;
 
                 // 指定角色
+                TimerTask.Instance.Hint = (Src.Position + 1).ToString() + "号位对你发动利驭，选择一名角色";
                 TimerTask.Instance.Extra = Src.Position.ToString();
-                result = await TimerTask.Instance.Run(dest, TimerType.利驭, 0);
+                bool result = await TimerTask.Instance.Run(dest, TimerType.利驭, 0);
 
                 Player dest1 = null;
                 if (!result)
@@ -127,8 +115,6 @@ namespace Model
             }
             // 摸牌
             else await new GetCardFromPile(dest, 1).Execute();
-
-            return true;
         }
     }
 }

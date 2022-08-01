@@ -19,20 +19,17 @@ namespace Model
             Src.playerEvents.afterDamaged.RemoveEvent(Src, Execute);
         }
 
-        public async Task<bool> Execute(Damaged damaged)
+        public async Task Execute(Damaged damaged)
         {
-            if (!await base.ShowTimer()) return true;
+            if (!await base.ShowTimer()) return;
             Execute();
 
             // var srcCard = damaged.SrcCard;
-            List<Card> srcCard = damaged.SrcCard.InDiscardPile();
-            // if (srcCard is null) cards = null;
-            // else if (srcCard.IsConvert) cards = srcCard.PrimiTives.Count > 0 ? srcCard.PrimiTives : null;
-            // else cards = new List<Card> { srcCard };
+            List<Card> srcCard = null;
+            if (damaged.SrcCard != null) srcCard = damaged.SrcCard.InDiscardPile();
 
             if (srcCard != null && srcCard.Count != 0) await new GetCard(Src, srcCard).Execute();
             await new GetCardFromPile(Src, 1).Execute();
-            return true;
         }
     }
 }

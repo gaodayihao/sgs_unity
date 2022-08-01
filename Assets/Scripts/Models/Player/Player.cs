@@ -140,12 +140,19 @@ namespace Model
                     case "奸雄": skills.Add(str, new 奸雄(this)); break;
                     case "无双": skills.Add(str, new 无双(this)); break;
                     case "利驭": skills.Add(str, new 利驭(this)); break;
+                    case "苦肉": skills.Add(str, new 苦肉(this)); break;
+                    case "诈降": skills.Add(str, new 诈降(this)); break;
+                    case "刚烈": skills.Add(str, new 刚烈(this)); break;
+                    case "清俭": skills.Add(str, new 清俭(this)); break;
                 }
 
                 // player.skills.Add(skill);
             }
         }
 
+        /// <summary>
+        /// 无次数限制
+        /// </summary>
         public Func<Card, bool> unlimitedCard = (card) => false;
         public bool UnlimitedCard(Card card)
         {
@@ -155,17 +162,29 @@ namespace Model
             }
             return false;
         }
-        public bool UnlimitedSha()
-        {
-            return UnlimitedCard(Card.Convert<杀>(new List<Card>()));
-        }
 
+        /// <summary>
+        /// 禁用卡牌
+        /// </summary>
         public Func<Card, bool> disabledCard = (card) => false;
         public bool DisabledCard(Card card)
         {
             foreach (Func<Card, bool> i in disabledCard.GetInvocationList())
             {
                 if (i(card)) return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 无距离限制
+        /// </summary>
+        public Func<Card, Player, bool> unlimitedDst = (card, player) => false;
+        public bool UnlimitedDst(Card card, Player dest)
+        {
+            foreach (Func<Card, Player, bool> i in unlimitedDst.GetInvocationList())
+            {
+                if (i(card, dest)) return true;
             }
             return false;
         }

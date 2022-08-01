@@ -56,10 +56,10 @@ namespace Model
         /// <summary>
         /// 判断dest是否能成为src的目标
         /// </summary>
-        public static bool PerformPhase(Player src, Player dest, int id, int firstdest = -1)
+        public static bool PerformPhase(Player src, Player dest, Card card, Player firstdest)
         {
             if (!dest.IsAlive) return false;
-            Card card = CardPile.Instance.cards[id];
+            if(src.UnlimitedDst(card,dest)) return true;
 
             switch (card.Name)
             {
@@ -79,8 +79,8 @@ namespace Model
                     return src.GetDistance(dest) == 1 && dest.HaveCard();
 
                 case "借刀杀人":
-                    if (firstdest == -1) return src != dest && src.weapon != null;
-                    else return UseSha(SgsMain.Instance.players[firstdest], dest);
+                    if (firstdest is null) return src != dest && src.weapon != null;
+                    else return UseSha(firstdest, dest);
 
                 case "决斗":
                     return src != dest;

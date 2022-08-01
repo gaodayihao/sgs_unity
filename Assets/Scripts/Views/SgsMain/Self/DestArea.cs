@@ -167,12 +167,12 @@ namespace View
             switch (operationArea.timerType)
             {
                 case TimerType.PerformPhase:
-                    foreach (var player in Players)
+                    foreach (var i in Players)
                     {
-                        int cardId = cardArea.SelectedCard[0].Id;
-                        int destPos = SelectedPlayer.Count != 0 ? SelectedPlayer[0].model.Position : -1;
-                        bool enable = Model.DestArea.PerformPhase(self.model, player.model, cardId, destPos);
-                        player.button.interactable = enable;
+                        var card = cardArea.SelectedCard[0].model;
+                        var firstDest = SelectedPlayer.Count != 0 ? SelectedPlayer[0].model : null;
+                        bool enable = Model.DestArea.PerformPhase(self.model, i.model, card, firstDest);
+                        i.button.interactable = enable;
                     }
                     break;
                 case TimerType.丈八蛇矛:

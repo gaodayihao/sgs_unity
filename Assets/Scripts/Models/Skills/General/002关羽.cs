@@ -24,7 +24,7 @@ namespace Model
 
         public override bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
         {
-            return cards[0].Suit == "方片" || DestArea.UseSha(Src, dest);
+            return cards[0].Suit == "方片" && dest != Src || DestArea.UseSha(Src, dest);
         }
 
         public override int MaxCard()
@@ -86,7 +86,7 @@ namespace Model
 
         public override bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
         {
-            return dest.HandCardCount > 0;
+            return dest.HandCardCount > 0 && dest != Src;
         }
 
         public override async Task Execute(List<Player> dests, List<Card> cards, string additional)
@@ -118,7 +118,7 @@ namespace Model
             {
                 Dest.disabledCard += DisabledCard;
                 foreach (var i in Dest.skills.Values) if (!i.Passive) i.SetActive(false);
-                TurnSystem.Instance.AfterTurn += Reset;
+                TurnSystem.Instance.AfterTurn += ResetEffect;
                 Dest.playerEvents.whenDamaged.AddEvent(Src, WhenDamaged);
                 isDone = false;
             }
@@ -133,9 +133,9 @@ namespace Model
             return true;
         }
 
-        public async Task<bool> WhenDamaged(Damaged damaged)
+        public async Task WhenDamaged(Damaged damaged)
         {
-            if (isDone) return true;
+            if (isDone) return;
             await Task.Yield();
             if (damaged.Src == Src && damaged.SrcCard is 杀 && damaged.SrcCard.Suit == "红桃")
             {
@@ -143,15 +143,14 @@ namespace Model
                 isDone = true;
                 // Dest.playerEvents.whenDamaged.RemoveEvent(Src, WhenDamaged);
             }
-            return true;
         }
 
-        public void Reset()
+        public void ResetEffect()
         {
             Dest.disabledCard -= DisabledCard;
             foreach (var i in Dest.skills.Values) if (!i.Passive && i.Enabled < 1) i.Enabled++;
             Dest.playerEvents.whenDamaged.RemoveEvent(Src, WhenDamaged);
-            TurnSystem.Instance.AfterTurn -= Reset;
+            TurnSystem.Instance.AfterTurn -= ResetEffect;
         }
     }
 }

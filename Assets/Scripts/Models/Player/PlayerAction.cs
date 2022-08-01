@@ -54,7 +54,7 @@ namespace Model
             actionView?.Invoke(this);
 
             // 执行获得牌后事件
-            await player.playerEvents.acquireCard.Execute(this);
+            await player.playerEvents.getCard.Execute(this);
         }
 
         // public async Task FromElse(Player dest)
@@ -87,6 +87,8 @@ namespace Model
             for (int i = 0; i < count; i++) Cards.Add(await CardPile.Instance.Pop());
             await base.Execute();
         }
+
+        public bool InGetCardPhase { get; set; } = false;
     }
 
     /// <summary>
@@ -176,6 +178,8 @@ namespace Model
 
             // 执行事件(濒死)
             if (player.Hp < 1) await NearDeath();
+            // 失去体力
+            if (Value < 0 && !(this is Damaged)) await player.playerEvents.afterLoseHp.Execute(this);
         }
 
         public async Task NearDeath()
@@ -227,7 +231,7 @@ namespace Model
             foreach (var i in cards) Debug.Log(i.Id);
             await new Discard(player, cards).Execute();
 
-            if (!player.Teammate.IsAlive) SgsMain.Instance.GameOver();
+            if (!player.Teammate.IsAlive) await SgsMain.Instance.GameOver();
             else await new GetCardFromPile(player.Teammate, 1).Execute();
         }
     }
@@ -318,7 +322,7 @@ namespace Model
             await new LoseCard(Dest, Cards).Execute();
 
             // 执行获得牌后事件
-            await player.playerEvents.acquireCard.Execute(this);
+            await player.playerEvents.getCard.Execute(this);
         }
     }
 
@@ -343,6 +347,9 @@ namespace Model
         public EventSet<Judge> modifyJudge = new EventSet<Judge>();
     }
 
+    /// <summary>
+    /// 展示手牌
+    /// </summary>
     public class ShowCard : PlayerAction<ShowCard>
     {
         public ShowCard(Player player, List<Card> cards) : base(player)

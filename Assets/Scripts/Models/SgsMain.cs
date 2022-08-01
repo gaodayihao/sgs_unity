@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -89,9 +90,10 @@ namespace Model
         public Player[] players;
         public List<Player> AlivePlayers { get; private set; } = new List<Player>();
         public bool GameIsOver { get; private set; } = false;
-        public void GameOver()
+        public async Task GameOver()
         {
             GameIsOver = true;
+            await Delay(2);
             gameOverView();
         }
 
@@ -116,28 +118,23 @@ namespace Model
         /// </summary>
         private async Task InitGeneral()
         {
-            // UnityWebRequest www = UnityWebRequest.Get(Urls.JSON_URL + "general.json");
-            // www.SendWebRequest();
-
-            // while (!www.isDone) await Task.Yield();
-
-            // if (www.result != UnityWebRequest.Result.Success)
-            // {
-            //     Debug.Log(www.error);
-            //     return;
-            // }
-
-            // List<General> json = JsonList<General>.FromJson(www.downloadHandler.text);
 
             string url = Urls.JSON_URL + "general.json";
             List<General> json = JsonList<General>.FromJson(await WebRequest.GetString(url));
-            // for (int i = 0; i < json.Count; i++) Debug.Log(i.ToString() + json[i].name);
-
 
             if (Room.Instance.IsSingle)
             {
                 // debug
-                General self = json[0];
+                General self = null;
+                string name = "夏侯惇";
+                foreach (var i in json)
+                {
+                    if (i.name == name)
+                    {
+                        self = i;
+                        break;
+                    }
+                }
                 json.Remove(self);
 
                 foreach (var i in players)
@@ -180,6 +177,20 @@ namespace Model
         {
             add => gameOverView += value;
             remove => gameOverView -= value;
+        }
+
+        private bool isDone;
+        public async Task Delay(float second)
+        {
+            isDone = false;
+            StartCoroutine(CorDelay(second));
+            while (!isDone) await Task.Yield();
+        }
+
+        public IEnumerator CorDelay(float second)
+        {
+            yield return new WaitForSeconds(second);
+            isDone = true;
         }
     }
 }

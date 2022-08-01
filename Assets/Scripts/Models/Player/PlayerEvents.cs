@@ -22,12 +22,13 @@ namespace Model
                 finishPhaseEvents.Add(phase, new EventSet());
             }
 
-            acquireCard = new EventSet<GetCard>();
+            getCard = new EventSet<GetCard>();
             loseCard = new EventSet<LoseCard>();
 
             recover = new EventSet<Recover>();
             whenDamaged = new EventSet<Damaged>();
             afterDamaged = new EventSet<Damaged>();
+            afterLoseHp=new EventSet<UpdateHp>();
 
             whenUseCard = new EventSet<Card>();
             afterUseCard = new EventSet<Card>();
@@ -43,7 +44,7 @@ namespace Model
         public Dictionary<Phase, EventSet> finishPhaseEvents;
 
         // 获得牌后事件
-        public EventSet<GetCard> acquireCard;
+        public EventSet<GetCard> getCard;
         // 失去牌后事件
         public EventSet<LoseCard> loseCard;
 
@@ -54,6 +55,8 @@ namespace Model
         public EventSet<Damaged> whenDamaged;
         // 受到伤害后事件
         public EventSet<Damaged> afterDamaged;
+        // 失去体力后事件
+        public EventSet<UpdateHp> afterLoseHp;
 
         // 使用牌时事件
         public EventSet<Card> whenUseCard;
