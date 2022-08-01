@@ -14,7 +14,7 @@ namespace Model
         {
             TimerTask.Instance.GivenSkill = Name;
             TimerTask.Instance.Hint = "是否发动" + Name + "？";
-            return await TimerTask.Instance.Run(Src, TimerType.CallSkill, 0);
+            return await TimerTask.Instance.Run(Src, TimerType.CallSkill, MaxCard(), MinCard());
         }
     }
 }

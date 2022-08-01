@@ -118,7 +118,13 @@ namespace Model
 
         public void Execute()
         {
+            Time++;
             useSkillView(this);
+        }
+
+        protected virtual void Reset()
+        {
+            Time = 0;
         }
 
         private static UnityAction<Skill> useSkillView;

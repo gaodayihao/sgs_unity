@@ -20,6 +20,7 @@ public static class WebRequest
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(www.error);
+            Debug.Log(url);
             return null;
         }
 
@@ -39,6 +40,7 @@ public static class WebRequest
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(www.error);
+            Debug.Log(url);
             return null;
         }
 
@@ -58,6 +60,7 @@ public static class WebRequest
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(www.error);
+            Debug.Log(url);
             return null;
         }
 

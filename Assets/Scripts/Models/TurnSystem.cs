@@ -95,9 +95,10 @@ namespace Model
             // 执行阶段开始时view事件
             startPhaseView?.Invoke(this);
 
-#if UNITY_EDITOR
-            await Task.Delay(300);
-#endif
+            // #if UNITY_EDITOR
+            //             await Task.Delay(300);
+            // #endif
+            await SgsMain.Instance.Delay(0.3f);
 
             var playerEvents = CurrentPlayer.playerEvents;
 
@@ -129,7 +130,9 @@ namespace Model
                 // 执行摸牌阶段
                 case Phase.Get:
 
-                    await new GetCardFromPile(CurrentPlayer, 2).Execute();
+                    var act = new GetCardFromPile(CurrentPlayer, 2);
+                    act.InGetCardPhase = true;
+                    await act.Execute();
                     break;
 
                 // 执行出牌阶段
@@ -158,7 +161,7 @@ namespace Model
             // 重置出杀次数
             CurrentPlayer.ShaCount = 0;
             // 重置使用技能次数
-            foreach (var i in CurrentPlayer.skills.Values) if (i is Active) (i as Active).Time = 0;
+            // foreach (var i in CurrentPlayer.skills.Values) if (i is Active) (i as Active).Time = 0;
 
             bool performIsDone = false;
             var timerTask = TimerTask.Instance;
@@ -201,15 +204,6 @@ namespace Model
                                 }
                                 dest = dest.Next;
                             } while (dest != CurrentPlayer);
-
-                            // foreach (var dest in SgsMain.Instance.players)
-                            //     if (DestArea.UseSha(CurrentPlayer, dest))
-                            //     {
-                            //         await card.UseCard(CurrentPlayer, new List<Player> { dest });
-                            //         performIsDone = false;
-                            //         goto done;
-                            //         // break;
-                            //     }
                         }
                         if (card is Equipage)
                         {
@@ -222,10 +216,12 @@ namespace Model
             done:
                 finishPerformView?.Invoke(this);
             }
+            AfterPerform?.Invoke();
         }
 
         public Action BeforeTurn;
         public Action AfterTurn;
+        public Action AfterPerform;
 
         private UnityAction<TurnSystem> startTurnView;
         private UnityAction<TurnSystem> finishTurnView;

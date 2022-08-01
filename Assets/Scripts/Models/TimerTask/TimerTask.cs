@@ -51,7 +51,7 @@ namespace Model
             this.player = player;
             this.timerType = timerType;
             this.maxCount = maxCount;
-            this.minCount = maxCount;
+            this.minCount = minCount;
 
             // Cards.Clear();
             // Equipages.Clear();

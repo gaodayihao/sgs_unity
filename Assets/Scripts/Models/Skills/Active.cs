@@ -30,5 +30,15 @@ namespace Model
         {
             return TimerTask.Instance.timerType == TimerType.PerformPhase && base.IsValid();
         }
+
+        public override void OnEnabled()
+        {
+            TurnSystem.Instance.AfterPerform += Reset;
+        }
+
+        public override void OnDisabled()
+        {
+            TurnSystem.Instance.AfterPerform -= Reset;
+        }
     }
 }

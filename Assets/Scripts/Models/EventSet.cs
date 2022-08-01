@@ -19,7 +19,7 @@ namespace Model
         /// <summary>
         /// 用字典维护每名玩家的操作请求
         /// </summary>
-        protected Dictionary<Player, List<Func<Task<bool>>>> eventDic;
+        protected Dictionary<Player, List<Func<Task>>> eventDic;
 
         // public EventSet(Player player)
         // {
@@ -30,13 +30,13 @@ namespace Model
         /// <summary>
         /// 添加操作请求
         /// </summary>
-        public void AddEvent(Player player, Func<Task<bool>> request)
+        public void AddEvent(Player player, Func<Task> request)
         {
             if (eventDic == null)
-                eventDic = new Dictionary<Player, List<Func<Task<bool>>>>();
+                eventDic = new Dictionary<Player, List<Func<Task>>>();
 
             if (!eventDic.ContainsKey(player))
-                eventDic.Add(player, new List<Func<Task<bool>>>());
+                eventDic.Add(player, new List<Func<Task>>());
 
             eventDic[player].Add(request);
         }
@@ -44,7 +44,7 @@ namespace Model
         /// <summary>
         /// 删除操作请求
         /// </summary>
-        public void RemoveEvent(Player player, Func<Task<bool>> request)
+        public void RemoveEvent(Player player, Func<Task> request)
         {
             if (!eventDic.ContainsKey(player)) return;
 
@@ -67,8 +67,8 @@ namespace Model
                 {
                     if (eventDic[player].Count == 1)
                     {
-                        var breakAsking = await eventDic[player][0]();
-                        if (breakAsking) break;
+                        await eventDic[player][0]();
+                        // if (breakAsking) break;
                     }
                 }
                 player = player.Next;
@@ -86,7 +86,7 @@ namespace Model
         /// <summary>
         /// 用字典维护每名玩家的操作请求
         /// </summary>
-        protected Dictionary<Player, List<Func<T, Task<bool>>>> eventDic;
+        protected Dictionary<Player, List<Func<T, Task>>> eventDic;
 
         // public EventSet(Player player)
         // {
@@ -97,13 +97,13 @@ namespace Model
         /// <summary>
         /// 添加操作请求
         /// </summary>
-        public void AddEvent(Player player, Func<T, Task<bool>> request)
+        public void AddEvent(Player player, Func<T, Task> request)
         {
             if (eventDic == null)
-                eventDic = new Dictionary<Player, List<Func<T, Task<bool>>>>();
+                eventDic = new Dictionary<Player, List<Func<T, Task>>>();
 
             if (!eventDic.ContainsKey(player))
-                eventDic.Add(player, new List<Func<T, Task<bool>>>());
+                eventDic.Add(player, new List<Func<T, Task>>());
 
             eventDic[player].Add(request);
         }
@@ -111,7 +111,7 @@ namespace Model
         /// <summary>
         /// 删除操作请求
         /// </summary>
-        public void RemoveEvent(Player player, Func<T, Task<bool>> request)
+        public void RemoveEvent(Player player, Func<T, Task> request)
         {
             if (!eventDic.ContainsKey(player)) return;
 
@@ -125,17 +125,18 @@ namespace Model
 
         public async Task Execute(T param)
         {
-            if (eventDic == null) return;
+            if (eventDic is null) return;
 
             Player player = TurnSystem.Instance.CurrentPlayer;
+            if (player is null) return;
             while (true)
             {
                 if (eventDic.ContainsKey(player))
                 {
                     foreach (var i in eventDic[player])
                     {
-                        var Continue = await i(param);
-                        if (!Continue) return;
+                        await i(param);
+                        // if (!Continue) return;
                     }
                 }
                 player = player.Next;

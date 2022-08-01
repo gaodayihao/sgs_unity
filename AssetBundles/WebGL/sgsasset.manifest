@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2960585781
+CRC: 3161431737
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cd13ec0be8dce6d62d21a401da359d32
+    Hash: c3e2a7f41482ecfc052a0e0bc239b9ad
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d77100bb651a2acfe74d88785c6517f0
+    Hash: 3148bb5fdc356fd6f95d744a35981b2b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -65,14 +65,14 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 Assets:
-- Assets/Prefabs/SgsMain/Panels/RegionPanel.prefab
-- "Assets/Prefabs/SgsMain/Skill/\u89C9\u9192\u6280.prefab"
-- "Assets/Prefabs/SgsMain/Skill/\u9501\u5B9A\u6280.prefab"
-- "Assets/Prefabs/SgsMain/Skill/\u9650\u5B9A\u6280.prefab"
-- Assets/Prefabs/SgsMain/Panels/QlgPanel.prefab
-- Assets/Prefabs/SgsMain/Card.prefab
-- "Assets/Prefabs/SgsMain/\u5224\u5B9A\u724C.prefab"
-- "Assets/Prefabs/SgsMain/Skill/\u4E3B\u52A8\u6280.prefab"
+- Assets/Prefabs/Panels/RegionPanel.prefab
+- "Assets/Prefabs/Skill/\u89C9\u9192\u6280.prefab"
+- "Assets/Prefabs/Skill/\u9501\u5B9A\u6280.prefab"
+- "Assets/Prefabs/Skill/\u9650\u5B9A\u6280.prefab"
+- Assets/Prefabs/Panels/QlgPanel.prefab
+- Assets/Prefabs/Card.prefab
+- "Assets/Prefabs/\u5224\u5B9A\u724C.prefab"
+- "Assets/Prefabs/Skill/\u4E3B\u52A8\u6280.prefab"
 Dependencies:
 - /Users/wyx/Desktop/sgs_unity/AssetBundles/WebGL/fonts
 - /Users/wyx/Desktop/sgs_unity/AssetBundles/WebGL/sprite

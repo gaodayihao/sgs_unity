@@ -21,11 +21,13 @@ namespace View
         public Slider slider;
         // 标题
         public Text title;
+        public Text hint;
 
         public void Init(Model.CardPanel model)
         {
             // gameObject.SetActive(true);
             title.text = model.Title;
+            hint.text = model.Hint;
 
             // 从assetbundle中加载卡牌预制件
             var card = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("Card");
@@ -53,12 +55,13 @@ namespace View
 
             // if (model.dest.JudgeArea.Count != 0)
             // {
-            foreach (var i in model.dest.JudgeArea)
-            {
-                var instance = Instantiate(card);
-                instance.transform.SetParent(equips.transform, false);
-                instance.GetComponent<Card>().InitInRegion(i);
-            }
+            if (Model.CardPanel.Instance.judgeArea)
+                foreach (var i in model.dest.JudgeArea)
+                {
+                    var instance = Instantiate(card);
+                    instance.transform.SetParent(equips.transform, false);
+                    instance.GetComponent<Card>().InitInRegion(i);
+                }
             // }
 
             StartTimer(model.second);

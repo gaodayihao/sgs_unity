@@ -13,6 +13,7 @@ namespace Model
         public Player player { get; private set; }
         public Player dest { get; private set; }
         public TimerType timerType { get; private set; }
+        public bool judgeArea { get; private set; }
 
         public string Title { get; set; }
         public string Hint { get; set; }
@@ -20,11 +21,12 @@ namespace Model
 
         public List<Card> Cards { get; private set; }
 
-        public async Task<bool> Run(Player player, Player dest, TimerType timerType)
+        public async Task<bool> Run(Player player, Player dest, TimerType timerType, bool judgeArea = false)
         {
             this.player = player;
             this.dest = dest;
             this.timerType = timerType;
+            this.judgeArea = judgeArea;
 
             // if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
 
@@ -68,17 +70,6 @@ namespace Model
         public void SendResult()
         {
             SendResult(null, false);
-            // if (Room.Instance.isSingle) SetResult();
-            // // 多人模式
-            // else
-            // {
-            //     var json = new TimerJson();
-            //     json.eventname = "card_panel_result";
-            //     json.id = Connection.Instance.Count + 1;
-            //     json.result = false;
-
-            //     Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
-            // }
         }
 
         public async Task<bool> ReceiveResult()
@@ -89,6 +80,23 @@ namespace Model
             if (json.result) SetResult(json.cards);
             else SendResult();
             return json.result;
+        }
+
+        public async Task<Card> SelectCard(Player player, Player dest, bool judgeArea = false)
+        {
+            bool result = await Run(player, dest, TimerType.CardPanel, judgeArea);
+            Card card;
+            if (!result)
+            {
+                if (dest.armor != null) card = dest.armor;
+                else if (dest.plusHorse != null) card = dest.plusHorse;
+                else if (dest.weapon != null) card = dest.weapon;
+                else if (dest.subHorse != null) card = dest.subHorse;
+                else if (dest.HandCardCount != 0) card = dest.HandCards[0];
+                else card = dest.JudgeArea[0];
+            }
+            else card = CardPanel.Instance.Cards[0];
+            return card;
         }
 
         private UnityAction<CardPanel> startTimerView;

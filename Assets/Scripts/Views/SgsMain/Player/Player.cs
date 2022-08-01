@@ -76,17 +76,18 @@ namespace View
             nationBack.sprite = Sprites.Instance.nationBack[model.general.nation];
             nation.sprite = Sprites.Instance.nation[model.general.nation];
 
+            if (IsSelf) SkillArea.Instance.InitSkill(model);
+
             await InitSkin();
-
-            UpdateSkin(model, skins[Random.Range(0, skins.Count)]);
-
-            if (IsSelf) GameObject.FindObjectOfType<SkillArea>().InitSkill(model);
-            StartCoroutine(RandomSkin(model));
+            index = Random.Range(0, 5);
+            UpdateSkin();
+            // UpdateSkin(model, skins[Random.Range(0, skins.Count)]);
+            if (!IsSelf) StartCoroutine(RandomSkin(model));
         }
 
         public async Task InitSkin()
         {
-            string url = Urls.STATIC_URL + "json/skin/" + model.general.id.ToString().PadLeft(3, '0') + ".json";
+            string url = Urls.JSON_URL + "skin/" + model.general.id.ToString().PadLeft(3, '0') + ".json";
             skins = JsonList<Model.Skin>.FromJson(await WebRequest.GetString(url));
 
             voices = new Dictionary<int, Dictionary<string, List<string>>>();
@@ -109,6 +110,12 @@ namespace View
             string url = Urls.GENERAL_IMAGE + player.general.id.ToString().PadLeft(3, '0') + "/" + skin.id + ".png";
             var texture = await WebRequest.GetTexture(url);
             generalImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+        }
+
+        private int index = 0;
+        public void UpdateSkin()
+        {
+            UpdateSkin(model, skins[index++ % skins.Count]);
         }
 
         public IEnumerator RandomSkin(Model.Player player)

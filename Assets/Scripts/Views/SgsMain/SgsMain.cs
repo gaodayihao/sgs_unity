@@ -14,6 +14,7 @@ namespace View
 
         public GameObject[] players;
         public Player self { get; private set; }
+        public Button gameOver;
 
         protected override void Awake()
         {
@@ -27,6 +28,7 @@ namespace View
         {
             SetBackgroundImage(Urls.TEST_BACKGROUND_IMAGE);
             Bgm.Instance.Load(Urls.AUDIO_URL + "bgm/bgm_1.mp3");
+            gameOver.onClick.AddListener(ClickGameOver);
         }
 
         public async void SetBackgroundImage(string url)
@@ -67,6 +69,11 @@ namespace View
         }
 
         public void GameOver()
+        {
+            gameOver.gameObject.SetActive(true);
+        }
+
+        public void ClickGameOver()
         {
             Debug.Log("gameover");
             string scene = Model.Room.Instance.IsSingle ? "Login" : "Menu";
@@ -139,9 +146,8 @@ namespace View
 
             switch (model.timerType)
             {
-                case TimerType.RegionPanel:
-                case TimerType.顺手牵羊:
-                    ShowRegion(model);
+                case TimerType.CardPanel:
+                    ShowCardPanel(model);
                     break;
                 case TimerType.麒麟弓:
                     ShowQlg(model);
@@ -149,7 +155,7 @@ namespace View
             }
         }
 
-        private void ShowRegion(Model.CardPanel model)
+        private void ShowCardPanel(Model.CardPanel model)
         {
             panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("RegionPanel");
             panel = Instantiate(this.panel);

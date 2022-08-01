@@ -1,0 +1,30 @@
+{
+    "list": [
+        {
+            "id": 102401,
+            "name": "经典形象",
+            "voice": [
+                {
+                    "name": "无双",
+                    "url": [
+                        "lvbu01/LvBu_WuShuang_01",
+                        "lvbu01/LvBu_WuShuang_02"
+                    ]
+                },
+                {
+                    "name": "利驭",
+                    "url": [
+                        "lvbu01/LvBu_LiYu_01",
+                        "lvbu01/LvBu_LiYu_02"
+                    ]
+                },
+                {
+                    "name": "阵亡",
+                    "url": [
+                        "lvbu01/LvBu_Dead"
+                    ]
+                }
+            ]
+        }
+    ]
+}

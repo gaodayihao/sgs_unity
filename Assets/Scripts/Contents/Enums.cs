@@ -18,8 +18,7 @@ public enum TimerType
     CallEquipSkill,
     丈八蛇矛,
     麒麟弓,
-    RegionPanel,
-    顺手牵羊,
+    CardPanel,
     CallSkill,
     Select,
     利驭

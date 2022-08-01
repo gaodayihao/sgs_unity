@@ -63,19 +63,8 @@ namespace Model
                 if (await 无懈可击.Call(this, dest)) continue;
 
                 CardPanel.Instance.Title = "过河拆桥";
-                bool result = await CardPanel.Instance.Run(Src, dest, TimerType.RegionPanel);
-
-                Card card;
-                if (!result)
-                {
-                    if (dest.armor != null) card = dest.armor;
-                    else if (dest.plusHorse != null) card = dest.plusHorse;
-                    else if (dest.weapon != null) card = dest.weapon;
-                    else if (dest.subHorse != null) card = dest.subHorse;
-                    else if (dest.HandCardCount != 0) card = dest.HandCards[0];
-                    else card = dest.JudgeArea[0];
-                }
-                else card = CardPanel.Instance.Cards[0];
+                CardPanel.Instance.Hint = "对" + (dest.Position + 1).ToString() + "号位使用过河拆桥，弃置其一张牌";
+                var card = await CardPanel.Instance.SelectCard(src, dest, true);
 
                 if (card is DelayScheme && dest.JudgeArea.Contains((DelayScheme)card))
                 {
@@ -106,19 +95,8 @@ namespace Model
                 if (await 无懈可击.Call(this, dest)) continue;
 
                 CardPanel.Instance.Title = "顺手牵羊";
-                bool result = await CardPanel.Instance.Run(Src, dest, TimerType.RegionPanel);
-
-                Card card;
-                if (!result)
-                {
-                    if (dest.armor != null) card = dest.armor;
-                    else if (dest.plusHorse != null) card = dest.plusHorse;
-                    else if (dest.weapon != null) card = dest.weapon;
-                    else if (dest.subHorse != null) card = dest.subHorse;
-                    else if (dest.HandCardCount != 0) card = dest.HandCards[0];
-                    else card = dest.JudgeArea[0];
-                }
-                else card = CardPanel.Instance.Cards[0];
+                CardPanel.Instance.Hint = "对" + (dest.Position + 1).ToString() + "号位使用顺手牵羊，获得其一张牌";
+                var card = await CardPanel.Instance.SelectCard(src, dest, true);
 
                 if (card is DelayScheme && dest.JudgeArea.Contains((DelayScheme)card))
                 {

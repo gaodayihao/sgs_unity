@@ -8,18 +8,21 @@ namespace View
 {
     public class Self : MonoBehaviour
     {
-        private Model.Player model { get => GameObject.FindObjectOfType<SgsMain>().self.model; }
+        private Player self { get => SgsMain.Instance.self; }
 
         // 阶段信息
         public Image currentPhase;
         // 每阶段对应sprite
         private Dictionary<Phase, Sprite> phaseSprite;
 
+        public Button changeSkin;
+
         void Start()
         {
             phaseSprite = Sprites.Instance.self_phase;
 
             currentPhase.gameObject.SetActive(false);
+            changeSkin.onClick.AddListener(ChangeSkin);
         }
 
         /// <summary>
@@ -29,7 +32,7 @@ namespace View
         public void ShowPhase(Model.TurnSystem turnSystem)
         {
             // while (player is null) await Task.Yield();
-            if (turnSystem.CurrentPlayer != model) return;
+            if (turnSystem.CurrentPlayer != self.model) return;
 
             currentPhase.gameObject.SetActive(true);
             currentPhase.sprite = phaseSprite[turnSystem.CurrentPhase];
@@ -40,9 +43,13 @@ namespace View
         /// </summary>
         public void HidePhase(Model.TurnSystem turnSystem)
         {
-            if (turnSystem.CurrentPlayer != model) return;
+            if (turnSystem.CurrentPlayer != self.model) return;
             currentPhase.gameObject.SetActive(false);
         }
 
+       private void ChangeSkin()
+        {
+            self.UpdateSkin();
+        }
     }
 }
