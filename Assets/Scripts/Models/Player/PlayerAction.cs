@@ -148,7 +148,8 @@ namespace Model
         public static async Task DiscardFromHand(Player player, int count)
         {
             TimerTask.Instance.Hint = "请弃置" + count.ToString() + "张手牌。";
-            bool result = await TimerTask.Instance.Run(player, TimerType.SelectHandCard, count);
+            TimerTask.Instance.ValidCard = (card) => player.HandCards.Contains(card);
+            bool result = await TimerTask.Instance.Run(player, TimerType.SelectHandCard, count, 0);
             if (result) await new Discard(player, TimerTask.Instance.Cards).Execute();
             else
             {
@@ -369,7 +370,8 @@ namespace Model
         /// </summary>
         public static async Task<List<Card>> ShowCardTimer(Player player, int count = 1)
         {
-            bool result = await TimerTask.Instance.Run(player, TimerType.SelectHandCard, count);
+            TimerTask.Instance.ValidCard = (card) => player.HandCards.Contains(card);
+            bool result = await TimerTask.Instance.Run(player, TimerType.SelectHandCard, count, 0);
             var cards = result ? TimerTask.Instance.Cards : player.HandCards.Take(count).ToList();
             var showCard = new ShowCard(player, cards);
             await showCard.Execute();

@@ -14,6 +14,7 @@ namespace Model
         public Player dest { get; private set; }
         public TimerType timerType { get; private set; }
         public bool judgeArea { get; private set; }
+        public bool display { get; private set; } = false;
 
         public string Title { get; set; }
         public string Hint { get; set; }
@@ -37,6 +38,7 @@ namespace Model
             stopTimerView?.Invoke(this);
 
             Hint = "";
+            display = false;
 
             return result;
         }
@@ -84,6 +86,7 @@ namespace Model
 
         public async Task<Card> SelectCard(Player player, Player dest, bool judgeArea = false)
         {
+            if (player.Teammate == dest) display = true;
             bool result = await Run(player, dest, TimerType.CardPanel, judgeArea);
             Card card;
             if (!result)

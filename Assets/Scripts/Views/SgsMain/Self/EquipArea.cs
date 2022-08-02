@@ -8,6 +8,8 @@ namespace View
     {
         private Dictionary<string, Equipage> equipages;
         public List<Equipage> SelectedCard { get; private set; } = new List<Equipage>();
+        private Model.TimerTask timerTask { get => Model.TimerTask.Instance; }
+        private Model.Skill skill { get => SkillArea.Instance.SelectedSkill; }
 
         private Player self { get => SgsMain.Instance.self; }
 
@@ -23,44 +25,37 @@ namespace View
             };
         }
 
-        public void InitEquipArea(TimerType timerType)
+        public void InitEquipArea()
         {
-            switch (timerType)
-            {
-                case TimerType.Discard:
-                    foreach (var card in equipages.Values) card.button.interactable = true;
-                    break;
-                case TimerType.PerformPhase:
-                    if (equipages["武器"].name == "丈八蛇矛")
-                    {
-                        equipages["武器"].button.interactable = Model.CardArea.UseSha(self.model);
-                    }
-                    break;
-                case TimerType.UseCard:
-                    if (Model.TimerTask.Instance.GivenCard.Contains("杀") && equipages["武器"].name == "丈八蛇矛")
-                    {
-                        equipages["武器"].button.interactable = true;
-                    }
-                    break;
-                case TimerType.丈八蛇矛:
-                    equipages["武器"].button.interactable = true;
-                    break;
-                case TimerType.CallSkill:
-                    var skill = SkillArea.Instance.SelectedSkill.model;
-                    foreach (var card in equipages.Values) card.button.interactable = skill.IsValidCard(card.model);
-                    break;
-            }
-
             if (Model.TimerTask.Instance.GivenSkill != null)
             {
-                foreach (var card in equipages.Values)
+                foreach (var i in equipages.Values)
                 {
-                    if (card.name == Model.TimerTask.Instance.GivenSkill)
+                    if (i.name == Model.TimerTask.Instance.GivenSkill)
                     {
-                        card.button.Select();
-                        card.button.interactable = false;
+                        i.Use();
                         break;
                     }
+                }
+            }
+
+            if (CardArea.Instance.MaxCount == 0)
+            {
+                foreach (var i in equipages.Values) i.button.interactable = false;
+            }
+
+            else if (skill != null)
+            {
+                foreach (var i in equipages.Values) i.button.interactable = skill.IsValidCard(i.model);
+            }
+
+            else
+            {
+                foreach (var i in equipages.Values) i.button.interactable = timerTask.ValidCard(i.model);
+
+                if (equipages["武器"].name == "丈八蛇矛" && timerTask.ValidCard(Model.Card.Convert<Model.杀>()))
+                {
+                    equipages["武器"].button.interactable = true;
                 }
             }
         }

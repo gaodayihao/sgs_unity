@@ -14,6 +14,7 @@ namespace View
 
         public Button button;
         public bool IsSelected { get; private set; }
+        public bool UseSkill { get; private set; }
 
         public EquipArea equipArea { get => EquipArea.Instance; }
         public OperationArea operationArea { get => OperationArea.Instance; }
@@ -42,26 +43,32 @@ namespace View
         /// </summary>
         private void ClickCard()
         {
-            if (name == "丈八蛇矛")
+            // 可发动丈八蛇矛
+            if (name == "丈八蛇矛" && Model.TimerTask.Instance.ValidCard(Model.Card.Convert<Model.杀>()))
             {
-                if (operationArea.timerType == TimerType.PerformPhase ||
-                    operationArea.timerType == TimerType.UseCard)
+                var skill = SkillArea.Instance.SelectedSkill;
+                if (skill == null)
                 {
-                    operationArea.ChangeType(TimerType.丈八蛇矛);
+                    SkillArea.Instance.SelectedSkill = (model as Model.丈八蛇矛).skill;
+                    operationArea.UseSkill();
+                    Use();
                 }
-                else if (operationArea.timerType == TimerType.丈八蛇矛)
+                else if (skill == (model as Model.丈八蛇矛).skill)
                 {
-                    operationArea.ChangeType(Model.TimerTask.Instance.timerType);
-                    Select();
+                    SkillArea.Instance.SelectedSkill = null;
+                    operationArea.UseSkill();
+                    Cancel();
                 }
             }
-            
-            // 选中卡牌
-            if (!IsSelected) Select();
-            else Unselect();
-            CardArea.Instance.UpdateCardArea();
-            DestArea.Instance.InitDestArea();
-            OperationArea.Instance.UpdateButtonArea();
+            else
+            {
+                // 选中卡牌
+                if (!IsSelected) Select();
+                else Unselect();
+                CardArea.Instance.UpdateCardArea();
+                DestArea.Instance.InitDestArea();
+                OperationArea.Instance.UpdateButtonArea();
+            }
 
         }
 
@@ -95,6 +102,28 @@ namespace View
         {
             button.interactable = false;
             Unselect();
+            Cancel();
+        }
+
+        /// <summary>
+        /// 发动技能
+        /// </summary>
+        public void Use()
+        {
+            if (UseSkill) return;
+
+            UseSkill = true;
+            GetComponent<RectTransform>().anchoredPosition += new Vector2(20, 0);
+        }
+
+        /// <summary>
+        /// 取消
+        /// </summary>
+        public void Cancel()
+        {
+            if (!UseSkill) return;
+            UseSkill = false;
+            GetComponent<RectTransform>().anchoredPosition -= new Vector2(20, 0);
         }
     }
 }

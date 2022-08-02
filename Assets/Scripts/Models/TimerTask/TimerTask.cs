@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Threading.Tasks;
+using System;
 
 namespace Model
 {
@@ -11,14 +12,18 @@ namespace Model
 
         public Player player { get; private set; }
         public TimerType timerType { get; private set; }
-        public int maxCount { get; private set; }
-        public int minCount { get; private set; }
+        public int maxCard { get; set; } = 0;
+        public int minCard { get; set; } = 0;
+        public int maxDest { get; set; } = 0;
+        public int minDest { get; set; } = 0;
+        public Func<List<Card>, int> MaxDest { get; set; }
+        public Func<List<Card>, int> MinDest { get; set; }
+        public Func<Card, bool> ValidCard { get; set; } = (card) => !card.IsConvert;
+        public Func<Player, Card, Player, bool> ValidDest { get; set; } = (player, card, fstPlayer) => true;
+        public bool isPerformPhase { get; set; } = false;
 
         public string Hint { get; set; }
-        public Player GivenDest { get; set; }
-        public List<string> GivenCard { get; set; }
         public string GivenSkill { get; set; }
-        public string Extra { get; set; }
 
         public int second
         {
@@ -27,18 +32,14 @@ namespace Model
                 switch (timerType)
                 {
                     case TimerType.PerformPhase: return 15;
-                    case TimerType.SelectHandCard: return 5 + maxCount;
+                    case TimerType.SelectHandCard: return 5 + maxCard;
                     case TimerType.无懈可击: return 5;
-                    default: return 10;
+                    default: return 15;
                 }
             }
         }
 
-        // public List<Card> Cards { get; private set; } = new List<Card>();
-        // public List<Card> Equipages { get; private set; } = new List<Card>();
-        // public List<Player> Dests { get; private set; } = new List<Player>();
         public List<Card> Cards { get; private set; }
-        // public List<Card> Equipages { get; private set; }
         public List<Player> Dests { get; private set; }
         public string Skill { get; private set; }
 
@@ -46,76 +47,63 @@ namespace Model
         /// 暂停主线程，并通过服务器或view开始计时
         /// </summary>
         /// <returns>是否有操作</returns>
-        public async Task<bool> Run(Player player, TimerType timerType, int maxCount, int minCount)
+        public async Task<bool> Run(Player player, TimerType timerType)
         {
             this.player = player;
             this.timerType = timerType;
-            this.maxCount = maxCount;
-            this.minCount = minCount;
 
-            // Cards.Clear();
-            // Equipages.Clear();
-            // Dests.Clear();
             Cards = new List<Card>();
-            // Equipages = new List<Card>();
             Dests = new List<Player>();
             Skill = "";
 
             if (SgsMain.Instance.GameIsOver) return true;
 
-            waitAction = new TaskCompletionSource<bool>();
-
             if (player.isSelf) moveSeat(player);
             startTimerView?.Invoke(this);
-            // if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
 
-            // var result = await waitAction.Task;
+            if (Room.Instance.IsSingle) waitAction = new TaskCompletionSource<bool>();
             var result = Room.Instance.IsSingle ? await waitAction.Task : await WaitResult();
 
             stopTimerView(this);
 
-            Hint = "";
-            GivenDest = null;
-            GivenCard = null;
-            GivenSkill = "";
-            Extra = "";
+            Reset();
 
-            // 转化技
-            //    if(Skill!="") Debug.Log("timerTask.Skill="+Skill);
-            if (Skill != "")
+            if (Skill == "丈八蛇矛" || Skill != "" && player.skills[Skill] is Converted)
             {
-                if (player.skills[Skill] is Converted)
-                {
-                    player.skills[Skill].Execute();
-                    Cards = new List<Card> { (player.skills[Skill] as Converted).Execute(Cards) };
-                }
+                var skill = Skill == "丈八蛇矛" ? (player.weapon as 丈八蛇矛).skill : player.skills[Skill] as Converted;
+                Cards = new List<Card> { skill.Execute(Cards) };
+                Skill = "";
             }
-            // 转化装备
-            else if ((timerType == TimerType.UseCard || timerType == TimerType.PerformPhase)
-                && Cards.Count == 3)
-            {
-                foreach (var i in Cards)
-                {
-                    if (i is 丈八蛇矛)
-                    {
-                        Cards.Remove(i);
-                        Cards = new List<Card> { (i as 丈八蛇矛).Execute(Cards) };
-                        break;
-                    }
-                }
-            }
-            // else if (Equipages.Count != 0 && Equipages[0] is 丈八蛇矛
-            //     && (timerType == TimerType.UseCard || timerType == TimerType.PerformPhase))
-            // {
-            //     Cards = new List<Card> { ((丈八蛇矛)Equipages[0]).Execute(Cards) };
-            // }
 
             return result;
         }
 
-        public async Task<bool> Run(Player player, TimerType timerType, int count = 1)
+        public async Task<bool> Run(Player player, TimerType timerType, int cardCount, int destCount)
         {
-            return await Run(player, timerType, count, count);
+            return await Run(player, timerType, cardCount, cardCount, destCount, destCount);
+        }
+
+        public async Task<bool> Run(Player player, TimerType timerType, int maxCard, int minCard, int maxDest, int minDest)
+        {
+            this.maxCard = maxCard;
+            this.minCard = minCard;
+            this.maxDest = maxDest;
+            this.minDest = minDest;
+            return await Run(player, timerType);
+        }
+
+        private void Reset()
+        {
+            Hint = "";
+            maxCard = 0;
+            minCard = 0;
+            maxDest = 0;
+            minDest = 0;
+            MaxDest = null;
+            MinDest = null;
+            ValidCard = (card) => !card.IsConvert;
+            ValidDest = (player, card, fstPlayer) => true;
+            GivenSkill = "";
         }
 
         /// <summary>
@@ -124,11 +112,7 @@ namespace Model
         public void SetResult(List<int> cards, List<int> dests, string skill)
         {
             foreach (var id in cards) Cards.Add(CardPile.Instance.cards[id]);
-
             foreach (var id in dests) Dests.Add(SgsMain.Instance.players[id]);
-
-            // foreach (var id in equipages) Equipages.Add(CardPile.Instance.cards[id]);
-
             Skill = skill;
         }
 
@@ -162,23 +146,10 @@ namespace Model
         public void SendResult()
         {
             SendResult(null, null, null, false);
-            // if (Room.Instance.isSingle) SetResult();
-            // // 多人模式
-            // else
-            // {
-            //     var json = new TimerJson();
-            //     json.eventname = "set_result";
-            //     json.id = Connection.Instance.Count + 1;
-            //     json.result = false;
-
-            //     Connection.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
-            // }
         }
 
         public async Task<bool> WaitResult()
         {
-            // while (Connection.Instance.IsRunning) await Task.Yield();
-
             var message = await Wss.Instance.PopSgsMsg();
             var json = JsonUtility.FromJson<TimerJson>(message);
 
@@ -188,7 +159,6 @@ namespace Model
                 {
                     player = SgsMain.Instance.players[json.src];
                     SetResult(json.cards, new List<int>(), "");
-                    // return true;
                 }
                 else
                 {
@@ -218,9 +188,9 @@ namespace Model
         public async Task<bool> RunWxkj()
         {
             this.timerType = TimerType.无懈可击;
-            this.maxCount = 1;
-            this.minCount = 1;
-            GivenCard = new List<string> { "无懈可击" };
+            this.maxCard = 1;
+            this.minCard = 1;
+            // GivenCard = new List<string> { "无懈可击" };
 
             Cards = new List<Card>();
             // Equipages = new List<Card>();
@@ -242,7 +212,7 @@ namespace Model
             stopTimerView?.Invoke(this);
 
             Hint = "";
-            GivenCard = null;
+            // GivenCard = null;
 
             return result;
         }
@@ -264,7 +234,6 @@ namespace Model
                     if (!i) return;
                 }
 
-                // if (!Room.Instance.isSingle) Connection.Instance.Count++;
                 if (Room.Instance.IsSingle) waitAction.TrySetResult(false);
             }
         }

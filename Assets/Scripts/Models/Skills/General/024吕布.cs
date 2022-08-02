@@ -93,8 +93,9 @@ namespace Model
 
                 // 指定角色
                 TimerTask.Instance.Hint = (Src.Position + 1).ToString() + "号位对你发动利驭，选择一名角色";
-                TimerTask.Instance.Extra = Src.Position.ToString();
-                bool result = await TimerTask.Instance.Run(dest, TimerType.利驭, 0);
+                // TimerTask.Instance.Extra = Src.Position.ToString();
+                TimerTask.Instance.ValidDest=(player,card,fstPlayer)=>player!=Src&&player!=dest;
+                bool result = await TimerTask.Instance.Run(dest, TimerType.利驭, 0,1);
 
                 Player dest1 = null;
                 if (!result)

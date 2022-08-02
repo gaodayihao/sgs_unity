@@ -69,8 +69,9 @@ namespace Model
         public static async Task<bool> Call(Player player)
         {
             TimerTask.Instance.Hint = "请打出一张杀。";
-            TimerTask.Instance.GivenCard = new List<string> { "杀", "雷杀", "火杀" };
-            bool result = await TimerTask.Instance.Run(player, TimerType.UseCard);
+            // TimerTask.Instance.GivenCard = new List<string> { "杀", "雷杀", "火杀" };
+            TimerTask.Instance.ValidCard = (card) => card is 杀 && !player.DisabledCard(card);
+            bool result = await TimerTask.Instance.Run(player, TimerType.UseCard, 1, 0);
 
             if (player.isAI)
             {
@@ -110,8 +111,9 @@ namespace Model
             }
 
             TimerTask.Instance.Hint = "请使用一张闪。";
-            TimerTask.Instance.GivenCard = new List<string> { "闪" };
-            result = await TimerTask.Instance.Run(player, TimerType.UseCard);
+            // TimerTask.Instance.GivenCard = new List<string> { "闪" };
+            TimerTask.Instance.ValidCard = (card) => card is 闪 && !player.DisabledCard(card);
+            result = await TimerTask.Instance.Run(player, TimerType.UseCard, 1, 0);
 
             if (player.isAI)
             {
@@ -168,9 +170,11 @@ namespace Model
         public static async Task<bool> Call(Player player, Player dest)
         {
             TimerTask.Instance.Hint = "请使用一张桃。";
-            TimerTask.Instance.GivenDest = dest;
-            TimerTask.Instance.GivenCard = new List<string> { "桃" };
-            bool result = await TimerTask.Instance.Run(player, TimerType.UseCard);
+            // TimerTask.Instance.GivenDest = dest;
+            // TimerTask.Instance.GivenCard = new List<string> { "桃" };
+            TimerTask.Instance.ValidCard = (card) => card is 桃 && !player.DisabledCard(card);
+            TimerTask.Instance.ValidDest = (player, card, fstPlayer) => player == dest;
+            bool result = await TimerTask.Instance.Run(player, TimerType.UseCard, 1, 0);
 
             if (player.isAI && player == dest)
             {

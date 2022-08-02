@@ -282,13 +282,21 @@ namespace Model
 
             if (await 无懈可击.Call(this, dests[0])) return;
 
-            TimerTask.Instance.GivenCard = new List<string> { "杀", "火杀", "雷杀" };
-            TimerTask.Instance.GivenDest = ShaDest;
-            var result = await TimerTask.Instance.Run(dests[0], TimerType.UseCard);
+            TimerTask.Instance.ValidCard = (card) => card is 杀;
+            TimerTask.Instance.ValidDest = (player, card, fstPlayer) =>
+            {
+                // return player == ShaDest || fstPlayer==ShaDest && DestArea.UseSha(src, player);
+                return player == ShaDest;
+            };
+            // int maxDest = DestArea.ShaMaxDest(dests[0]);
+            
+            var result = await TimerTask.Instance.Run(dests[0], TimerType.UseCard, 1, 1);
+            // 出杀
             if (result)
             {
                 await TimerTask.Instance.Cards[0].UseCard(dests[0], TimerTask.Instance.Dests);
             }
+            // 获得武器
             else await new GetCardFromElse(Src, dests[0], new List<Card> { dests[0].weapon }).Execute();
         }
     }

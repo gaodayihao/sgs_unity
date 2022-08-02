@@ -23,7 +23,7 @@ namespace Model
             if (!enable) return false;
 
             TimerTask.Instance.Hint = "是否发动八卦阵？";
-            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallEquipSkill, 0);
+            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallEquipSkill);
             if (!result && !Owner.isAI) return false;
 
             SkillView();

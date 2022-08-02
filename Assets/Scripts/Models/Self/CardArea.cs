@@ -6,10 +6,11 @@ namespace Model
 {
     public class CardArea
     {
-        public static bool PerformPhase(Player player, int id)
+        public static bool ValidCard(Card card)
         {
-            Card card = CardPile.Instance.cards[id];
-
+            var player = TurnSystem.Instance.CurrentPlayer;
+            if (!player.HandCards.Contains(card) && !card.IsConvert) return false;
+            if (player.DisabledCard(card)) return false;
             switch (card.Name)
             {
                 case "闪":
@@ -29,9 +30,7 @@ namespace Model
 
         public static bool UseSha(Player player, Card card = null)
         {
-            // if (player.Equipages["武器"] is ZhuGeLianNu) return true;
-            // return player.ShaCount < 1;
-            if (card is null) card = Card.Convert<杀>(new List<Card>());
+            if (card is null) card = Card.Convert<杀>();
             return player.ShaCount < 1 || player.UnlimitedCard(card);
         }
     }

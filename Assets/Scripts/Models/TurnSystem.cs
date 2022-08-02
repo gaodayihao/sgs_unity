@@ -170,11 +170,17 @@ namespace Model
             {
                 // 暂停线程,显示进度条
                 timerTask.Hint = "出牌阶段，请选择一张牌。";
-                performIsDone = !await timerTask.Run(CurrentPlayer, TimerType.PerformPhase);
+                timerTask.MaxDest = DestArea.MaxDest;
+                timerTask.MinDest = DestArea.MinDest;
+                timerTask.ValidCard = CardArea.ValidCard;
+                timerTask.ValidDest = DestArea.ValidDest;
+                timerTask.isPerformPhase = true;
+                performIsDone = !await timerTask.Run(CurrentPlayer, TimerType.PerformPhase, 1, 0);
+                timerTask.isPerformPhase = false;
 
                 if (!performIsDone)
                 {
-                    if (timerTask.Skill != "" && CurrentPlayer.skills[timerTask.Skill] is Active)
+                    if (timerTask.Skill != "")
                     {
                         var skill = CurrentPlayer.skills[timerTask.Skill] as Active;
                         await skill.Execute(timerTask.Dests, timerTask.Cards, "");

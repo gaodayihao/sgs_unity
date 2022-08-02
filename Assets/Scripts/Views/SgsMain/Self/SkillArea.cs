@@ -9,8 +9,9 @@ namespace View
         // 技能表
         public List<Skill> Skills { get; private set; } = new List<Skill>();
         // 已选技能
-        public Skill SelectedSkill { get; set; }
+        public Model.Skill SelectedSkill { get; set; }
         private Player self { get => SgsMain.Instance.self; }
+        private Model.TimerTask timerTask { get => Model.TimerTask.Instance; }
 
         public Transform Long;
         public Transform Short;
@@ -63,26 +64,54 @@ namespace View
         /// <summary>
         /// 显示进度条时更新技能区
         /// </summary>
-        public void InitSkillArea(TimerType timerType)
+        public void InitSkillArea()
         {
-            switch (timerType)
+            if (Model.TimerTask.Instance.GivenSkill != "")
             {
-                case TimerType.CallSkill:
-                    foreach (var i in Skills)
+                foreach (var i in Skills)
+                {
+                    if (i.name == Model.TimerTask.Instance.GivenSkill)
                     {
-                        if (i != SelectedSkill) i.button.interactable = false;
-                        if (i.name == Model.TimerTask.Instance.GivenSkill) i.Select();
+                        i.Select();
+                        break;
                     }
-                    break;
-
-                default:
-                    foreach (var i in Skills)
-                    {
-                        i.button.interactable = i.model.IsValid() &&
-                            (i.model is Model.Active || i.model is Model.Converted);
-                    }
-                    break;
+                }
             }
+            if (SelectedSkill != null)
+            {
+                foreach (var i in Skills) i.button.interactable = i.model == SelectedSkill;
+            }
+            else
+            {
+                foreach (var i in Skills)
+                {
+                    if (!i.model.IsValid()) i.button.interactable = false;
+                    else if (i.model is Model.Converted)
+                    {
+                        Debug.Log(i.name+timerTask.ValidCard((i.model as Model.Converted).Execute(null)));
+                        i.button.interactable = timerTask.ValidCard((i.model as Model.Converted).Execute(null));
+                    }
+                    else i.button.interactable = timerTask.isPerformPhase && i.model is Model.Active;
+                }
+            }
+            // switch (timerType)
+            // {
+            //     case TimerType.CallSkill:
+            //         foreach (var i in Skills)
+            //         {
+            //             if (i != SelectedSkill) i.button.interactable = false;
+            //             if (i.name == Model.TimerTask.Instance.GivenSkill) i.Select();
+            //         }
+            //         break;
+
+            //     default:
+            //         foreach (var i in Skills)
+            //         {
+            //             i.button.interactable = i.model.IsValid() &&
+            //                 (i.model is Model.Active || i.model is Model.Converted);
+            //         }
+            //         break;
+            // }
         }
 
         /// <summary>

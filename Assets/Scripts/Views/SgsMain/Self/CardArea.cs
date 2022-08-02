@@ -30,10 +30,11 @@ namespace View
                 return m;
             }
         }
-        private int maxCount;
-        private int minCount;
+        public int MaxCount { get; private set; }
+        public int MinCount { get; private set; }
         // 是否已设置
         public bool IsSettled { get; private set; } = false;
+        public Model.Card Converted { get; private set; }
 
 
         /// <summary>
@@ -47,7 +48,6 @@ namespace View
             var cards = operation.Cards;
 
             // 从assetbundle中加载卡牌预制件
-            // while (!ABManager.Instance.ABMap.ContainsKey("sgsasset")) await Task.Yield();
             var card = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("Card");
 
             // 实例化新卡牌，添加到手牌区，并根据卡牌id初始化
@@ -66,7 +66,6 @@ namespace View
         public void MoveSeat(Model.Player model)
         {
             foreach (var i in handcards.Values) i.gameObject.SetActive(model.HandCards.Contains(i.model));
-            // UpdateSpacing();
         }
 
         /// <summary>
@@ -78,51 +77,35 @@ namespace View
 
             foreach (var i in operation.Cards)
             {
-                if (handcards.ContainsKey(i.Id))
+                if (!handcards.ContainsKey(i.Id)) continue;
+                if (!self.model.Teammate.HandCards.Contains(i))
                 {
-                    if (!self.model.Teammate.HandCards.Contains(i))
-                    {
-                        Destroy(handcards[i.Id].gameObject);
-                        handcards.Remove(i.Id);
-                    }
-                    else handcards[i.Id].gameObject.SetActive(false);
+                    Destroy(handcards[i.Id].gameObject);
+                    handcards.Remove(i.Id);
                 }
+                else handcards[i.Id].gameObject.SetActive(false);
             }
         }
 
-        public void InitCardArea(TimerType timerType)
+        public void InitCardArea()
         {
             var timerTask = Model.TimerTask.Instance;
+            var skill = SkillArea.Instance.SelectedSkill;
 
             // 可选卡牌数量
-            if (timerType == timerTask.timerType)
+
+            if (skill != null)
             {
-                maxCount = timerTask.maxCount;
-                minCount = timerTask.minCount;
+                MaxCount = skill.MaxCard();
+                MinCount = skill.MinCard();
             }
             else
             {
-                switch (timerType)
-                {
-                    case TimerType.丈八蛇矛:
-                        maxCount = 3;
-                        minCount = 3;
-                        break;
-
-                    case TimerType.CallSkill:
-                        var skill = SkillArea.Instance.SelectedSkill.model;
-                        maxCount = skill.MaxCard();
-                        minCount = skill.MinCard();
-                        break;
-
-                    default:
-                        maxCount = 0;
-                        minCount = 0;
-                        break;
-                }
+                MaxCount = timerTask.maxCard;
+                MinCount = timerTask.minCard;
             }
 
-            if (maxCount == 0)
+            if (MaxCount == 0)
             {
                 foreach (var i in handcards.Values)
                 {
@@ -135,7 +118,7 @@ namespace View
             }
 
             // 无懈可击
-            if (timerType == TimerType.无懈可击)
+            if (OperationArea.Instance.timerType == TimerType.无懈可击)
             {
                 foreach (var i in handcards.Values) i.gameObject.SetActive(i.name == "无懈可击");
                 UpdateSpacing();
@@ -143,51 +126,20 @@ namespace View
 
             // 判断每张卡牌是否可选
 
-            if (Model.TimerTask.Instance.timerType == timerType && Model.TimerTask.Instance.GivenCard != null)
+            if (skill != null)
             {
                 foreach (var i in handcards.Values)
                 {
                     if (!i.gameObject.activeSelf) continue;
-                    i.button.interactable = Model.TimerTask.Instance.GivenCard.Contains(i.name);
+                    i.button.interactable = skill.IsValidCard(i.model);
                 }
             }
-
             else
-            {
-                switch (timerType)
-                {
-                    // 出牌阶段
-                    case TimerType.PerformPhase:
-                        foreach (var card in handcards.Values)
-                        {
-                            // 设置不能使用的手牌
-                            card.button.interactable = Model.CardArea.PerformPhase(self.model, card.Id);
-                        }
-                        break;
-
-                    case TimerType.CallSkill:
-                        var skill = SkillArea.Instance.SelectedSkill.model;
-                        foreach (var i in handcards.Values)
-                        {
-                            if (!i.gameObject.activeSelf) continue;
-                            // 设置不能使用的手牌
-                            i.button.interactable = skill.IsValidCard(i.model);
-                        }
-                        break;
-
-                    // 弃牌
-                    default:
-                        foreach (var card in handcards.Values) card.button.interactable = true;
-                        break;
-                }
-            }
-
-            // 设置禁用卡牌
-            if (timerType == TimerType.PerformPhase || timerType == TimerType.UseCard || timerType == TimerType.无懈可击)
             {
                 foreach (var i in handcards.Values)
                 {
-                    if (self.model.DisabledCard(i.model)) i.button.interactable = false;
+                    if (!i.gameObject.activeSelf) continue;
+                    i.button.interactable = timerTask.ValidCard(i.model);
                 }
             }
 
@@ -234,7 +186,7 @@ namespace View
             }
 
             // 若已选中手牌数量超出范围，取消第一个选中的手牌
-            while (count > maxCount)
+            while (count > MaxCount)
             {
                 if (SelectedCard.Count > 0) SelectedCard[0].Unselect();
                 else if (equipArea.SelectedCard[0].name != Model.TimerTask.Instance.GivenSkill)
@@ -245,7 +197,21 @@ namespace View
                 count--;
             }
 
-            IsSettled = count >= minCount;
+            IsSettled = count >= MinCount;
+
+            if (IsSettled)
+            {
+                var skill = SkillArea.Instance.SelectedSkill;
+                if (skill != null && skill is Model.Converted)
+                {
+                    Converted = (skill as Model.Converted).Execute(model);
+                }
+                else if (OperationArea.Instance.timerType == TimerType.丈八蛇矛)
+                {
+                    Converted = Model.Card.Convert<Model.杀>(model);
+                }
+            }
+            else Converted = null;
         }
 
         /// <summary>
@@ -291,7 +257,6 @@ namespace View
                 return;
             }
 
-            // Card.width = 121.5, HandCardArea.width = 950
             float spacing = -(count * 121.5f - 950) / (float)(count - 1) - 0.001f;
             handCardArea.GetComponent<GridLayoutGroup>().spacing = new Vector2(spacing, 0);
         }

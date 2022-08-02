@@ -34,9 +34,11 @@ namespace Model
         {
             TimerTask.Instance.GivenSkill = "青龙偃月刀";
             TimerTask.Instance.Hint = "是否发动青龙偃月刀？";
-            TimerTask.Instance.GivenDest = dest;
-            TimerTask.Instance.GivenCard = new List<string> { "杀", "雷杀", "火杀" };
-            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallEquipSkill);
+            TimerTask.Instance.ValidCard = (card) => card is 杀;
+            TimerTask.Instance.ValidDest = (player, card, fstPlayer) => player == dest;
+            // TimerTask.Instance.GivenDest = dest;
+            // TimerTask.Instance.GivenCard = new List<string> { "杀", "雷杀", "火杀" };
+            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallEquipSkill, 1, 1);
 
             if (!result) return;
 
@@ -58,8 +60,8 @@ namespace Model
 
             TimerTask.Instance.GivenSkill = "麒麟弓";
             TimerTask.Instance.Hint = "是否发动麒麟弓？";
-            TimerTask.Instance.GivenDest = dest;
-            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallEquipSkill, 0);
+            // TimerTask.Instance.GivenDest = dest;
+            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallEquipSkill);
 
             if (!result) return;
 
@@ -116,12 +118,40 @@ namespace Model
         public 丈八蛇矛()
         {
             range = 3;
+            // skill=new ZBSMSkill()
         }
 
-        public 杀 Execute(List<Card> primitives)
+        public override async Task AddEquipage(Player owner)
         {
-            SkillView();
-            return Card.Convert<杀>(primitives);
+            skill = new ZBSMSkill(owner);
+            await base.AddEquipage(owner);
+        }
+
+        public ZBSMSkill skill { get; private set; }
+
+        public class ZBSMSkill : Converted
+        {
+            public ZBSMSkill(Player src) : base(src, "丈八蛇矛", false, int.MaxValue, "杀") { }
+
+            public override Card Execute(List<Card> cards)
+            {
+                return Card.Convert<杀>(cards);
+            }
+
+            public override bool IsValidCard(Card card)
+            {
+                return Src.HandCards.Contains(card) || card == Src.weapon;
+            }
+
+            public override int MaxCard()
+            {
+                return 2;
+            }
+
+            public override int MinCard()
+            {
+                return 2;
+            }
         }
     }
 
@@ -160,11 +190,12 @@ namespace Model
         {
             TimerTask.Instance.GivenSkill = "贯石斧";
             TimerTask.Instance.Hint = "是否发动贯石斧？";
-            bool result = await TimerTask.Instance.Run(Owner, TimerType.Discard, 2);
+            TimerTask.Instance.ValidCard = (card) => card != Owner.weapon && !card.IsConvert;
+            bool result = await TimerTask.Instance.Run(Owner, TimerType.Discard, 2, 0);
             if (result)
             {
                 // var list = TimerTask.Instance.Cards.Union(TimerTask.Instance.Equipages).ToList();
-                TimerTask.Instance.Cards.Remove(this);
+                // TimerTask.Instance.Cards.Remove(this);
                 await new Discard(Owner, TimerTask.Instance.Cards).Execute();
                 return true;
             }

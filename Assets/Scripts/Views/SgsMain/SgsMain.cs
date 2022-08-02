@@ -8,8 +8,6 @@ namespace View
 {
     public class SgsMain : SingletonMono<SgsMain>
     {
-        // public Self self;
-        // private GameObject elsePlayers;
         public RawImage backgroundImage;
 
         public GameObject[] players;
@@ -43,8 +41,6 @@ namespace View
             float radio = Mathf.Max(canvasSize.x / texture.width, canvasSize.y / texture.height);
             backgroundImage.rectTransform.sizeDelta *= radio;
         }
-        // 适配屏幕
-        // AdaptScreen();
 
         /// <summary>
         /// 初始化每个View.Player
@@ -56,7 +52,6 @@ namespace View
             {
                 players[i].GetComponent<Player>().Init(model[i]);
             }
-            // self = players[0].GetComponent<Player>();
 
             foreach (var i in players)
             {

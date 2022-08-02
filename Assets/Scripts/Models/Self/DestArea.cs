@@ -11,39 +11,51 @@ namespace Model
         /// 根据玩家和卡牌id初始化目标数量
         /// </summary>
         /// <returns>目标数量最大值与最小值</returns>
-        public static int[] InitDestCount(Player player, string cardName)
+        public static int MaxDest(List<Card> cards)
         {
-            int maxCount = 0;
-            int minCount = 0;
-            // Card card = CardPile.Instance.cards[id];
+            var player = TimerTask.Instance.player;
+            var cardName = cards[0].Name;
             switch (cardName)
             {
-                case "杀":
+                case "杀" + "":
                 case "雷杀":
                 case "火杀":
-                    maxCount = ShaMaxDest(player);
-                    minCount = 1;
-                    break;
+                    return ShaMaxDest(player);
                 case "决斗":
                 case "过河拆桥":
                 case "顺手牵羊":
                 case "乐不思蜀":
                 case "兵粮寸断":
                 case "火攻":
-                    maxCount = 1;
-                    minCount = 1;
-                    break;
+                    return 1;
                 case "借刀杀人":
-                    maxCount = 2;
-                    minCount = 2;
-                    break;
+                    return 2;
                 case "铁索连环":
-                    maxCount = 2;
-                    break;
+                    return 2;
                 default:
-                    break;
+                    return 0;
             }
-            return new int[2] { maxCount, minCount };
+        }
+
+        public static int MinDest(List<Card> cards)
+        {
+            switch (cards[0].Name)
+            {
+                case "杀" + "":
+                case "雷杀":
+                case "火杀":
+                case "决斗":
+                case "过河拆桥":
+                case "顺手牵羊":
+                case "乐不思蜀":
+                case "兵粮寸断":
+                case "火攻":
+                    return 1;
+                case "借刀杀人":
+                    return 2;
+                default:
+                    return 0;
+            }
         }
 
         public static int ShaMaxDest(Player player)
@@ -56,20 +68,17 @@ namespace Model
         /// <summary>
         /// 判断dest是否能成为src的目标
         /// </summary>
-        public static bool PerformPhase(Player src, Player dest, Card card, Player firstdest)
+        public static bool ValidDest(Player dest, Card card, Player firstdest)
         {
+            var src = TurnSystem.Instance.CurrentPlayer;
             if (!dest.IsAlive) return false;
-            if(src.UnlimitedDst(card,dest)) return true;
+            if (src.UnlimitedDst(card, dest)) return true;
 
             switch (card.Name)
             {
                 case "杀":
                 case "火杀":
                 case "雷杀":
-                    // if (card.Suit == "方片") foreach (var i in src.skills.Keys)
-                    //     {
-                    //         if (i == "武圣") return true;
-                    //     }
                     return UseSha(src, dest);
 
                 case "过河拆桥":
@@ -89,14 +98,6 @@ namespace Model
                     return true;
             }
         }
-
-        // private static bool HaveCard(Player player)
-        // {
-        //     if (player.HandCardCount != 0) return true;
-        //     foreach (var equip in player.Equipages.Values) if (equip != null) return true;
-        //     if (player.JudgeArea.Count != 0) return true;
-        //     return false;
-        // }
 
         public static bool UseSha(Player src, Player dest)
         {

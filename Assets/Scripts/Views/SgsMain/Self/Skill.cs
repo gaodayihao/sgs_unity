@@ -30,12 +30,12 @@ namespace View
             if (!IsSelected)
             {
                 Select();
-                operationArea.ChangeType(TimerType.CallSkill);
+                operationArea.UseSkill();
             }
             else
             {
                 Unselect();
-                operationArea.ChangeType(Model.TimerTask.Instance.timerType);
+                operationArea.UseSkill();
             }
         }
 
@@ -48,7 +48,7 @@ namespace View
 
             IsSelected = true;
             effect.SetActive(true);
-            skillArea.SelectedSkill = this;
+            skillArea.SelectedSkill = model;
         }
 
         /// <summary>

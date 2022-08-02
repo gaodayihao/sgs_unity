@@ -64,12 +64,12 @@ namespace Model
             return 1;
         }
 
-        public override int MaxDest()
+        public override int MaxDest(List<Card> cards)
         {
             return 1;
         }
 
-        public override int MinDest()
+        public override int MinDest(List<Card> cards)
         {
             return 1;
         }

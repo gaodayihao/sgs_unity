@@ -39,7 +39,7 @@ namespace View
             {
                 var instance = Instantiate(card);
                 instance.transform.SetParent(handCards.transform, false);
-                instance.GetComponent<Card>().InitInRegion(i, false);
+                instance.GetComponent<Card>().InitInRegion(i, model.display);
             }
             // }
 

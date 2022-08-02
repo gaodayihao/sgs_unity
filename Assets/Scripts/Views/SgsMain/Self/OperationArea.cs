@@ -61,7 +61,7 @@ namespace View
             // foreach (var card in equipArea.SelectedCard) equips.Add(card.Id);
 
             string skill = "";
-            if (skillArea.SelectedSkill != null) skill = skillArea.SelectedSkill.text.text;
+            if (skillArea.SelectedSkill != null) skill = skillArea.SelectedSkill.Name;
 
             if (timerTask.timerType != TimerType.无懈可击)
             {
@@ -132,10 +132,10 @@ namespace View
                     break;
             }
 
-            skillArea.InitSkillArea(timerType);
-            cardArea.InitCardArea(timerType);
+            skillArea.InitSkillArea();
+            cardArea.InitCardArea();
             destArea.InitDestArea();
-            equipArea.InitEquipArea(timerType);
+            equipArea.InitEquipArea();
 
             UpdateButtonArea();
             StartTimer(timerTask.second);
@@ -188,7 +188,7 @@ namespace View
             confirm.interactable = cardArea.IsSettled && destArea.IsSettled;
         }
 
-        public void ChangeType(TimerType timerType)
+        public void UseSkill()
         {
             cardArea.ResetCardArea();
             destArea.ResetDestArea();
@@ -196,18 +196,18 @@ namespace View
 
             this.timerType = timerType;
 
-            cardArea.InitCardArea(timerType);
+            skillArea.InitSkillArea();
+            cardArea.InitCardArea();
             destArea.InitDestArea();
-            equipArea.InitEquipArea(timerType);
-            skillArea.InitSkillArea(timerType);
+            equipArea.InitEquipArea();
 
             UpdateButtonArea();
         }
 
-        public void ChangeType()
-        {
-            ChangeType(timerTask.timerType);
-        }
+        // public void ChangeType()
+        // {
+        //     ChangeType(timerTask.timerType);
+        // }
 
     }
 }

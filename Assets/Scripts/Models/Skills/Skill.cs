@@ -58,7 +58,7 @@ namespace Model
         /// <summary>
         /// 最大目标数
         /// </summary>
-        public virtual int MaxDest()
+        public virtual int MaxDest(List<Card> cards)
         {
             return 0;
         }
@@ -66,7 +66,7 @@ namespace Model
         /// <summary>
         /// 最小目标数
         /// </summary>
-        public virtual int MinDest()
+        public virtual int MinDest(List<Card> cards)
         {
             return 0;
         }

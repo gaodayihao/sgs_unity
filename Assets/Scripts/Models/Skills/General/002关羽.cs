@@ -22,10 +22,14 @@ namespace Model
             return (card.Suit == "红桃" || card.Suit == "方片") && base.IsValidCard(card);
         }
 
-        public override bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
-        {
-            return cards[0].Suit == "方片" && dest != Src || DestArea.UseSha(Src, dest);
-        }
+        // public override bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
+        // {
+        //     if (TimerTask.Instance.timerType == TimerType.PerformPhase)
+        //     {
+        //         return cards[0].Suit == "方片" && dest != Src || DestArea.UseSha(Src, dest);
+        //     }
+        //     return TimerTask.Instance.ValidDest(dest, cards[0], firstDest);
+        // }
 
         public override int MaxCard()
         {
@@ -37,23 +41,19 @@ namespace Model
             return 1;
         }
 
-        public override bool IsValid()
+        public override void OnEnabled()
         {
-            var timerType = TimerTask.Instance.timerType;
+            Src.unlimitedDst += IsUnlimited;
+        }
 
-            // 使用或打出杀
-            if (timerType == TimerType.UseCard)
-            {
-                return TimerTask.Instance.GivenCard.Contains("杀");
-            }
+        public override void OnDisabled()
+        {
+            Src.unlimitedDst -= IsUnlimited;
+        }
 
-            // 出牌阶段
-            else if (timerType == TimerType.PerformPhase)
-            {
-                return CardArea.UseSha(Src);
-            }
-
-            return false;
+        private bool IsUnlimited(Card card, Player dest)
+        {
+            return card is 杀 && card.Suit == "方片";
         }
     }
 
@@ -74,12 +74,12 @@ namespace Model
             return 1;
         }
 
-        public override int MaxDest()
+        public override int MaxDest(List<Card> cards)
         {
             return 1;
         }
 
-        public override int MinDest()
+        public override int MinDest(List<Card> cards)
         {
             return 1;
         }
@@ -109,7 +109,7 @@ namespace Model
                 if (Dest.Hp < Dest.HpLimit)
                 {
                     TimerTask.Instance.Hint = "是否让" + (Dest.Position + 1).ToString() + "号位回复一点体力？";
-                    bool result = await TimerTask.Instance.Run(Src, TimerType.Select, 0);
+                    bool result = await TimerTask.Instance.Run(Src, TimerType.Select);
                     if (result) await new Recover(Dest).Execute();
                 }
             }

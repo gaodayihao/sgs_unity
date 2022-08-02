@@ -99,8 +99,9 @@ namespace Model
         /// </summary>
         /// <param name="primitives">原卡牌</param>
         /// <typeparam name="T">类型</typeparam>
-        public static T Convert<T>(List<Card> primitives) where T : Card, new()
+        public static T Convert<T>(List<Card> primitives = null) where T : Card, new()
         {
+            if (primitives is null) primitives = new List<Card>();
             // 二次转化
             if (primitives.Count > 0 && primitives[0].IsConvert) return Convert<T>(primitives[0].PrimiTives);
 
