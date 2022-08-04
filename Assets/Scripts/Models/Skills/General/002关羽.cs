@@ -22,15 +22,6 @@ namespace Model
             return (card.Suit == "红桃" || card.Suit == "方片") && base.IsValidCard(card);
         }
 
-        // public override bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
-        // {
-        //     if (TimerTask.Instance.timerType == TimerType.PerformPhase)
-        //     {
-        //         return cards[0].Suit == "方片" && dest != Src || DestArea.UseSha(Src, dest);
-        //     }
-        //     return TimerTask.Instance.ValidDest(dest, cards[0], firstDest);
-        // }
-
         public override int MaxCard()
         {
             return 1;
@@ -109,7 +100,7 @@ namespace Model
                 if (Dest.Hp < Dest.HpLimit)
                 {
                     TimerTask.Instance.Hint = "是否让" + (Dest.Position + 1).ToString() + "号位回复一点体力？";
-                    bool result = await TimerTask.Instance.Run(Src, TimerType.Select);
+                    bool result = await TimerTask.Instance.Run(Src);
                     if (result) await new Recover(Dest).Execute();
                 }
             }

@@ -32,8 +32,9 @@ namespace Model
             // if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
 
             waitAction = new TaskCompletionSource<bool>();
-
             startTimerView?.Invoke(this);
+            StartCoroutine(SelfAutoResult());
+            StartCoroutine(AIAutoResult());
             var result = Room.Instance.IsSingle ? await waitAction.Task : await ReceiveResult();
             stopTimerView?.Invoke(this);
 
@@ -76,12 +77,24 @@ namespace Model
 
         public async Task<bool> ReceiveResult()
         {
-            Debug.Log("ReceiveSetResult");
+            // Debug.Log("ReceiveSetResult");
             var msg = await Wss.Instance.PopSgsMsg();
             var json = JsonUtility.FromJson<TimerJson>(msg);
             if (json.result) SetResult(json.cards);
             else SendResult();
             return json.result;
+        }
+
+        private IEnumerator AIAutoResult()
+        {
+            yield return new WaitForSeconds(1);
+            if (player.isAI) SendResult();
+        }
+
+        private IEnumerator SelfAutoResult()
+        {
+            yield return new WaitForSeconds(second);
+            if (player.isSelf) SendResult();
         }
 
         public async Task<Card> SelectCard(Player player, Player dest, bool judgeArea = false)

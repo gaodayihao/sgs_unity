@@ -10,16 +10,13 @@ public enum Phase
 
 public enum TimerType
 {
-    PerformPhase,
-    Discard,
-    SelectHandCard,
-    UseCard,
-    无懈可击,
-    CallEquipSkill,
-    丈八蛇矛,
     麒麟弓,
-    CardPanel,
-    CallSkill,
-    Select,
-    利驭
+    CardPanel
+}
+
+public enum Damage
+{
+    Normal,
+    Fire,
+    Thunder
 }

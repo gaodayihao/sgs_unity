@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Networking;
 using System.Threading.Tasks;
 
 namespace View
@@ -37,6 +36,9 @@ namespace View
         // 阵亡
         public Image death;
         public Image deadText;
+
+        //横置
+        public GameObject Lock;
 
         // 回合内边框
         public Image turnBorder;
@@ -76,10 +78,10 @@ namespace View
             nationBack.sprite = Sprites.Instance.nationBack[model.general.nation];
             nation.sprite = Sprites.Instance.nation[model.general.nation];
 
-            if (IsSelf) SkillArea.Instance.InitSkill(model);
+            // if (IsSelf) SkillArea.Instance.InitSkill(model);
 
             await InitSkin();
-            index = Random.Range(0, 5);
+            index = Random.Range(0, skins.Count);
             UpdateSkin();
             // UpdateSkin(model, skins[Random.Range(0, skins.Count)]);
             if (!IsSelf) StartCoroutine(RandomSkin(model));
@@ -273,5 +275,10 @@ namespace View
         }
         #endregion
 
+        public void OnLock(Model.SetLock setLock)
+        {
+            if (setLock.player != model) return;
+            Lock.SetActive(setLock.player.IsLocked);
+        }
     }
 }

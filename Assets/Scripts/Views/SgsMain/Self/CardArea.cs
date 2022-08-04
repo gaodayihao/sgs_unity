@@ -17,6 +17,8 @@ namespace View
 
         private Player self { get => SgsMain.Instance.self; }
         private EquipArea equipArea { get => EquipArea.Instance; }
+        private Model.TimerTask timerTask { get => Model.TimerTask.Instance; }
+        private Model.Skill skill { get => SkillArea.Instance.SelectedSkill; }
 
         // 被选中卡牌
         public List<Card> SelectedCard { get; private set; } = new List<Card>();
@@ -89,9 +91,6 @@ namespace View
 
         public void InitCardArea()
         {
-            var timerTask = Model.TimerTask.Instance;
-            var skill = SkillArea.Instance.SelectedSkill;
-
             // 可选卡牌数量
 
             if (skill != null)
@@ -118,7 +117,7 @@ namespace View
             }
 
             // 无懈可击
-            if (OperationArea.Instance.timerType == TimerType.无懈可击)
+            if (timerTask.isWxkj)
             {
                 foreach (var i in handcards.Values) i.gameObject.SetActive(i.name == "无懈可击");
                 UpdateSpacing();
@@ -154,7 +153,7 @@ namespace View
         {
             // 重置手牌状态
             foreach (var card in handcards.Values) if (card.gameObject.activeSelf) card.ResetCard();
-            if (OperationArea.Instance.timerType == TimerType.无懈可击)
+            if (timerTask.isWxkj)
             {
                 foreach (var i in handcards.Values) i.gameObject.SetActive(self.model.HandCards.Contains(i.model));
                 UpdateSpacing();
@@ -165,7 +164,7 @@ namespace View
 
         public void ResetCardArea(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.无懈可击 && self.model != timerTask.player) return;
+            if (!timerTask.isWxkj && self.model != timerTask.player) return;
 
             ResetCardArea();
         }
@@ -205,10 +204,6 @@ namespace View
                 if (skill != null && skill is Model.Converted)
                 {
                     Converted = (skill as Model.Converted).Execute(model);
-                }
-                else if (OperationArea.Instance.timerType == TimerType.丈八蛇矛)
-                {
-                    Converted = Model.Card.Convert<Model.杀>(model);
                 }
             }
             else Converted = null;

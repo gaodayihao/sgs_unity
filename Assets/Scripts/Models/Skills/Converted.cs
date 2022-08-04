@@ -21,5 +21,10 @@ namespace Model
         {
             return !Src.DisabledCard(card);
         }
+
+        public override bool IsValid()
+        {
+            return base.IsValid() && TimerTask.Instance.ValidCard(Execute(null));
+        }
     }
 }

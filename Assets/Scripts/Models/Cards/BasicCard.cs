@@ -19,59 +19,49 @@ namespace Model
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
             src.ShaCount++;
-
-            if (src.ShaCount > 1 && src.weapon is 诸葛连弩) src.weapon.SkillView();
-            else if (dests.Count > 1 && src.weapon is 方天画戟) src.weapon.SkillView();
-
             await base.UseCard(src, dests);
 
-            // 发动青釭剑
-            bool qgj = false;
-            if (src.weapon is 青缸剑) qgj = ((青缸剑)src.weapon).Skill(this);
+            // 询问青釭剑 雌雄双股剑 诸葛连弩 方天画戟
+            if (src.weapon != null) await src.weapon.UseShaSkill(this);
 
             foreach (var dest in Dests)
             {
-                bool hit = false;
-                if (ShanCount == 0) hit = true;
+                if (ShanCount == 0) isDamage = true;
                 else
                 {
                     for (int i = 0; i < ShanCount; i++)
                     {
-                        if (!await 闪.Call(dest))
+                        if (!await 闪.Call(dest, this))
                         {
-                            hit = true;
+                            isDamage = true;
                             break;
                         }
                     }
                 }
 
-                if (hit == false)
-                {
-                    // 询问青龙偃月刀
-                    if (src.weapon is 青龙偃月刀) await ((青龙偃月刀)src.weapon).Skill(dest);
-                    // 询问贯石斧
-                    else if (src.weapon is 贯石斧 && await ((贯石斧)src.weapon).Skill()) hit = true;
-                }
+                if (!isDamage && src.weapon != null) await src.weapon.CounteredSkill(this, dest);
 
-                if (hit == true)
+                if (isDamage)
                 {
-                    if (src.weapon is 麒麟弓) await ((麒麟弓)src.weapon).Skill(dest);
-                    await new Damaged(dest, 1, Src, this).Execute();
+                    if (src.weapon != null) await src.weapon.DamageSkill(this, dest);
+                    Damage type = this is 火杀 ? Damage.Fire : this is 雷杀 ? Damage.Thunder : Damage.Normal;
+                    await new Damaged(dest, Src, this, 1, type).Execute();
                 }
             }
 
-            // 重新激活防具
-            if (qgj) ((青缸剑)src.weapon).ResetArmor(this);
+            ShanCount = 1;
+            IgnoreArmor = false;
         }
 
         public int ShanCount { get; set; } = 1;
+        public bool IgnoreArmor { get; set; } = false;
+        public bool isDamage { get; set; }
 
         public static async Task<bool> Call(Player player)
         {
             TimerTask.Instance.Hint = "请打出一张杀。";
-            // TimerTask.Instance.GivenCard = new List<string> { "杀", "雷杀", "火杀" };
             TimerTask.Instance.ValidCard = (card) => card is 杀 && !player.DisabledCard(card);
-            bool result = await TimerTask.Instance.Run(player, TimerType.UseCard, 1, 0);
+            bool result = await TimerTask.Instance.Run(player, 1, 0);
 
             if (player.isAI)
             {
@@ -101,31 +91,21 @@ namespace Model
             Name = "闪";
         }
 
-        public static async Task<bool> Call(Player player)
+        public static async Task<bool> Call(Player player, 杀 sha = null)
         {
             bool result;
-            if (player.Equipages["防具"] is 八卦阵)
+            if (player.Equipages["防具"] is 八卦阵 && (sha is null || !sha.IgnoreArmor))
             {
                 result = await ((八卦阵)player.Equipages["防具"]).Skill();
                 if (result) return true;
             }
 
             TimerTask.Instance.Hint = "请使用一张闪。";
-            // TimerTask.Instance.GivenCard = new List<string> { "闪" };
             TimerTask.Instance.ValidCard = (card) => card is 闪 && !player.DisabledCard(card);
-            result = await TimerTask.Instance.Run(player, TimerType.UseCard, 1, 0);
+            result = await TimerTask.Instance.Run(player, 1, 0);
 
             if (player.isAI)
             {
-                // foreach (var card in player.HandCards)
-                // {
-                //     if (card is Shan)
-                //     {
-                //         TimerTask.Instance.Cards = new List<Card> { card };
-                //         result = true;
-                //         break;
-                //     }
-                // }
                 var card = player.FindCard<闪>();
                 if (card != null)
                 {
@@ -170,23 +150,12 @@ namespace Model
         public static async Task<bool> Call(Player player, Player dest)
         {
             TimerTask.Instance.Hint = "请使用一张桃。";
-            // TimerTask.Instance.GivenDest = dest;
-            // TimerTask.Instance.GivenCard = new List<string> { "桃" };
             TimerTask.Instance.ValidCard = (card) => card is 桃 && !player.DisabledCard(card);
             TimerTask.Instance.ValidDest = (player, card, fstPlayer) => player == dest;
-            bool result = await TimerTask.Instance.Run(player, TimerType.UseCard, 1, 0);
+            bool result = await TimerTask.Instance.Run(player, 1, 1);
 
             if (player.isAI && player == dest)
             {
-                // foreach (var card in player.HandCards)
-                // {
-                //     if (card is Tao)
-                //     {
-                //         TimerTask.Instance.Cards = new List<Card> { card };
-                //         result = true;
-                //         break;
-                //     }
-                // }
                 var card = player.FindCard<桃>();
                 if (card != null)
                 {
@@ -202,6 +171,24 @@ namespace Model
                 await TimerTask.Instance.Cards[0].UseCard(player);
                 return true;
             }
+        }
+    }
+
+    public class 火杀 : 杀
+    {
+        public 火杀()
+        {
+            Type = "基本牌";
+            Name = "火杀";
+        }
+    }
+
+    public class 雷杀 : 杀
+    {
+        public 雷杀()
+        {
+            Type = "基本牌";
+            Name = "雷杀";
         }
     }
 }

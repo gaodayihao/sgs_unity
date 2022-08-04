@@ -19,6 +19,21 @@ namespace Model
             base.RemoveEquipage();
         }
         protected int range;
+
+        public virtual async Task UseShaSkill(杀 sha)
+        {
+            await Task.Yield();
+        }
+
+        public virtual async Task CounteredSkill(杀 sha, Player dest)
+        {
+            await Task.Yield();
+        }
+
+        public virtual async Task DamageSkill(杀 sha, Player dest)
+        {
+            await Task.Yield();
+        }
     }
 
     public class 青龙偃月刀 : Weapon
@@ -28,17 +43,13 @@ namespace Model
             range = 3;
         }
 
-        // public Sha sha { get; set; }
-
-        public async Task Skill(Player dest)
+        public override async Task CounteredSkill(杀 sha, Player dest)
         {
             TimerTask.Instance.GivenSkill = "青龙偃月刀";
             TimerTask.Instance.Hint = "是否发动青龙偃月刀？";
             TimerTask.Instance.ValidCard = (card) => card is 杀;
             TimerTask.Instance.ValidDest = (player, card, fstPlayer) => player == dest;
-            // TimerTask.Instance.GivenDest = dest;
-            // TimerTask.Instance.GivenCard = new List<string> { "杀", "雷杀", "火杀" };
-            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallEquipSkill, 1, 1);
+            bool result = await TimerTask.Instance.Run(Owner, 1, 1);
 
             if (!result) return;
 
@@ -54,14 +65,13 @@ namespace Model
             range = 5;
         }
 
-        public async Task Skill(Player dest)
+        public override async Task DamageSkill(杀 sha, Player dest)
         {
             if (dest.plusHorse is null && dest.subHorse is null) return;
 
             TimerTask.Instance.GivenSkill = "麒麟弓";
             TimerTask.Instance.Hint = "是否发动麒麟弓？";
-            // TimerTask.Instance.GivenDest = dest;
-            bool result = await TimerTask.Instance.Run(Owner, TimerType.CallEquipSkill);
+            bool result = await TimerTask.Instance.Run(Owner);
 
             if (!result) return;
 
@@ -83,33 +93,44 @@ namespace Model
         {
             range = 2;
         }
+
+        public override async Task UseShaSkill(杀 sha)
+        {
+            foreach (var i in sha.Dests)
+            {
+                if (i.general.gender == sha.Src.general.gender) continue;
+                TimerTask.Instance.GivenSkill = "雌雄双股剑";
+                TimerTask.Instance.Hint = "是否对" + (i.Position + 1).ToString() + "号位发动雌雄双股剑？";
+                if (!await TimerTask.Instance.Run(Owner)) continue;
+
+                SkillView();
+                if (i.HandCardCount == 0)
+                {
+                    await new GetCardFromPile(sha.Src, 1).Execute();
+                    continue;
+                }
+
+                TimerTask.Instance.Hint = (Src.Position + 1).ToString() + "号位对你发动雌雄双股剑，请弃一张手牌或令其摸一张牌";
+                TimerTask.Instance.ValidCard = (card) => i.HandCards.Contains(card);
+                bool result = await TimerTask.Instance.Run(i, 1, 0);
+                if (result) await new Discard(i, TimerTask.Instance.Cards).Execute();
+                else await new GetCardFromPile(sha.Src, 1).Execute();
+            }
+        }
     }
 
-    public class 青缸剑 : Weapon
+    public class 青釭剑 : Weapon
     {
-        public 青缸剑()
+        public 青釭剑()
         {
             range = 2;
         }
 
-        public bool Skill(杀 sha)
+        public override async Task UseShaSkill(杀 sha)
         {
+            await Task.Yield();
             SkillView();
-            bool result = false;
-            foreach (var dest in sha.Dests)
-            {
-                if (dest.armor != null)
-                {
-                    ((Armor)dest.armor).enable = false;
-                    result = true;
-                }
-            }
-            return result;
-        }
-
-        public void ResetArmor(杀 sha)
-        {
-            foreach (var dest in sha.Dests) if (dest.armor != null) ((Armor)dest.armor).enable = false;
+            sha.IgnoreArmor = true;
         }
     }
 
@@ -118,13 +139,18 @@ namespace Model
         public 丈八蛇矛()
         {
             range = 3;
-            // skill=new ZBSMSkill()
         }
 
         public override async Task AddEquipage(Player owner)
         {
             skill = new ZBSMSkill(owner);
             await base.AddEquipage(owner);
+        }
+
+        public override void RemoveEquipage()
+        {
+            skill = null;
+            base.RemoveEquipage();
         }
 
         public ZBSMSkill skill { get; private set; }
@@ -177,6 +203,12 @@ namespace Model
         {
             return card is 杀;
         }
+
+        public override async Task UseShaSkill(杀 sha)
+        {
+            await Task.Yield();
+            if (sha.Src.ShaCount > 1) SkillView();
+        }
     }
 
     public class 贯石斧 : Weapon
@@ -186,20 +218,15 @@ namespace Model
             range = 3;
         }
 
-        public async Task<bool> Skill()
+        public override async Task CounteredSkill(杀 sha, Player dest)
         {
             TimerTask.Instance.GivenSkill = "贯石斧";
             TimerTask.Instance.Hint = "是否发动贯石斧？";
             TimerTask.Instance.ValidCard = (card) => card != Owner.weapon && !card.IsConvert;
-            bool result = await TimerTask.Instance.Run(Owner, TimerType.Discard, 2, 0);
-            if (result)
-            {
-                // var list = TimerTask.Instance.Cards.Union(TimerTask.Instance.Equipages).ToList();
-                // TimerTask.Instance.Cards.Remove(this);
-                await new Discard(Owner, TimerTask.Instance.Cards).Execute();
-                return true;
-            }
-            else return false;
+            if (!await TimerTask.Instance.Run(Owner, 2, 0)) return;
+
+            await new Discard(Owner, TimerTask.Instance.Cards).Execute();
+            sha.isDamage = true;
         }
     }
 
@@ -208,6 +235,12 @@ namespace Model
         public 方天画戟()
         {
             range = 4;
+        }
+
+        public override async Task UseShaSkill(杀 sha)
+        {
+            await Task.Yield();
+            if (sha.Dests.Count > 1) SkillView();
         }
     }
 }

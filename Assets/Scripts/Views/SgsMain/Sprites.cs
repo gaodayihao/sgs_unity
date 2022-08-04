@@ -8,13 +8,11 @@ namespace View
     {
         // 从assetbundle中加载的sprite数组
         public Sprite[] seat;
-
         public Sprite[] selfseat;
-
         public Sprite[] card;
 
-
         // seat
+
         public Sprite[] position;
         // 每阶段对应sprite
         public Dictionary<Phase, Sprite> phase;
@@ -42,15 +40,11 @@ namespace View
         public Sprite[] deadText;
 
         // selfseat
+
         // 每阶段对应sprite
         public Dictionary<Phase, Sprite> self_phase;
-        // 技能
-        // public Sprite[,,] skills;
 
         // card
-        // public Sprite[] cardImage;
-        // public Sprite[] cardSuit;
-        // public Sprite[] cardWeight;
         public Dictionary<string, Sprite> cardImage;
         public Dictionary<string, Sprite> cardSuit;
         public Dictionary<int, Sprite> blackWeight;
@@ -62,14 +56,6 @@ namespace View
         {
             // 初始化sprites
             AssetBundle assetBundle = ABManager.Instance.ABMap["sprite"];
-
-
-            // #if UNITY_EDITOR
-            //             if (ABManager.Instance.ABMap.ContainsKey("sprite")) assetBundle = ABManager.Instance.ABMap["sprite"];
-            //             else assetBundle = AssetBundle.LoadFromFile(Application.dataPath + "/../AssetBundles/WebGL/sprite");
-            // #else
-            //             assetBundle = ABManager.Instance.ABMap["sprite"];
-            // #endif
 
             seat = assetBundle.LoadAssetWithSubAssets<Sprite>("seat");
             selfseat = assetBundle.LoadAssetWithSubAssets<Sprite>("selfseat");
@@ -249,48 +235,6 @@ namespace View
             // 结束阶段
             self_phase.Add(Phase.End, selfseat[128]);
 
-            // 技能
-            // skills = new Sprite[4, 4, 2]
-            // {
-            //     // 主动技
-            //     {
-            //         // normal
-            //         {selfseat[0], selfseat[0]},
-            //         // highlighted
-            //         {selfseat[0], selfseat[0]},
-            //         // pressed
-            //         {selfseat[0], selfseat[0]},
-            //         // disabled
-            //         {selfseat[0], selfseat[0]}
-            //     },
-            //     {
-            //         // 锁定技
-            //         {selfseat[0], selfseat[0]},
-            //         {selfseat[0], selfseat[0]},
-            //         {selfseat[0], selfseat[0]},
-            //         {selfseat[0], selfseat[0]}
-            //     },
-            //     {
-            //         // 限定技
-            //         {selfseat[0], selfseat[0]},
-            //         {selfseat[0], selfseat[0]},
-            //         {selfseat[0], selfseat[0]},
-            //         {selfseat[0], selfseat[0]}
-            //     },
-            //     {
-            //         // 觉醒技
-            //         {selfseat[0], selfseat[0]},
-            //         {selfseat[0], selfseat[0]},
-            //         {selfseat[0], selfseat[0]},
-            //         {selfseat[0], selfseat[0]}
-            //     }
-            // };
-
-
-            // cardImage = new Sprite[100];
-            // cardSuit = new Sprite[100];
-            // cardWeight = new Sprite[100];
-
             // card
 
             equipImage = new Dictionary<string, Sprite>
@@ -364,149 +308,50 @@ namespace View
             cardImage = new Dictionary<string, Sprite>
             {
                 {"青龙偃月刀", card[0]},
-                // {"青龙偃月刀",card[1]},
                 {"仁王盾", card[2]},
-                // {"青龙偃月刀",card[3]},
-                // {"青龙偃月刀",card[4]},
                 {"借刀杀人", card[5]},
                 {"雷杀", card[6]},
-                // {"青龙偃月刀",card[7]},
-                // {"青龙偃月刀",card[8]},
-                // {"青龙偃月刀",card[9]},
-                // {"青龙偃月刀",card[10]},
-                // {"青龙偃月刀",card[11]},
-                // {"青龙偃月刀",card[12]},
-                // {"青龙偃月刀",card[13]},
                 {"无中生有", card[14]},
-                // {"青龙偃月刀",card[15]},
-                // {"青龙偃月刀",card[16]},
-                // {"青龙偃月刀",card[17]},
                 {"火杀", card[18]},
                 {"寒冰剑", card[19]},
-                // {"青龙偃月刀",card[20]},
-                // {"青龙偃月刀",card[21]},
-                // {"青龙偃月刀",card[22]},
                 {"诸葛连弩", card[23]},
-                // {"青龙偃月刀",card[24]},
                 {"朱雀羽扇", card[25]},
                 {"紫骍", card[26]},
                 {"铁索连环", card[27]},
-                // {"青龙偃月刀",card[28]},
-                // {"青龙偃月刀",card[29]},
-                // {"青龙偃月刀",card[30]},
-                // {"青龙偃月刀",card[31]},
-                // {"青龙偃月刀",card[32]},
                 {"方天画戟", card[33]},
-                // {"青龙偃月刀",card[34]},
-                // {"青龙偃月刀",card[35]},
-                // {"青龙偃月刀",card[36]},
                 {"丈八蛇矛", card[37]},
-                // {"青龙偃月刀",card[38]},
                 {"桃园结义", card[39]},
                 {"藤甲", card[40]},
-                // {"青龙偃月刀",card[41]},
-                // {"青龙偃月刀",card[42]},
-                // {"青龙偃月刀",card[43]},
-                // {"青龙偃月刀",card[44]},
-                // {"青龙偃月刀",card[45]},
                 {"麒麟弓", card[46]},
-                // {"青龙偃月刀",card[47]},
                 {"贯石斧", card[48]},
                 {"骅骝", card[49]},
                 {"酒", card[50]},
-                // {"青龙偃月刀",card[51]},
-                // {"青龙偃月刀",card[52]},
                 {"顺手牵羊", card[53]},
-                // {"青龙偃月刀",card[54]},
-                // {"青龙偃月刀",card[55]},
                 {"五谷丰登", card[56]},
-                // {"青龙偃月刀",card[57]},
                 {"无懈可击", card[58]},
-                // {"青龙偃月刀",card[59]},
-                // {"青龙偃月刀",card[60]},
                 {"青釭剑", card[61]},
-                // {"青龙偃月刀",card[62]},
                 {"古锭刀", card[63]},
-                // {"青龙偃月刀",card[64]},
-                // {"青龙偃月刀",card[65]},
-                // {"青龙偃月刀",card[66]},
-                // {"青龙偃月刀",card[67]},
-                // {"青龙偃月刀",card[68]},
-                // {"青龙偃月刀",card[69]},
-                // {"青龙偃月刀",card[70]},
                 {"的卢", card[71]},
                 {"大宛", card[72]},
-                // {"青龙偃月刀",card[73]},
                 {"雌雄双股剑", card[74]},
-                // {"青龙偃月刀",card[75]},
-                // {"青龙偃月刀",card[76]},
                 {"杀", card[77]},
                 {"过河拆桥", card[78]},
                 {"火攻", card[79]},
                 {"决斗", card[80]},
-                // {"青龙偃月刀",card[81]},
-                // {"青龙偃月刀",card[82]},
-                // {"青龙偃月刀",card[83]},
                 {"万箭齐发", card[84]},
                 {"未知牌", card[85]},
-                // {"青龙偃月刀",card[86]},
-                // {"青龙偃月刀",card[87]},
-                // {"青龙偃月刀",card[88]},
-                // {"青龙偃月刀",card[89]},
                 {"南蛮入侵", card[90]},
-                // {"青龙偃月刀",card[91]},
                 {"闪", card[92]},
-                // {"青龙偃月刀",card[93]},
-                // {"青龙偃月刀",card[94]},
                 {"绝影", card[95]},
-                // {"青龙偃月刀",card[96]},
                 {"爪黄飞电", card[97]},
                 {"桃", card[98]},
-                // {"青龙偃月刀",card[99]},
-                // {"青龙偃月刀",card[100]},
                 {"赤兔", card[101]},
                 {"兵粮寸断", card[102]},
                 {"白银狮子", card[103]},
-                // {"青龙偃月刀",card[104]},
-                // {"青龙偃月刀",card[105]},
-                // {"青龙偃月刀",card[106]},
                 {"闪电", card[107]},
-                // {"青龙偃月刀",card[108]},
-                // {"青龙偃月刀",card[109]},
                 {"乐不思蜀", card[110]},
-                // {"青龙偃月刀",card[111]},
-                // {"青龙偃月刀",card[112]},
-                // {"青龙偃月刀",card[113]},
-                // {"青龙偃月刀",card[114]},
-                // {"青龙偃月刀",card[115]},
-                // {"青龙偃月刀",card[116]},
-                // {"青龙偃月刀",card[117]},
                 {"八卦阵", card[118]},
             };
         }
-
-        public void InitCard(List<Model.Card> model)
-        {
-
-
-            // for (int i = 1; i < model.Count; i++)
-            // {
-            //     cardSuit[i] = suitMap[model[i].Suit];
-            //     if (model[i].Suit == "黑桃" || model[i].Suit == "草花") cardWeight[i] = blackWeightMap[model[i].Weight];
-            //     else cardWeight[i] = redWeightMap[model[i].Weight];
-
-            //     // if(!imageMap.ContainsKey(model[i].Name)) Debug.Log(model[i].Name);
-            //     cardImage[i] = imageMap[model[i].Name];
-            // }
-
-            // var a = new JsonDictionary<string, int>();
-            // a.dictionary = new Dictionary<string, int>();
-            // a.dictionary.Add("aa", 1);
-            // Debug.Log(System.Text.jso);
-
-        }
     }
-
-
-
 }

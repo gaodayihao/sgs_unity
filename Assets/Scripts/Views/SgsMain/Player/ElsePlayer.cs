@@ -38,25 +38,25 @@ namespace View
         /// <summary>
         /// 显示倒计时进度条
         /// </summary>
-        public void ShowTimer(TimerType timerType, int second)
+        public void ShowTimer(int second)
         {
             timer.gameObject.SetActive(true);
             timer.value = 1;
-            StartCoroutine(UpdateTimer(timerType, second));
+            StartCoroutine(UpdateTimer(second));
         }
 
         public void ShowTimer(Model.TimerTask timerTask)
         {
             if (!gameObject.activeSelf) return;
-            if (timerTask.timerType != TimerType.无懈可击 && timerTask.player != model) return;
-            ShowTimer(timerTask.timerType, timerTask.second);
+            if (!timerTask.isWxkj && timerTask.player != model) return;
+            ShowTimer(timerTask.second);
         }
 
         public void ShowTimer(Model.CardPanel cardPanel)
         {
             if (!gameObject.activeSelf) return;
             if (cardPanel.player != model) return;
-            ShowTimer(cardPanel.timerType, cardPanel.second);
+            ShowTimer(cardPanel.second);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace View
 
         public void HideTimer(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.无懈可击 && timerTask.player != model) return;
+            if (!timerTask.isWxkj && timerTask.player != model) return;
             HideTimer();
         }
 
@@ -143,43 +143,12 @@ namespace View
         /// <summary>
         /// 每帧更新进度条
         /// </summary>
-        private IEnumerator UpdateTimer(TimerType timerType, int second)
+        private IEnumerator UpdateTimer(int second)
         {
-            if (timerType == TimerType.无懈可击)
+            while (timer.value > 0)
             {
-                bool done = false;
-                while (timer.value > 0)
-                {
-                    timer.value -= 0.1f / second;
-                    if (!done && model.isAI && timer.value <= 1 - 1.0f / second)
-                    {
-                        done = true;
-                        Model.TimerTask.Instance.SetWxkjResult(model.Position, false, null, "");
-                    }
-                    yield return new WaitForSeconds(0.1f);
-                }
-            }
-            else
-            {
-                while (timer.value > 0)
-                {
-                    timer.value -= 0.1f / second;
-                    if (model.isAI && timer.value <= 1 - 1.0f / second)
-                    {
-                        switch (timerType)
-                        {
-                            case TimerType.CardPanel:
-                            case TimerType.麒麟弓:
-                                Model.CardPanel.Instance.SendResult();
-                                break;
-                            default:
-                                Model.TimerTask.Instance.SendResult();
-                                break;
-                        }
-                        break;
-                    }
-                    yield return new WaitForSeconds(0.1f);
-                }
+                timer.value -= 0.1f / second;
+                yield return new WaitForSeconds(0.1f);
             }
         }
     }

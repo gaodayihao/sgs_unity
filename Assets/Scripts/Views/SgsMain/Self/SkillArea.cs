@@ -19,33 +19,37 @@ namespace View
         /// <summary>
         /// 初始化技能区
         /// </summary>
-        public void InitSkill(Model.Player model)
+        public void InitSkill()
         {
-            int c = 0;
-            // 实例化预制件，添加到技能区
-            foreach (var i in model.skills)
+            foreach (var i in Model.SgsMain.Instance.players)
             {
-                string str;
-                if (i.Value.Passive) str = "锁定技";
-                else str = "主动技";
-                var prefab = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>(str);
-                var instance = Instantiate(prefab).GetComponent<Skill>();
-                instance.name = i.Key;
-                instance.text.text = i.Key;
-                instance.model = i.Value;
-
-                if (model.skills.Count % 2 == 1 && c == 0)
+                if (!i.isSelf) continue;
+                int c = 0;
+                // 实例化预制件，添加到技能区
+                foreach (var j in i.skills)
                 {
-                    instance.transform.SetParent(Long, false);
-                    instance.transform.SetAsFirstSibling();
-                    c++;
+                    string str;
+                    if (j.Value.Passive) str = "锁定技";
+                    else str = "主动技";
+                    var prefab = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>(str);
+                    var instance = Instantiate(prefab).GetComponent<Skill>();
+                    instance.name = j.Key;
+                    instance.text.text = j.Key;
+                    instance.model = j.Value;
+
+                    if (i.skills.Count % 2 == 1 && c == 0)
+                    {
+                        instance.transform.SetParent(Long, false);
+                        instance.transform.SetAsFirstSibling();
+                        c++;
+                    }
+                    else instance.transform.SetParent(Short, false);
+
+                    Skills.Add(instance);
                 }
-                else instance.transform.SetParent(Short, false);
 
-                Skills.Add(instance);
+                MoveSeat(i);
             }
-
-            MoveSeat(model);
         }
 
         public void MoveSeat(Model.Player model)
@@ -54,11 +58,6 @@ namespace View
             {
                 i.gameObject.SetActive(i.model.Src == model);
             }
-        }
-
-        public void Clear()
-        {
-
         }
 
         /// <summary>
@@ -83,35 +82,8 @@ namespace View
             }
             else
             {
-                foreach (var i in Skills)
-                {
-                    if (!i.model.IsValid()) i.button.interactable = false;
-                    else if (i.model is Model.Converted)
-                    {
-                        Debug.Log(i.name+timerTask.ValidCard((i.model as Model.Converted).Execute(null)));
-                        i.button.interactable = timerTask.ValidCard((i.model as Model.Converted).Execute(null));
-                    }
-                    else i.button.interactable = timerTask.isPerformPhase && i.model is Model.Active;
-                }
+                foreach (var i in Skills) i.button.interactable = i.model is Model.Active && i.model.IsValid();
             }
-            // switch (timerType)
-            // {
-            //     case TimerType.CallSkill:
-            //         foreach (var i in Skills)
-            //         {
-            //             if (i != SelectedSkill) i.button.interactable = false;
-            //             if (i.name == Model.TimerTask.Instance.GivenSkill) i.Select();
-            //         }
-            //         break;
-
-            //     default:
-            //         foreach (var i in Skills)
-            //         {
-            //             i.button.interactable = i.model.IsValid() &&
-            //                 (i.model is Model.Active || i.model is Model.Converted);
-            //         }
-            //         break;
-            // }
         }
 
         /// <summary>
@@ -119,7 +91,7 @@ namespace View
         /// </summary>
         public void ResetSkillArea(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.无懈可击 && self.model != timerTask.player) return;
+            if (!timerTask.isWxkj && self.model != timerTask.player) return;
 
             foreach (var i in Skills) i.ResetSkill();
         }

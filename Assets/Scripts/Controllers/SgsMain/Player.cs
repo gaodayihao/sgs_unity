@@ -11,7 +11,7 @@ namespace Controller
         private void Start()
         {
             player = GetComponent<View.Player>();
-            
+
             // 武将
             Model.SgsMain.Instance.GeneralView += player.UpdateHpLimit;
             Model.SgsMain.Instance.GeneralView += player.UpdateHp;
@@ -30,6 +30,9 @@ namespace Controller
             // 判定区
             Model.DelayScheme.AddJudgeView += player.AddJudgeCard;
             Model.DelayScheme.RemoveJudgeView += player.RemoveJudgeCard;
+
+            // 横置
+            Model.SetLock.ActionView += player.OnLock;
         }
 
         private void OnDestroy()
@@ -37,16 +40,18 @@ namespace Controller
             Model.SgsMain.Instance.GeneralView -= player.UpdateHpLimit;
             Model.SgsMain.Instance.GeneralView -= player.UpdateHp;
             Model.SgsMain.Instance.GeneralView -= player.InitGeneral;
-            
+
             Model.TurnSystem.Instance.StartTurnView -= player.StartTurn;
             Model.TurnSystem.Instance.FinishTurnView -= player.FinishTurn;
 
             Model.UpdateHp.ActionView -= player.UpdateHp;
-            
+
             Model.Die.ActionView -= player.OnDead;
-            
+
             Model.DelayScheme.AddJudgeView -= player.AddJudgeCard;
             Model.DelayScheme.RemoveJudgeView -= player.RemoveJudgeCard;
+
+            Model.SetLock.ActionView -= player.OnLock;
         }
     }
 }

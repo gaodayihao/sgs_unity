@@ -86,7 +86,7 @@ namespace View
 
         public void ResetDestArea(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.无懈可击 && self.model != timerTask.player) return;
+            if (!timerTask.isWxkj && self.model != timerTask.player) return;
 
             ResetDestArea();
         }
@@ -101,6 +101,8 @@ namespace View
 
             var skill = SkillArea.Instance.SelectedSkill;
             var firstDest = SelectedPlayer.Count > 0 ? SelectedPlayer[0].model : null;
+
+            // 判断每名角色能否成为目标
 
             if (cardArea.Converted != null)
             {
@@ -128,11 +130,8 @@ namespace View
                 }
             }
 
-            foreach (var player in players)
-            {
-                // 对不能选择的角色设置阴影
-                player.AddShadow();
-            }
+            // 对不能选择的角色设置阴影
+            foreach (var player in players) player.AddShadow();
         }
 
     }

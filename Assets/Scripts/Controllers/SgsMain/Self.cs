@@ -55,6 +55,7 @@ namespace Controller
             Model.TimerTask.Instance.StopTimerView += equipArea.ResetEquipArea;
 
             // 技能区
+            Model.SgsMain.Instance.GeneralView += skillArea.InitSkill;
             Model.TimerTask.Instance.StopTimerView += skillArea.ResetSkillArea;
 
             // 移动座位
@@ -90,6 +91,7 @@ namespace Controller
             Model.Equipage.RemoveEquipView -= equipArea.HideEquipage;
             Model.TimerTask.Instance.StopTimerView -= equipArea.ResetEquipArea;
 
+            Model.SgsMain.Instance.GeneralView -= skillArea.InitSkill;
             Model.TimerTask.Instance.StopTimerView -= skillArea.ResetSkillArea;
 
             Model.TimerTask.Instance.MoveSeat -= cardArea.MoveSeat;

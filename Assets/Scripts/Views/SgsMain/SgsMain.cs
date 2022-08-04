@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Threading.Tasks;
-using UnityEngine.Networking;
 
 namespace View
 {

@@ -29,7 +29,6 @@ namespace View
         private SkillArea skillArea { get => SkillArea.Instance; }
 
         private Model.TimerTask timerTask;
-        public TimerType timerType { get; private set; }
 
         void Start()
         {
@@ -63,13 +62,12 @@ namespace View
             string skill = "";
             if (skillArea.SelectedSkill != null) skill = skillArea.SelectedSkill.Name;
 
-            if (timerTask.timerType != TimerType.无懈可击)
+            if (!timerTask.isWxkj)
             {
                 timerTask.SendResult(cards, players, skill);
             }
             else
             {
-
                 bool isSelf = self.model.HandCards.Contains(Model.CardPile.Instance.cards[cards[0]]);
                 timerTask.SendWxkjResult((isSelf ? self.model : self.model.Teammate).Position, true, cards);
             }
@@ -80,9 +78,23 @@ namespace View
         /// </summary>
         private void ClickCancel()
         {
+            // 取消技能
+            if (skillArea.SelectedSkill != null && timerTask.GivenSkill == "")
+            {
+                foreach (var i in skillArea.Skills)
+                {
+                    if (i.name == skillArea.SelectedSkill.Name)
+                    {
+                        i.button.onClick.Invoke();
+                        return;
+                    }
+                }
+            }
+
+            // SetResult
             StopAllCoroutines();
             HideTimer();
-            if (timerTask.timerType != TimerType.无懈可击) timerTask.SendResult();
+            if (!timerTask.isWxkj) timerTask.SendResult();
             else
             {
                 timerTask.SendWxkjResult(self.model.Position, false);
@@ -104,33 +116,17 @@ namespace View
         /// </summary>
         public void ShowTimer(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.无懈可击 && self.model != timerTask.player) return;
+            if (!timerTask.isWxkj && self.model != timerTask.player) return;
 
             this.timerTask = timerTask;
-            timerType = timerTask.timerType;
             operationArea.SetActive(true);
             hint.text = timerTask.Hint;
 
-            // 根据进度条类型初始化进度条和按键
-            switch (timerType)
-            {
-                // 确定 + 回合结束
-                case TimerType.PerformPhase:
-                    confirm.gameObject.SetActive(true);
-                    finishPhase.gameObject.SetActive(true);
-                    break;
+            // 初始化进度条和按键
 
-                // 确定
-                case TimerType.SelectHandCard:
-                    confirm.gameObject.SetActive(true);
-                    break;
-
-                // 确定 + 取消
-                default:
-                    confirm.gameObject.SetActive(true);
-                    cancel.gameObject.SetActive(true);
-                    break;
-            }
+            confirm.gameObject.SetActive(true);
+            if (timerTask.Refusable) cancel.gameObject.SetActive(true);
+            if (timerTask.isPerformPhase) finishPhase.gameObject.SetActive(true);
 
             skillArea.InitSkillArea();
             cardArea.InitCardArea();
@@ -156,7 +152,7 @@ namespace View
 
         public void HideTimer(Model.TimerTask timerTask)
         {
-            if (timerTask.timerType != TimerType.无懈可击 && self.model != timerTask.player) return;
+            if (!timerTask.isWxkj && self.model != timerTask.player) return;
             HideTimer();
         }
 
@@ -176,7 +172,7 @@ namespace View
                 timer.value -= 0.1f / (second - 0.5f);
                 yield return new WaitForSeconds(0.1f);
             }
-            ClickCancel();
+            // ClickCancel();
         }
 
         /// <summary>
@@ -186,6 +182,7 @@ namespace View
         {
             // 启用确定键
             confirm.interactable = cardArea.IsSettled && destArea.IsSettled;
+            cancel.interactable = !timerTask.isPerformPhase || skillArea.SelectedSkill != null;
         }
 
         public void UseSkill()
@@ -194,8 +191,6 @@ namespace View
             destArea.ResetDestArea();
             equipArea.ResetEquipArea();
 
-            this.timerType = timerType;
-
             skillArea.InitSkillArea();
             cardArea.InitCardArea();
             destArea.InitDestArea();
@@ -203,11 +198,5 @@ namespace View
 
             UpdateButtonArea();
         }
-
-        // public void ChangeType()
-        // {
-        //     ChangeType(timerTask.timerType);
-        // }
-
     }
 }

@@ -47,12 +47,15 @@ namespace Model
         // 手牌上限
         public int HandCardLimit { get => Hp; }
 
+        // 铁锁
+        public bool IsLocked { get; set; } = false;
+
         // 装备区
         public Dictionary<string, Equipage> Equipages { get; set; } = new Dictionary<string, Equipage>
         {
             { "武器", null }, { "防具", null }, { "加一马", null }, { "减一马", null }
         };
-        public Equipage weapon { get => Equipages["武器"]; }
+        public Weapon weapon { get => Equipages["武器"] as Weapon; }
         public Equipage armor { get => Equipages["防具"]; }
         public Equipage plusHorse { get => Equipages["加一马"]; }
         public Equipage subHorse { get => Equipages["减一马"]; }

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Networking;
 
 namespace Model
 {
@@ -11,12 +10,9 @@ namespace Model
     {
         public async void Start()
         {
-            // Connection.Instance.Start();
-            // this.mode = mode;
             // 初始化玩家
             PlayersCount = 4;
             players = new Player[PlayersCount];
-            // Debug.Log("players init");
 
             if (Room.Instance.IsSingle)
             {
@@ -62,7 +58,6 @@ namespace Model
 
             // 初始化武将
             await InitGeneral();
-            // foreach (var player in players) generalView?.Invoke(player);
             generalView();
 
             // 初始化牌堆
@@ -71,11 +66,6 @@ namespace Model
             if (Room.Instance.IsSingle) await DebugCard();
 
             foreach (var player in players) await new GetCardFromPile(player, 4).Execute();
-
-            // debug
-            // await new Damaged(players[0], null).Execute();
-            // await new Damaged(players[1], null).Execute();
-            // await new Damaged(players[0], null, 2).Execute();
 
             // 开始第一个回合
             await TurnSystem.Instance.StartGame();
@@ -101,7 +91,7 @@ namespace Model
         {
             List<string> list = new List<string>
             {
-                "决斗","无中生有","诸葛连弩","借刀杀人","丈八蛇矛","贯石斧"
+                "火杀","无中生有","诸葛连弩","借刀杀人","雷杀","铁索连环"
             };
 
             while (list.Count > 0)

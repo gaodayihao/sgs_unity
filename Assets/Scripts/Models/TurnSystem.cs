@@ -145,9 +145,6 @@ namespace Model
 
                     var count = CurrentPlayer.HandCardCount - CurrentPlayer.HandCardLimit;
                     if (count > 0) await Discard.DiscardFromHand(CurrentPlayer, count);
-                    // {
-                    //     await TimerTask.Instance.Run(CurrentPlayer, TimerType.Discard, quantity);
-                    // }
                     break;
             }
 
@@ -175,7 +172,7 @@ namespace Model
                 timerTask.ValidCard = CardArea.ValidCard;
                 timerTask.ValidDest = DestArea.ValidDest;
                 timerTask.isPerformPhase = true;
-                performIsDone = !await timerTask.Run(CurrentPlayer, TimerType.PerformPhase, 1, 0);
+                performIsDone = !await timerTask.Run(CurrentPlayer, 1, 0);
                 timerTask.isPerformPhase = false;
 
                 if (!performIsDone)

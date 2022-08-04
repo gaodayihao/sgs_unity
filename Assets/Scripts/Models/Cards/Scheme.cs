@@ -134,7 +134,7 @@ namespace Model
                 {
                     done = !await 杀.Call(player);
 
-                    if (done) await new Damaged(player, 1, player == dest ? src : dest, this).Execute();
+                    if (done) await new Damaged(player, player == dest ? src : dest, this).Execute();
                     else
                     {
                         shaCount++;
@@ -176,7 +176,7 @@ namespace Model
             {
                 if (await 无懈可击.Call(this, dest)) continue;
 
-                if (!await 杀.Call(dest)) await new Damaged(dest, 1, src, this).Execute();
+                if (!await 杀.Call(dest)) await new Damaged(dest, src, this).Execute();
             }
         }
     }
@@ -204,7 +204,7 @@ namespace Model
             {
                 if (await 无懈可击.Call(this, dest)) continue;
 
-                if (!await 闪.Call(dest)) await new Damaged(dest, 1, src, this).Execute();
+                if (!await 闪.Call(dest)) await new Damaged(dest, src, this).Execute();
             }
         }
     }
@@ -289,8 +289,8 @@ namespace Model
                 return player == ShaDest;
             };
             // int maxDest = DestArea.ShaMaxDest(dests[0]);
-            
-            var result = await TimerTask.Instance.Run(dests[0], TimerType.UseCard, 1, 1);
+
+            var result = await TimerTask.Instance.Run(dests[0], 1, 1);
             // 出杀
             if (result)
             {
@@ -299,5 +299,36 @@ namespace Model
             // 获得武器
             else await new GetCardFromElse(Src, dests[0], new List<Card> { dests[0].weapon }).Execute();
         }
+    }
+
+    public class 铁索连环 : Card
+    {
+        public 铁索连环()
+        {
+            Type = "锦囊牌";
+            Name = "铁索连环";
+        }
+
+        public override async Task UseCard(Player src, List<Player> dests = null)
+        {
+            if (dests is null || dests.Count == 0)
+            {
+
+                CardPile.Instance.AddToDiscard(this);
+                await new LoseCard(src, new List<Card> { this }).Execute();
+                await new GetCardFromPile(src, 1).Execute();
+                return;
+            }
+
+            await base.UseCard(src, dests);
+
+            foreach (var i in Dests)
+            {
+                if (await 无懈可击.Call(this, i)) continue;
+
+                await new SetLock(i).Execute();
+            }
+        }
+
     }
 }

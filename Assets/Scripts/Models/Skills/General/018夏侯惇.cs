@@ -28,7 +28,7 @@ namespace Model
                 Execute();
 
                 var card = await new Judge().Execute();
-                if (card.Suit == "红桃" || card.Suit == "方片") await new Damaged(damaged.Src, 1, Src).Execute();
+                if (card.Suit == "红桃" || card.Suit == "方片") await new Damaged(damaged.Src, Src).Execute();
                 else
                 {
                     CardPanel.Instance.Hint = "对" + (damaged.Src.Position + 1).ToString() + "号位发动刚烈，弃置其一张牌";

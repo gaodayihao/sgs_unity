@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.Events;
+using System;
 
 namespace Model
 {
@@ -19,44 +19,50 @@ namespace Model
             foreach (var cardJson in cardJsons)
             {
                 Card card;
-                switch (cardJson.name)
+                if (cardMap.ContainsKey(cardJson.name))
                 {
-                    case "杀": card = new 杀(); break;
-                    case "闪": card = new 闪(); break;
-                    case "桃": card = new 桃(); break;
-
-                    case "绝影": card = new PlusHorse(); break;
-                    case "大宛": card = new SubHorse(); break;
-                    case "赤兔": card = new SubHorse(); break;
-                    case "爪黄飞电": card = new PlusHorse(); break;
-                    case "的卢": card = new PlusHorse(); break;
-                    case "紫骍": card = new SubHorse(); break;
-
-                    case "青龙偃月刀": card = new 青龙偃月刀(); break;
-                    case "麒麟弓": card = new 麒麟弓(); break;
-                    case "雌雄双股剑": card = new 雌雄双股剑(); break;
-                    case "青釭剑": card = new 青缸剑(); break;
-                    case "丈八蛇矛": card = new 丈八蛇矛(); break;
-                    case "诸葛连弩": card = new 诸葛连弩(); break;
-                    case "贯石斧": card = new 贯石斧(); break;
-                    case "方天画戟": card = new 方天画戟(); break;
-
-                    case "八卦阵": card = new 八卦阵(); break;
-
-                    case "乐不思蜀": card = new 乐不思蜀(); break;
-
-                    case "过河拆桥": card = new 过河拆桥(); break;
-                    case "顺手牵羊": card = new 顺手牵羊(); break;
-                    case "无懈可击": card = new 无懈可击(); break;
-                    case "南蛮入侵": card = new 南蛮入侵(); break;
-                    case "万箭齐发": card = new 万箭齐发(); break;
-                    case "桃园结义": card = new 桃园结义(); break;
-                    case "无中生有": card = new 无中生有(); break;
-                    case "决斗": card = new 决斗(); break;
-                    case "借刀杀人": card = new 借刀杀人(); break;
-
-                    default: card = new 桃(); break;
+                    card = Activator.CreateInstance(cardMap[cardJson.name]) as Card;
                 }
+                else card = new 桃();
+                // switch (cardJson.name)
+                // {
+                //     case "杀": card = new 杀(); break;
+                //     case "闪": card = new 闪(); break;
+                //     case "桃": card = new 桃(); break;
+
+                //     case "绝影": card = new PlusHorse(); break;
+                //     case "大宛": card = new SubHorse(); break;
+                //     case "赤兔": card = new SubHorse(); break;
+                //     case "爪黄飞电": card = new PlusHorse(); break;
+                //     case "的卢": card = new PlusHorse(); break;
+                //     case "紫骍": card = new SubHorse(); break;
+
+                //     case "青龙偃月刀": card = new 青龙偃月刀(); break;
+                //     case "麒麟弓": card = new 麒麟弓(); break;
+                //     case "雌雄双股剑": card = new 雌雄双股剑(); break;
+                //     case "青釭剑": card = new 青釭剑(); break;
+                //     case "丈八蛇矛": card = new 丈八蛇矛(); break;
+                //     case "诸葛连弩": card = new 诸葛连弩(); break;
+                //     case "贯石斧": card = new 贯石斧(); break;
+                //     case "方天画戟": card = new 方天画戟(); break;
+
+                //     case "八卦阵": card = new 八卦阵(); break;
+
+                //     case "乐不思蜀": card = new 乐不思蜀(); break;
+
+                //     case "过河拆桥": card = new 过河拆桥(); break;
+                //     case "顺手牵羊": card = new 顺手牵羊(); break;
+                //     case "无懈可击": card = new 无懈可击(); break;
+                //     case "南蛮入侵": card = new 南蛮入侵(); break;
+                //     case "万箭齐发": card = new 万箭齐发(); break;
+                //     case "桃园结义": card = new 桃园结义(); break;
+                //     case "无中生有": card = new 无中生有(); break;
+                //     case "决斗": card = new 决斗(); break;
+                //     case "借刀杀人": card = new 借刀杀人(); break;
+                //     case "铁索连环": card = new 铁索连环(); break;
+
+                //     default: card = new 桃(); break;
+                // }
                 card.Id = cardJson.id;
                 card.Suit = cardJson.suit;
                 card.Weight = cardJson.weight;
@@ -66,13 +72,52 @@ namespace Model
                 cards.Add(card);
                 remainPile.Add(card);
             }
-            // View.Sprites.Instance.InitCard(cards);
 
             remainPile.RemoveAt(0);
             await Shuffle();
         }
 
         public List<Card> cards;
+
+        private Dictionary<string, System.Type> cardMap = new Dictionary<string, System.Type>
+        {
+            { "杀", typeof(杀) },
+            { "闪", typeof(闪) },
+            { "桃", typeof(桃) },
+            { "火杀", typeof(火杀) },
+            { "雷杀", typeof(雷杀) },
+
+            { "绝影", typeof(PlusHorse) },
+            { "大宛", typeof(SubHorse) },
+            { "赤兔", typeof(SubHorse) },
+            { "爪黄飞电", typeof(PlusHorse) },
+            { "的卢", typeof(PlusHorse) },
+            { "紫骍", typeof(SubHorse) },
+
+            { "青龙偃月刀", typeof(青龙偃月刀) },
+            { "麒麟弓", typeof(麒麟弓) },
+            { "雌雄双股剑", typeof(雌雄双股剑) },
+            { "青釭剑", typeof(青釭剑) },
+            { "丈八蛇矛", typeof(丈八蛇矛) },
+            { "诸葛连弩", typeof(诸葛连弩) },
+            { "贯石斧", typeof(贯石斧) },
+            { "方天画戟", typeof(方天画戟) },
+
+            { "八卦阵", typeof(八卦阵) },
+
+            { "乐不思蜀", typeof(乐不思蜀) },
+
+            { "过河拆桥", typeof(过河拆桥) },
+            { "顺手牵羊", typeof(顺手牵羊) },
+            { "无懈可击", typeof(无懈可击) },
+            { "南蛮入侵", typeof(南蛮入侵) },
+            { "万箭齐发", typeof(万箭齐发) },
+            { "桃园结义", typeof(桃园结义) },
+            { "无中生有", typeof(无中生有) },
+            { "决斗", typeof(决斗) },
+            { "借刀杀人", typeof(借刀杀人) },
+            { "铁索连环", typeof(铁索连环) },
+        };
 
         // 牌堆
         private List<Card> remainPile;
@@ -126,7 +171,7 @@ namespace Model
                 // 随机取一个元素与第i个元素交换
                 for (int i = 0; i < remainPile.Count; i++)
                 {
-                    int t = Random.Range(i, remainPile.Count);
+                    int t = UnityEngine.Random.Range(i, remainPile.Count);
                     var card = remainPile[i];
                     remainPile[i] = remainPile[t];
                     remainPile[t] = card;
@@ -143,9 +188,6 @@ namespace Model
                 Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
 
                 // 等待消息
-                // tcs = new TaskCompletionSource<CardPileJson>();
-                // Connection.Instance.IsRunning = false;
-                // var message = await tcs.Task;
                 var msg = await Wss.Instance.PopSgsMsg();
                 var newJson = JsonUtility.FromJson<CardPileJson>(msg);
 
@@ -154,14 +196,6 @@ namespace Model
                 foreach (int i in newJson.cards) remainPile.Add(cards[i]);
             }
         }
-
-        private TaskCompletionSource<CardPileJson> tcs;
-        public void ReceiveShuffle(CardPileJson json)
-        {
-            tcs.TrySetResult(json);
-        }
-
-        // public void SendShuffle()
 
         /// <summary>
         /// 刷新牌堆

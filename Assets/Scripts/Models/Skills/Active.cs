@@ -28,7 +28,7 @@ namespace Model
 
         public override bool IsValid()
         {
-            return TimerTask.Instance.timerType == TimerType.PerformPhase && base.IsValid();
+            return TimerTask.Instance.isPerformPhase && base.IsValid();
         }
 
         public override void OnEnabled()

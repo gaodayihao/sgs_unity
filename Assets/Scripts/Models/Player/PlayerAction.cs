@@ -149,7 +149,8 @@ namespace Model
         {
             TimerTask.Instance.Hint = "请弃置" + count.ToString() + "张手牌。";
             TimerTask.Instance.ValidCard = (card) => player.HandCards.Contains(card);
-            bool result = await TimerTask.Instance.Run(player, TimerType.SelectHandCard, count, 0);
+            TimerTask.Instance.Refusable = false;
+            bool result = await TimerTask.Instance.Run(player, count, 0);
             if (result) await new Discard(player, TimerTask.Instance.Cards).Execute();
             else
             {
@@ -208,10 +209,10 @@ namespace Model
     {
         public Die(Player player, Player damageSrc) : base(player)
         {
-            this.damageSrc = damageSrc;
+            DamageSrc = damageSrc;
         }
 
-        private Player damageSrc;
+        public Player DamageSrc { get; private set; }
 
         public override async Task Execute()
         {
@@ -274,14 +275,19 @@ namespace Model
         /// <param name="player">玩家</param>
         /// <param name="src">伤害来源</param>
         /// <param name="value">伤害量</param>
-        public Damaged(Player player, int value, Player src, Card srcCard = null) : base(player, -value)
+        public Damaged(Player player, Player src, Card srcCard = null, int value = 1, Damage type = Damage.Normal)
+            : base(player, -value)
         {
             Src = src;
             SrcCard = srcCard;
+            damageType = type;
         }
 
         public Player Src { get; private set; }
         public Card SrcCard { get; private set; }
+        public Damage damageType { get; private set; }
+        public bool IsConDucted { get; set; } = false;
+        private bool conduct = false;
 
         public override async Task Execute()
         {
@@ -291,10 +297,33 @@ namespace Model
             Debug.Log((player.Position + 1).ToString() + "受到了" + (-Value).ToString() + "点伤害");
 
             // 受到伤害
+            if (player.IsLocked)
+            {
+                await new SetLock(player, true).Execute();
+                if (!IsConDucted) conduct = true;
+            }
             await base.Execute();
 
             // 受到伤害后
             await player.playerEvents.afterDamaged.Execute(this);
+
+            if (conduct) await Conduct();
+        }
+
+        private async Task Conduct()
+        {
+            Player i = TurnSystem.Instance.CurrentPlayer;
+            while (true)
+            {
+                if (i.IsLocked)
+                {
+                    var damaged = new Damaged(i, Src, SrcCard, -Value, damageType);
+                    damaged.IsConDucted = true;
+                    await damaged.Execute();
+                }
+                i = i.Next;
+                if (i == TurnSystem.Instance.CurrentPlayer) break;
+            }
         }
     }
 
@@ -361,8 +390,8 @@ namespace Model
 
         public override async Task Execute()
         {
-            actionView?.Invoke(this);
             await Task.Yield();
+            actionView?.Invoke(this);
         }
 
         /// <summary>
@@ -371,11 +400,32 @@ namespace Model
         public static async Task<List<Card>> ShowCardTimer(Player player, int count = 1)
         {
             TimerTask.Instance.ValidCard = (card) => player.HandCards.Contains(card);
-            bool result = await TimerTask.Instance.Run(player, TimerType.SelectHandCard, count, 0);
+            TimerTask.Instance.Refusable = false;
+            bool result = await TimerTask.Instance.Run(player, count, 0);
             var cards = result ? TimerTask.Instance.Cards : player.HandCards.Take(count).ToList();
             var showCard = new ShowCard(player, cards);
             await showCard.Execute();
             return showCard.Cards;
+        }
+    }
+
+    /// <summary>
+    /// 横置 (重置)
+    /// </summary>
+    public class SetLock : PlayerAction<SetLock>
+    {
+        public SetLock(Player player, bool byDamage = false) : base(player)
+        {
+            ByDamage = byDamage;
+        }
+
+        public bool ByDamage { get; private set; }
+
+        public override async Task Execute()
+        {
+            player.IsLocked = !player.IsLocked;
+            actionView?.Invoke(this);
+            await Task.Yield();
         }
     }
 
