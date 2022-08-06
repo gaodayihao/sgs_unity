@@ -20,7 +20,9 @@ namespace Model
         {
             if (src.weapon != null)
             {
-                if (src.weapon is 朱雀羽扇 && await (src.weapon as 朱雀羽扇).Skill(this, src, dests)) return;
+                Src=src;
+                Dests=dests;
+                if (src.weapon is 朱雀羽扇 && await (src.weapon as 朱雀羽扇).Skill(this)) return;
                 src.weapon.WhenUseSha(this);
             }
             

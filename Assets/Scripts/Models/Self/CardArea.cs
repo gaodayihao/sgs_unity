@@ -25,6 +25,10 @@ namespace Model
                 case "火杀":
                     return UseSha(player, card);
 
+                case "闪电":
+                    foreach (var i in player.JudgeArea) if (i is 闪电) return false;
+                    return true;
+
                 default:
                     return true;
             }

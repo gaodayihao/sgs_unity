@@ -19,9 +19,9 @@ namespace Model
         public string Name { get; set; }
 
         // 使用者
-        public Player Src { get; private set; }
+        public Player Src { get; protected set; }
         // 目标
-        public List<Player> Dests { get; private set; }
+        public List<Player> Dests { get; protected set; }
 
         /// <summary>
         /// 使用牌

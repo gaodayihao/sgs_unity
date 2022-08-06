@@ -251,15 +251,15 @@ namespace Model
             range = 4;
         }
 
-        public async Task<bool> Skill(杀 sha, Player src, List<Player> dests)
+        public async Task<bool> Skill(杀 sha)
         {
-            if (sha is 火杀) return false;
+            if (sha is 火杀 || sha is 雷杀) return false;
             TimerTask.Instance.GivenSkill = "朱雀羽扇";
             TimerTask.Instance.Hint = "是否发动朱雀羽扇？";
             if (!await TimerTask.Instance.Run(Owner)) return false;
 
             SkillView();
-            await Card.Convert<火杀>(new List<Card> { sha }).UseCard(src, dests);
+            await Card.Convert<火杀>(new List<Card> { sha }).UseCard(sha.Src, sha.Dests);
             return true;
         }
     }

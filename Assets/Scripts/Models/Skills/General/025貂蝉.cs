@@ -38,7 +38,30 @@ namespace Model
         {
             await base.Execute(dests, cards, additional);
 
+            await new Discard(Src, cards).Execute();
             await Card.Convert<决斗>().UseCard(dests[1], new List<Player> { dests[0] });
+        }
+    }
+
+    public class 闭月 : Triggered
+    {
+        public 闭月(Player src) : base(src, "闭月", false) { }
+
+        public override void OnEnabled()
+        {
+            Src.playerEvents.startPhaseEvents[Phase.End].AddEvent(Src, Execute);
+        }
+
+        public override void OnDisabled()
+        {
+            Src.playerEvents.startPhaseEvents[Phase.End].RemoveEvent(Src, Execute);
+        }
+
+        public new async Task Execute()
+        {
+            if (!await base.ShowTimer()) return;
+            base.Execute();
+            await new GetCardFromPile(Src, Src.HandCardCount == 0 ? 2 : 1).Execute();
         }
     }
 }

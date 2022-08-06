@@ -21,7 +21,7 @@ namespace View
             { typeof(Model.决斗), 8 },
             { typeof(Model.南蛮入侵), 9 },
             { typeof(Model.万箭齐发), 10 },
-            // { "闪电", 11 },
+            { typeof(Model.闪电), 11 },
             { typeof(Model.桃园结义), 12 },
             { typeof(Model.无懈可击), 13 },
             { typeof(Model.借刀杀人), 14 },
@@ -31,8 +31,8 @@ namespace View
             { typeof(Model.火杀), 16 },
             { typeof(Model.雷杀), 17 },
             { typeof(Model.酒), 82 },
-            // 83 huogong
-            // 84 blcd
+            { typeof(Model.火攻), 83 },
+            { typeof(Model.兵粮寸断), 84 },
             { typeof(Model.铁索连环), 85 },
             // 88
         };
