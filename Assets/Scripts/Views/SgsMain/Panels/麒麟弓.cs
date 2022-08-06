@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace View
 {
-    public class QlgPanel : Drag
+    public class 麒麟弓 : Drag
     {
         // 装备区
         public GameObject equips;

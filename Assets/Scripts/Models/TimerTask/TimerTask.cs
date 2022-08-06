@@ -53,7 +53,7 @@ namespace Model
             startTimerView?.Invoke(this);
 
             if (Room.Instance.IsSingle) waitAction = new TaskCompletionSource<bool>();
-            StartCoroutine(SelfAutoResult());
+           if(player.isSelf) StartCoroutine(SelfAutoResult());
             StartCoroutine(AIAutoResult());
             var result = Room.Instance.IsSingle ? await waitAction.Task : await WaitResult();
 
@@ -74,6 +74,7 @@ namespace Model
             if (Skill == "丈八蛇矛" || Skill != "" && player.skills[Skill] is Converted)
             {
                 var skill = Skill == "丈八蛇矛" ? (player.weapon as 丈八蛇矛).skill : player.skills[Skill] as Converted;
+                skill.Execute();
                 Cards = new List<Card> { skill.Execute(Cards) };
                 Skill = "";
             }
@@ -107,10 +108,10 @@ namespace Model
 
         public void SendResult(List<int> cards, List<int> dests, string skill, bool result = true)
         {
+            StopAllCoroutines();
             if (Room.Instance.IsSingle)
             {
                 if (result) SetResult(cards, dests, skill);
-                StopAllCoroutines();
                 waitAction.TrySetResult(result);
             }
             // 多人模式
@@ -157,6 +158,7 @@ namespace Model
                         }
                     }
                 }
+                StopAllCoroutines();
                 return json.result;
             }
 
@@ -184,7 +186,7 @@ namespace Model
 
             waitAction = new TaskCompletionSource<bool>();
             startTimerView?.Invoke(this);
-            StartCoroutine(SelfAutoResult());
+            StartCoroutine(WxkjAutoResult());
             StartCoroutine(AIAutoResult());
             bool result = Room.Instance.IsSingle ? await waitAction.Task : await WaitResult();
 
@@ -260,17 +262,19 @@ namespace Model
         private IEnumerator SelfAutoResult()
         {
             yield return new WaitForSeconds(second);
-            if (!isWxkj)
+            SendResult();
+
+        }
+
+        private IEnumerator WxkjAutoResult()
+        {
+            yield return new WaitForSeconds(second);
+
+            foreach (var i in wxkjDone)
             {
-                if (player.isSelf) SendResult();
+                if (!i.Value && SgsMain.Instance.players[i.Key].isSelf) SendWxkjResult(i.Key, false);
             }
-            else
-            {
-                foreach (var i in wxkjDone)
-                {
-                    if (!i.Value && SgsMain.Instance.players[i.Key].isSelf) SendWxkjResult(i.Key, false);
-                }
-            }
+
         }
 
 

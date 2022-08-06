@@ -18,44 +18,63 @@ namespace Model
 
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
+            if (src.weapon != null)
+            {
+                if (src.weapon is 朱雀羽扇 && await (src.weapon as 朱雀羽扇).Skill(this, src, dests)) return;
+                src.weapon.WhenUseSha(this);
+            }
+            
+            ShanCount = 1;
+            DamageValue = 1;
+            IgnoreArmor = false;
+
+            if (src.Use酒)
+            {
+                src.Use酒 = false;
+                DamageValue++;
+            }
+
             src.ShaCount++;
             await base.UseCard(src, dests);
 
-            // 询问青釭剑 雌雄双股剑 诸葛连弩 方天画戟
-            if (src.weapon != null) await src.weapon.UseShaSkill(this);
+            // 青釭剑 雌雄双股剑
+            if (src.weapon != null) await src.weapon.AfterUseSha(this);
 
             foreach (var dest in Dests)
             {
-                if (ShanCount == 0) isDamage = true;
+                // 仁王盾 藤甲
+                if (!IgnoreArmor && dest.armor != null && dest.armor.Disable(this)) continue;
+
+                IsDamage = false;
+                if (ShanCount == 0) IsDamage = true;
                 else
                 {
                     for (int i = 0; i < ShanCount; i++)
                     {
                         if (!await 闪.Call(dest, this))
                         {
-                            isDamage = true;
+                            IsDamage = true;
                             break;
                         }
                     }
                 }
 
-                if (!isDamage && src.weapon != null) await src.weapon.CounteredSkill(this, dest);
+                if (!IsDamage && src.weapon != null) await src.weapon.ShaMiss(this, dest);
 
-                if (isDamage)
+                if (IsDamage)
                 {
-                    if (src.weapon != null) await src.weapon.DamageSkill(this, dest);
+                    if (src.weapon != null) await src.weapon.WhenDamage(this, dest);
+                    if (!IsDamage) continue;
                     Damage type = this is 火杀 ? Damage.Fire : this is 雷杀 ? Damage.Thunder : Damage.Normal;
-                    await new Damaged(dest, Src, this, 1, type).Execute();
+                    await new Damaged(dest, Src, this, DamageValue, type).Execute();
                 }
             }
-
-            ShanCount = 1;
-            IgnoreArmor = false;
         }
 
-        public int ShanCount { get; set; } = 1;
-        public bool IgnoreArmor { get; set; } = false;
-        public bool isDamage { get; set; }
+        public int ShanCount { get; set; }
+        public int DamageValue { get; set; }
+        public bool IgnoreArmor { get; set; }
+        public bool IsDamage { get; set; }
 
         public static async Task<bool> Call(Player player)
         {
@@ -150,13 +169,17 @@ namespace Model
         public static async Task<bool> Call(Player player, Player dest)
         {
             TimerTask.Instance.Hint = "请使用一张桃。";
-            TimerTask.Instance.ValidCard = (card) => card is 桃 && !player.DisabledCard(card);
+            TimerTask.Instance.ValidCard = (card) =>
+            {
+                return (card is 桃 || card is 酒 && dest == player) && !player.DisabledCard(card);
+            };
             TimerTask.Instance.ValidDest = (player, card, fstPlayer) => player == dest;
             bool result = await TimerTask.Instance.Run(player, 1, 1);
 
-            if (player.isAI && player == dest)
+            if (player.isAI && (player == dest || player.Teammate == dest))
             {
-                var card = player.FindCard<桃>();
+                var card = player.FindCard<酒>() as Card;
+                if (card is null) card = player.FindCard<桃>();
                 if (card != null)
                 {
                     TimerTask.Instance.Cards.Add(card);
@@ -168,7 +191,7 @@ namespace Model
 
             else
             {
-                await TimerTask.Instance.Cards[0].UseCard(player);
+                await TimerTask.Instance.Cards[0].UseCard(player, new List<Player> { dest });
                 return true;
             }
         }
@@ -189,6 +212,26 @@ namespace Model
         {
             Type = "基本牌";
             Name = "雷杀";
+        }
+    }
+
+    public class 酒 : Card
+    {
+        public 酒()
+        {
+            Type = "基本牌";
+            Name = "酒";
+        }
+
+        public override async Task UseCard(Player src, List<Player> dests = null)
+        {
+            // 默认将目标设为使用者
+            if (dests is null || dests.Count == 0) dests = new List<Player> { src };
+
+            await base.UseCard(src, dests);
+
+            if (Dests[0].Hp < 1) await new Recover(Dests[0]).Execute();
+            else Dests[0].Use酒 = true;
         }
     }
 }

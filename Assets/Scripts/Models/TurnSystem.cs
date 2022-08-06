@@ -57,7 +57,7 @@ namespace Model
                 startTurnView?.Invoke(this);
                 for (CurrentPhase = Phase.Prepare; CurrentPhase <= Phase.End; CurrentPhase++)
                 {
-                    if (!Room.Instance.IsSingle) await Sync();
+                    // if (!Room.Instance.IsSingle) await Sync();
                     BeforeTurn?.Invoke();
                     await ExecutePhase();
                     if (SgsMain.Instance.GameIsOver) break;
@@ -82,7 +82,7 @@ namespace Model
             PhaseJson json = new PhaseJson();
             json.eventname = "execute_phase";
             json.id = Wss.Instance.Count + 1;
-            json.player = CurrentPlayer.Position;
+            json.username = User.Instance.Username;
             json.phase = CurrentPhase;
 
             Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
@@ -157,6 +157,7 @@ namespace Model
         {
             // 重置出杀次数
             CurrentPlayer.ShaCount = 0;
+            CurrentPlayer.Use酒 = false;
             // 重置使用技能次数
             // foreach (var i in CurrentPlayer.skills.Values) if (i is Active) (i as Active).Time = 0;
 
@@ -219,6 +220,12 @@ namespace Model
             done:
                 finishPerformView?.Invoke(this);
             }
+
+
+            // 重置出杀次数
+            CurrentPlayer.ShaCount = 0;
+            CurrentPlayer.Use酒 = false;
+
             AfterPerform?.Invoke();
         }
 

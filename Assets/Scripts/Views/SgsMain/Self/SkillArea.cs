@@ -82,7 +82,7 @@ namespace View
             }
             else
             {
-                foreach (var i in Skills) i.button.interactable = i.model is Model.Active && i.model.IsValid();
+                foreach (var i in Skills) i.button.interactable = !(i.model is Model.Triggered) && i.model.IsValid();
             }
         }
 

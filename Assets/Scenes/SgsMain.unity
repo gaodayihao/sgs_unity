@@ -1782,6 +1782,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &121027187
@@ -3210,6 +3211,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &218379316
@@ -5696,6 +5698,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &430251273
@@ -6753,6 +6756,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 779257811}
+  - {fileID: 1460228927}
   m_Father: {fileID: 1737497583}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7262,6 +7266,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &548674586
@@ -7508,6 +7513,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &559078707
@@ -7674,6 +7680,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &567555490
@@ -8878,6 +8885,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &644181745
@@ -10709,7 +10717,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &779257811
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13344,6 +13352,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &975815696
@@ -16081,6 +16090,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1158267099
@@ -16785,6 +16795,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1218867518
@@ -17402,6 +17413,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1285378108
@@ -18968,6 +18980,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1421436994
@@ -19286,6 +19299,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1457933895
@@ -19300,6 +19314,86 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 423007fb241669449b47b2017be9534a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1460228926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1460228927}
+  - component: {fileID: 1460228929}
+  - component: {fileID: 1460228928}
+  m_Layer: 5
+  m_Name: Text (Legacy)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1460228927
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460228926}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 509346229}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -250}
+  m_SizeDelta: {x: 300, y: 60}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1460228928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460228926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: c072c559ec6e9cc428eae1bd7a6d2754, type: 3}
+    m_FontSize: 40
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 4
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: "\u70B9\u51FB\u5C4F\u5E55\u7EE7\u7EED"
+--- !u!222 &1460228929
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460228926}
+  m_CullTransparentMesh: 1
 --- !u!1 &1481050118
 GameObject:
   m_ObjectHideFlags: 0
@@ -21274,6 +21368,7 @@ MonoBehaviour:
   nearDeath: {fileID: 0}
   death: {fileID: 0}
   deadText: {fileID: 0}
+  Lock: {fileID: 0}
   turnBorder: {fileID: 0}
   judgeArea: {fileID: 0}
 --- !u!114 &1676435795
@@ -22132,6 +22227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9f756e63bb598b41b15a81d9738e739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  second: 0
 --- !u!114 &1737497591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25666,8 +25762,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0.000061035156}
-  m_SizeDelta: {x: 10, y: 0}
+  m_AnchoredPosition: {x: 2.4999695, y: 0.000061035156}
+  m_SizeDelta: {x: 4.999939, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &269854156711006869
 GameObject:
@@ -27729,8 +27825,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
   m_AnchorMax: {x: 1, y: 0.75}
-  m_AnchoredPosition: {x: -5, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_AnchoredPosition: {x: -7.5, y: 0}
+  m_SizeDelta: {x: -15, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9119698572717602913
 MonoBehaviour:

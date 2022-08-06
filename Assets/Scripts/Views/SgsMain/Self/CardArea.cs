@@ -85,7 +85,7 @@ namespace View
                     Destroy(handcards[i.Id].gameObject);
                     handcards.Remove(i.Id);
                 }
-                else handcards[i.Id].gameObject.SetActive(false);
+                else handcards[i.Id].gameObject.SetActive(self.model == operation.player);
             }
         }
 
@@ -160,6 +160,7 @@ namespace View
             }
 
             IsSettled = false;
+            Converted = null;
         }
 
         public void ResetCardArea(Model.TimerTask timerTask)

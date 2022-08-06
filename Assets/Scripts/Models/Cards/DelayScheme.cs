@@ -33,7 +33,6 @@ namespace Model
         public virtual async Task Judge()
         {
             RemoveToJudgeArea();
-            CardPile.Instance.AddToDiscard(this);
             judgeCard = await new Judge().Execute();
         }
 
@@ -61,12 +60,56 @@ namespace Model
             Type = "延时锦囊";
             Name = "乐不思蜀";
         }
-        
+
+        public override async Task Judge()
+        {
+            CardPile.Instance.AddToDiscard(this);
+            await base.Judge();
+
+            if (judgeCard.Suit != "红桃") TurnSystem.Instance.SkipPhase[Owner][Phase.Perform] = true;
+        }
+    }
+
+    public class 兵粮寸断 : DelayScheme
+    {
+        public 兵粮寸断()
+        {
+            Type = "延时锦囊";
+            Name = "兵粮寸断";
+        }
+
+        public override async Task Judge()
+        {
+            CardPile.Instance.AddToDiscard(this);
+            await base.Judge();
+
+            if (judgeCard.Suit != "草花") TurnSystem.Instance.SkipPhase[Owner][Phase.Get] = true;
+        }
+    }
+
+    public class 闪电 : DelayScheme
+    {
+        public 闪电()
+        {
+            Type = "延时锦囊";
+            Name = "闪电";
+        }
+
+        public override async Task UseCard(Player src, List<Player> dests = null)
+        {
+            await base.UseCard(src, new List<Player> { src });
+        }
+
         public override async Task Judge()
         {
             await base.Judge();
 
-            if (judgeCard.Suit != "红桃") TurnSystem.Instance.SkipPhase[Owner][Phase.Perform] = true;
+            if (judgeCard.Suit == "黑桃" && judgeCard.Weight >= 2 && judgeCard.Weight <= 9)
+            {
+                CardPile.Instance.AddToDiscard(this);
+                await new Damaged(Owner, null, this, 3, Damage.Thunder).Execute();
+            }
+            else AddToJudgeArea(Owner.Next);
         }
     }
 }

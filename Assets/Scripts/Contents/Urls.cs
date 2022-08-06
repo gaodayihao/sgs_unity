@@ -24,7 +24,7 @@ public static class Urls
 #if UNITY_EDITOR
         "file:///" + UnityEngine.Application.dataPath + "/../Json/";
 #else
-        STATIC_URL + "json/";
+        STATIC_URL + "Json/";
 #endif
 
     // 图片文件地址

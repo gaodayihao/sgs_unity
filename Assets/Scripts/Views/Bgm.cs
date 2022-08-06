@@ -22,6 +22,7 @@ public class Bgm : MonoBehaviour
     void Awake()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.volume = 0.4f;
     }
 
     public async void Load(string url)

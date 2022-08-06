@@ -151,18 +151,18 @@ namespace View
 
         private void ShowCardPanel(Model.CardPanel model)
         {
-            panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("RegionPanel");
+            panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("区域内");
             panel = Instantiate(this.panel);
             panel.transform.SetParent(transform, false);
-            panel.GetComponent<RegionPanel>().Init(model);
+            panel.GetComponent<区域内>().Init(model);
         }
 
         private void ShowQlg(Model.CardPanel model)
         {
-            panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("QlgPanel");
+            panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("麒麟弓");
             panel = Instantiate(this.panel);
             panel.transform.SetParent(transform, false);
-            panel.GetComponent<QlgPanel>().Init(model);
+            panel.GetComponent<麒麟弓>().Init(model);
         }
 
         public void HidePanel(Model.CardPanel model)

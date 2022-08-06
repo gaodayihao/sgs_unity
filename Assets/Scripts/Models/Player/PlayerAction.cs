@@ -76,15 +76,15 @@ namespace Model
         /// <param name="count">摸牌数</param>
         public GetCardFromPile(Player player, int count) : base(player, new List<Card>())
         {
-            this.count = count;
+            Count = count;
         }
-        private int count;
+        public int Count { get; set; }
 
         public override async Task Execute()
         {
-            Debug.Log((player.Position + 1).ToString() + "号位摸了" + count.ToString() + "张牌");
+            Debug.Log(player.PosStr + "号位摸了" + Count.ToString() + "张牌");
             // 摸牌
-            for (int i = 0; i < count; i++) Cards.Add(await CardPile.Instance.Pop());
+            for (int i = 0; i < Count; i++) Cards.Add(await CardPile.Instance.Pop());
             await base.Execute();
         }
 
@@ -110,7 +110,7 @@ namespace Model
             foreach (var card in Cards)
             {
                 if (player.HandCards.Contains(card)) player.HandCards.Remove(card);
-                else if (card is Equipage) ((Equipage)card).RemoveEquipage();
+                else if (card is Equipage) await (card as Equipage).RemoveEquipage();
             }
 
             actionView?.Invoke(this);
@@ -134,7 +134,7 @@ namespace Model
         {
             string str = "";
             foreach (var card in Cards) str += "【" + card.Name + card.Suit + card.Weight.ToString() + "】";
-            Debug.Log((player.Position + 1).ToString() + "号位弃置了" + str);
+            Debug.Log(player.PosStr + "号位弃置了" + str);
 
             CardPile.Instance.AddToDiscard(Cards);
 
@@ -186,16 +186,16 @@ namespace Model
 
         public async Task NearDeath()
         {
-            Player askedPlayer = TurnSystem.Instance.CurrentPlayer;
-            do
+            Player i = TurnSystem.Instance.CurrentPlayer;
+            while (true)
             {
-                while (await 桃.Call(askedPlayer, player))
+                while (await 桃.Call(i, player))
                 {
                     if (player.Hp >= 1) return;
                 }
-
-                askedPlayer = askedPlayer.Next;
-            } while (askedPlayer != TurnSystem.Instance.CurrentPlayer);
+                i = i.Next;
+                if (i == TurnSystem.Instance.CurrentPlayer) break;
+            }
 
             if (this is Damaged) await new Die(player, ((Damaged)this).Src).Execute();
             else await new Die(player, null).Execute();
@@ -257,7 +257,7 @@ namespace Model
                 if (Value == 0) return;
             }
 
-            Debug.Log((player.Position + 1).ToString() + "回复了" + Value.ToString() + "点体力");
+            Debug.Log(player.PosStr + "回复了" + Value.ToString() + "点体力");
 
             // 回复体力
             await base.Execute();
@@ -294,7 +294,10 @@ namespace Model
             // 受到伤害时
             await player.playerEvents.whenDamaged.Execute(this);
 
-            Debug.Log((player.Position + 1).ToString() + "受到了" + (-Value).ToString() + "点伤害");
+            if (Value == 0) return;
+            if (player.armor != null && !(SrcCard is 杀 && (SrcCard as 杀).IgnoreArmor)) player.armor.WhenDamaged(this);
+
+            Debug.Log(player.PosStr + "受到了" + (-Value).ToString() + "点伤害");
 
             // 受到伤害
             if (player.IsLocked)

@@ -80,7 +80,7 @@ namespace Model
             if (!await base.ShowTimer()) return;
             Execute();
 
-            CardPanel.Instance.Hint = "对" + (dest.Position + 1).ToString() + "号位发动利驭，获得其一张牌";
+            CardPanel.Instance.Hint = "对" + dest.PosStr + "号位发动利驭，获得其一张牌";
             var card = await CardPanel.Instance.SelectCard(Src, damaged.player);
 
             // 获得牌
@@ -92,7 +92,7 @@ namespace Model
                 if (SgsMain.Instance.AlivePlayers.Count <= 2) return;
 
                 // 指定角色
-                TimerTask.Instance.Hint = (Src.Position + 1).ToString() + "号位对你发动利驭，选择一名角色";
+                TimerTask.Instance.Hint = Src.PosStr + "号位对你发动利驭，选择一名角色";
                 TimerTask.Instance.ValidDest=(player,card,fstPlayer)=>player!=Src&&player!=dest;
                 bool result = await TimerTask.Instance.Run(dest, 0,1);
 

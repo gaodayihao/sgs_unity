@@ -86,6 +86,7 @@ namespace Model
             { "桃", typeof(桃) },
             { "火杀", typeof(火杀) },
             { "雷杀", typeof(雷杀) },
+            { "酒", typeof(酒) },
 
             { "绝影", typeof(PlusHorse) },
             { "大宛", typeof(SubHorse) },
@@ -93,6 +94,7 @@ namespace Model
             { "爪黄飞电", typeof(PlusHorse) },
             { "的卢", typeof(PlusHorse) },
             { "紫骍", typeof(SubHorse) },
+            { "骅骝", typeof(PlusHorse) },
 
             { "青龙偃月刀", typeof(青龙偃月刀) },
             { "麒麟弓", typeof(麒麟弓) },
@@ -102,10 +104,18 @@ namespace Model
             { "诸葛连弩", typeof(诸葛连弩) },
             { "贯石斧", typeof(贯石斧) },
             { "方天画戟", typeof(方天画戟) },
+            { "朱雀羽扇", typeof(朱雀羽扇) },
+            { "古锭刀", typeof(古锭刀) },
+            { "寒冰剑", typeof(寒冰剑) },
 
             { "八卦阵", typeof(八卦阵) },
+            { "藤甲", typeof(藤甲) },
+            { "仁王盾", typeof(仁王盾) },
+            { "白银狮子", typeof(白银狮子) },
 
             { "乐不思蜀", typeof(乐不思蜀) },
+            { "兵粮寸断", typeof(兵粮寸断) },
+            { "闪电", typeof(闪电) },
 
             { "过河拆桥", typeof(过河拆桥) },
             { "顺手牵羊", typeof(顺手牵羊) },
@@ -117,6 +127,7 @@ namespace Model
             { "决斗", typeof(决斗) },
             { "借刀杀人", typeof(借刀杀人) },
             { "铁索连环", typeof(铁索连环) },
+            { "火攻", typeof(火攻) },
         };
 
         // 牌堆

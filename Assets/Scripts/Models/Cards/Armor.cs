@@ -14,6 +14,13 @@ namespace Model
         //     enable = true;
         //     await base.AddEquipage(owner);
         // }
+
+        public virtual bool Disable(Card card)
+        {
+            return false;
+        }
+
+        public virtual void WhenDamaged(Damaged damaged) { }
     }
 
     public class 八卦阵 : Armor
@@ -29,6 +36,41 @@ namespace Model
             SkillView();
             var card = await new Judge().Execute();
             return card.Suit == "红桃" || card.Suit == "方片";
+        }
+    }
+
+    public class 藤甲 : Armor
+    {
+        public override bool Disable(Card card)
+        {
+            return !(card is 雷杀 || card is 火杀);
+        }
+
+        public override void WhenDamaged(Damaged damaged)
+        {
+            if (damaged.damageType == Damage.Fire) damaged.Value--;
+        }
+    }
+
+    public class 仁王盾 : Armor
+    {
+        public override bool Disable(Card card)
+        {
+            return card is 杀 && (card.Suit == "黑桃" || card.Suit == "草花" || card.Suit == "黑色");
+        }
+    }
+
+    public class 白银狮子 : Armor
+    {
+        public override async Task RemoveEquipage()
+        {
+           await base.RemoveEquipage();
+           await new Recover(Owner).Execute();
+        }
+        public override void WhenDamaged(Damaged damaged)
+        {
+            if (damaged.Value == -1) return;
+            damaged.Value = -1;
         }
     }
 }

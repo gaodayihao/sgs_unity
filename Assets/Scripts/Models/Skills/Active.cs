@@ -21,7 +21,7 @@ namespace Model
         public virtual async Task Execute(List<Player> dests, List<Card> cards, string additional)
         {
             await Task.Yield();
-            Debug.Log((Src.Position + 1).ToString() + "号位使用了" + Name);
+            Debug.Log(Src.PosStr + "号位使用了" + Name);
             Time++;
             Execute();
         }

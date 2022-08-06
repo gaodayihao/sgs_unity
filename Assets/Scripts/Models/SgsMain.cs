@@ -91,7 +91,7 @@ namespace Model
         {
             List<string> list = new List<string>
             {
-                "火杀","无中生有","诸葛连弩","借刀杀人","雷杀","铁索连环"
+                "火杀","无中生有","诸葛连弩","兵粮寸断","铁索连环","朱雀羽扇","闪电"
             };
 
             while (list.Count > 0)
@@ -116,7 +116,7 @@ namespace Model
             {
                 // debug
                 General self = null;
-                string name = "夏侯惇";
+                string name = "关羽";
                 foreach (var i in json)
                 {
                     if (i.name == name)

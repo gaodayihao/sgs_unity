@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 5424184130655347231}
   - component: {fileID: 6106803982852403080}
   m_Layer: 5
-  m_Name: QlgPanel
+  m_Name: "\u9E92\u9E9F\u5F13"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -299,11 +299,11 @@ RectTransform:
   m_Father: {fileID: 3526199203135927927}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -215}
-  m_SizeDelta: {x: 700, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 40}
+  m_SizeDelta: {x: 500, y: 30}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &3526199203582631169
 MonoBehaviour:
   m_ObjectHideFlags: 0

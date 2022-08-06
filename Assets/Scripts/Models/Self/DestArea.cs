@@ -88,11 +88,14 @@ namespace Model
                     return src.GetDistance(dest) == 1 && dest.HaveCard();
 
                 case "借刀杀人":
-                    if (firstdest is null) return src != dest && src.weapon != null;
+                    if (firstdest is null) return src != dest && dest.weapon != null;
                     else return UseSha(firstdest, dest);
 
                 case "决斗":
                     return src != dest;
+
+                case "火攻":
+                    return dest.HandCardCount != 0;
 
                 default:
                     return true;

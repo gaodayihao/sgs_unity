@@ -110,7 +110,7 @@ public class PhaseJson
 {
     public string eventname;
     public int id;
-    public int player;
+    public string username;
     public Phase phase;
 }
 

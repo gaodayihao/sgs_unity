@@ -137,21 +137,21 @@
                 {
                     "name": "武圣",
                     "url": [
-                        "guanyupo07/GuanYuPo_WuSheng_01",
-                        "guanyupo07/GuanYuPo_WuSheng_02"
+                        "guanyu07/GuanYuPo_WuSheng_01",
+                        "guanyu07/GuanYuPo_WuSheng_02"
                     ]
                 },
                 {
                     "name": "义绝",
                     "url": [
-                        "guanyupo07/GuanYuPo_YiJue_01",
-                        "guanyupo07/GuanYuPo_YiJue_02"
+                        "guanyu07/GuanYuPo_YiJue_01",
+                        "guanyu07/GuanYuPo_YiJue_02"
                     ]
                 },
                 {
                     "name": "阵亡",
                     "url": [
-                        "guanyupo07/GuanYuPo_Dead"
+                        "guanyu07/GuanYuPo_Dead"
                     ]
                 }
             ]

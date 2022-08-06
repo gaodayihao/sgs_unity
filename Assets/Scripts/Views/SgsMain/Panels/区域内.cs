@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace View
 {
-    public class RegionPanel : Drag
+    public class 区域内 : Drag
     {
         // 手牌区
         public GameObject handCards;

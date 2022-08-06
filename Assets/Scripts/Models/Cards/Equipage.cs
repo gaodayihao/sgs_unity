@@ -36,15 +36,16 @@ namespace Model
         /// <summary>
         /// 移出装备区(只由LoseCard调用)
         /// </summary>
-        public virtual void RemoveEquipage()
+        public virtual async Task RemoveEquipage()
         {
+            await Task.Yield();
             removeEquipView?.Invoke(this);
             Owner.Equipages[Type] = null;
         }
 
         public void SkillView()
         {
-            Debug.Log((Owner.Position + 1).ToString() + "号位发动了" + Name + "【" + Suit + Weight.ToString() + "】");
+            Debug.Log(Owner.PosStr + "号位发动了" + Name + "【" + Suit + Weight.ToString() + "】");
         }
 
 
@@ -70,10 +71,10 @@ namespace Model
             owner.DstPlus++;
             await base.AddEquipage(owner);
         }
-        public override void RemoveEquipage()
+        public override async Task RemoveEquipage()
         {
             Owner.DstPlus--;
-            base.RemoveEquipage();
+            await base.RemoveEquipage();
         }
     }
 
@@ -84,10 +85,10 @@ namespace Model
             owner.DstSub++;
             await base.AddEquipage(owner);
         }
-        public override void RemoveEquipage()
+        public override async Task RemoveEquipage()
         {
             Owner.DstSub--;
-            base.RemoveEquipage();
+            await base.RemoveEquipage();
         }
     }
 }

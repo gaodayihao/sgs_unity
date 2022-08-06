@@ -31,7 +31,7 @@ namespace Model
             Src = src;
             Dests = dests;
             string cardInfo = IsConvert ? "" : "【" + Suit + Weight.ToString() + "】";
-            Debug.Log((Src.Position + 1).ToString() + "号位使用了" + Name + cardInfo);
+            Debug.Log(Src.PosStr + "号位使用了" + Name + cardInfo);
             useCardView?.Invoke(this);
 
             // 目标角色排序
@@ -74,7 +74,7 @@ namespace Model
         {
             Src = player;
             string cardInfo = IsConvert ? "" : "【" + Suit + Weight.ToString() + "】";
-            Debug.Log((player.Position + 1).ToString() + "号位打出了" + Name + cardInfo);
+            Debug.Log(player.PosStr + "号位打出了" + Name + cardInfo);
             useCardView?.Invoke(this);
 
             // 使用者失去此手牌

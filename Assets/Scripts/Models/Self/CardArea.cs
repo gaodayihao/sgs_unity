@@ -21,6 +21,8 @@ namespace Model
                     return player.Hp < player.HpLimit;
 
                 case "杀":
+                case "雷杀":
+                case "火杀":
                     return UseSha(player, card);
 
                 default:

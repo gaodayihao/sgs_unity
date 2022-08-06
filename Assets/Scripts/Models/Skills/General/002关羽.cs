@@ -88,8 +88,8 @@ namespace Model
             // 弃一张手牌
             await new Discard(Src, cards).Execute();
             // 展示手牌
-            TimerTask.Instance.Hint = Src.Position.ToString() + "号位对你发动义绝，请展示一张手牌。";
-            var showCard = (await ShowCard.ShowCardTimer(Dest));
+            TimerTask.Instance.Hint = Src.PosStr + "号位对你发动义绝，请展示一张手牌。";
+            var showCard = await ShowCard.ShowCardTimer(Dest);
 
             // 红色
             if (showCard[0].Suit == "红桃" || showCard[0].Suit == "方片")
@@ -99,7 +99,7 @@ namespace Model
                 // 回复体力
                 if (Dest.Hp < Dest.HpLimit)
                 {
-                    TimerTask.Instance.Hint = "是否让" + (Dest.Position + 1).ToString() + "号位回复一点体力？";
+                    TimerTask.Instance.Hint = "是否让" + Dest.PosStr + "号位回复一点体力？";
                     bool result = await TimerTask.Instance.Run(Src);
                     if (result) await new Recover(Dest).Execute();
                 }

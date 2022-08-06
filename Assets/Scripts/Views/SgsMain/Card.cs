@@ -149,7 +149,7 @@ namespace View
             // 选中卡牌
             // if (!IsSelected) Select();
             // else Unselect();
-            var panel = GetComponentInParent<RegionPanel>();
+            var panel = GetComponentInParent<区域内>();
 
             panel.selectCards.Add(this);
             panel.UpdatePanel();
@@ -157,7 +157,7 @@ namespace View
 
         private void ClickInQlg()
         {
-            var panel = GetComponentInParent<QlgPanel>();
+            var panel = GetComponentInParent<麒麟弓>();
 
             panel.SelectCard = this;
             panel.UpdatePanel();

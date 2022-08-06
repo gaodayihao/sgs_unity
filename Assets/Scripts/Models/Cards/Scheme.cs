@@ -18,7 +18,7 @@ namespace Model
 
         public static async Task<bool> Call(Card card, Player dest)
         {
-            string hint = dest != null ? "对" + (dest.Position + 1).ToString() + "号位" : "";
+            string hint = dest != null ? "对" + dest.PosStr + "号位" : "";
             TimerTask.Instance.Hint = card.Name + "即将" + hint + "生效，是否使用无懈可击？";
 
             bool result = await TimerTask.Instance.RunWxkj();
@@ -63,7 +63,7 @@ namespace Model
                 if (await 无懈可击.Call(this, dest)) continue;
 
                 CardPanel.Instance.Title = "过河拆桥";
-                CardPanel.Instance.Hint = "对" + (dest.Position + 1).ToString() + "号位使用过河拆桥，弃置其一张牌";
+                CardPanel.Instance.Hint = "对" + dest.PosStr + "号位使用过河拆桥，弃置其一张牌";
                 var card = await CardPanel.Instance.SelectCard(src, dest, true);
 
                 if (card is DelayScheme && dest.JudgeArea.Contains((DelayScheme)card))
@@ -95,7 +95,7 @@ namespace Model
                 if (await 无懈可击.Call(this, dest)) continue;
 
                 CardPanel.Instance.Title = "顺手牵羊";
-                CardPanel.Instance.Hint = "对" + (dest.Position + 1).ToString() + "号位使用顺手牵羊，获得其一张牌";
+                CardPanel.Instance.Hint = "对" + dest.PosStr + "号位使用顺手牵羊，获得其一张牌";
                 var card = await CardPanel.Instance.SelectCard(src, dest, true);
 
                 if (card is DelayScheme && dest.JudgeArea.Contains((DelayScheme)card))
@@ -329,6 +329,35 @@ namespace Model
                 await new SetLock(i).Execute();
             }
         }
+    }
 
+    public class 火攻 : Card
+    {
+        public 火攻()
+        {
+            Type = "锦囊牌";
+            Name = "火攻";
+        }
+
+        public override async Task UseCard(Player src, List<Player> dests = null)
+        {
+            await base.UseCard(src, dests);
+
+            foreach (var dest in Dests)
+            {
+                if (await 无懈可击.Call(this, dest)) continue;
+                if (dest.HandCardCount == 0) continue;
+
+                TimerTask.Instance.Hint = Src.PosStr + "号位对你使用火攻，请展示一张手牌。";
+                var showCard = (await ShowCard.ShowCardTimer(dest))[0];
+
+                TimerTask.Instance.Hint = "是否弃置手牌";
+                TimerTask.Instance.ValidCard = (card) => card.Suit == showCard.Suit;
+                if (!await TimerTask.Instance.Run(Src, 1, 0)) return;
+
+                await new Discard(Src, TimerTask.Instance.Cards).Execute();
+                await new Damaged(dest, Src, this, 1, Damage.Fire).Execute();
+            }
+        }
     }
 }

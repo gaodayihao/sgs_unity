@@ -35,6 +35,7 @@ namespace Model
         public int Hp { get; set; }
         // 位置
         public int Position { get; set; }
+        public string PosStr { get => (Position + 1).ToString(); }
         // 上家
         public Player Last { get; set; }
         // 下家
@@ -56,7 +57,7 @@ namespace Model
             { "武器", null }, { "防具", null }, { "加一马", null }, { "减一马", null }
         };
         public Weapon weapon { get => Equipages["武器"] as Weapon; }
-        public Equipage armor { get => Equipages["防具"]; }
+        public Armor armor { get => Equipages["防具"] as Armor; }
         public Equipage plusHorse { get => Equipages["加一马"]; }
         public Equipage subHorse { get => Equipages["减一马"]; }
 
@@ -69,6 +70,7 @@ namespace Model
         public int DstSub { get; set; } = 0;
         // 攻击范围
         public int AttackRange { get; set; } = 1;
+        public bool Use酒 { get; set; } = false;
 
         /// <summary>
         /// 计算距离
