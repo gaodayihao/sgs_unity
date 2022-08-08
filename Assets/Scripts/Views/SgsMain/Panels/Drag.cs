@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace View
 {
-    public class Drag : MonoBehaviour, IDragHandler
+    public class Drag<T> : SingletonMono<T>, IDragHandler where T : MonoBehaviour
     {
         private Canvas canvas;
 

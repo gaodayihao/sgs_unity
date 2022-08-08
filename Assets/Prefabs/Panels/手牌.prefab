@@ -378,8 +378,7 @@ GameObject:
   - component: {fileID: 8394255898202405633}
   - component: {fileID: 8394255898202405639}
   - component: {fileID: 8394255898202405638}
-  - component: {fileID: 1789182357903101140}
-  - component: {fileID: 1268773665891933190}
+  - component: {fileID: 6732214702373438164}
   m_Layer: 5
   m_Name: "\u624B\u724C"
   m_TagString: Untagged
@@ -407,7 +406,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 47.021107}
+  m_AnchoredPosition: {x: 0, y: 50}
   m_SizeDelta: {x: 1100, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8394255898202405639
@@ -448,7 +447,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1789182357903101140
+--- !u!114 &6732214702373438164
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -457,27 +456,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8394255898202405632}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e57737c65a4cebe4d9c6c816bfa2adef, type: 3}
+  m_Script: {fileID: 11500000, guid: de2ab0f2a9f43495e9e44657269685df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handCards: {fileID: 8394255897140976902}
-  equips: {fileID: 0}
   selectCards: []
   slider: {fileID: 8394255898653266039}
-  title: {fileID: 0}
   hint: {fileID: 9013524774944708159}
---- !u!114 &1268773665891933190
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8394255898202405632}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 062b01ae459fc9948aff1baaa0543f5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  handCards: {fileID: 8394255897140976902}
 --- !u!1 &8394255898364404520
 GameObject:
   m_ObjectHideFlags: 0

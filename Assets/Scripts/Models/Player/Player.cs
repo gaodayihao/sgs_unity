@@ -142,13 +142,14 @@ namespace Model
                     case "义绝": skills.Add(str, new 义绝(this)); break;
                     case "咆哮": skills.Add(str, new 咆哮(this)); break;
                     case "制衡": skills.Add(str, new 制衡(this)); break;
-                    case "奸雄": skills.Add(str, new 奸雄(this)); break;
-                    case "无双": skills.Add(str, new 无双(this)); break;
-                    case "利驭": skills.Add(str, new 利驭(this)); break;
                     case "苦肉": skills.Add(str, new 苦肉(this)); break;
                     case "诈降": skills.Add(str, new 诈降(this)); break;
+                    case "奸雄": skills.Add(str, new 奸雄(this)); break;
                     case "刚烈": skills.Add(str, new 刚烈(this)); break;
                     case "清俭": skills.Add(str, new 清俭(this)); break;
+                    case "突袭": skills.Add(str, new 突袭(this)); break;
+                    case "无双": skills.Add(str, new 无双(this)); break;
+                    case "利驭": skills.Add(str, new 利驭(this)); break;
                     case "离间": skills.Add(str, new 离间(this)); break;
                     case "闭月": skills.Add(str, new 闭月(this)); break;
                 }

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 4264038146
+CRC: 1947934805
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f62c8d0e2033a08e4da8d5bf5c348973
+    Hash: e1f2954e845085e1d65a573deb11195f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: a5ac48808cd7eae498d2d11fec4d84e9
+    Hash: 4c2d7f3620410b6a45b69bc89d273602
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,11 +28,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 4db03cec1d43a93438de7adaf4f8d43f, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 062b01ae459fc9948aff1baaa0543f5c, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: e57737c65a4cebe4d9c6c816bfa2adef, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: de2ab0f2a9f43495e9e44657269685df, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -69,6 +69,7 @@ Assets:
 - "Assets/Prefabs/Skill/\u89C9\u9192\u6280.prefab"
 - "Assets/Prefabs/Skill/\u9501\u5B9A\u6280.prefab"
 - "Assets/Prefabs/Skill/\u9650\u5B9A\u6280.prefab"
+- "Assets/Prefabs/Panels/\u624B\u724C.prefab"
 - "Assets/Prefabs/Panels/\u9E92\u9E9F\u5F13.prefab"
 - Assets/Prefabs/Card.prefab
 - "Assets/Prefabs/\u5224\u5B9A\u724C.prefab"

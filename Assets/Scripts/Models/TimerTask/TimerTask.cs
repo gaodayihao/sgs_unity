@@ -53,7 +53,7 @@ namespace Model
             startTimerView?.Invoke(this);
 
             if (Room.Instance.IsSingle) waitAction = new TaskCompletionSource<bool>();
-           if(player.isSelf) StartCoroutine(SelfAutoResult());
+            if (player.isSelf) StartCoroutine(SelfAutoResult());
             StartCoroutine(AIAutoResult());
             var result = Room.Instance.IsSingle ? await waitAction.Task : await WaitResult();
 
@@ -70,6 +70,21 @@ namespace Model
             ValidDest = (player, card, fstPlayer) => true;
             GivenSkill = "";
             Refusable = true;
+
+            // 目标角色排序
+            if (Dests.Count > 1)
+            {
+                Dests.Sort((x, y) =>
+                {
+                    Player i = TurnSystem.Instance.CurrentPlayer;
+                    while (true)
+                    {
+                        if (x == i) return -1;
+                        else if (y == i) return 1;
+                        i = i.Next;
+                    }
+                });
+            }
 
             if (Skill == "丈八蛇矛" || Skill != "" && player.skills[Skill] is Converted)
             {

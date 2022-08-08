@@ -379,7 +379,6 @@ GameObject:
   - component: {fileID: 5919976113037844844}
   - component: {fileID: 5919976113037844845}
   - component: {fileID: 4507516410301912767}
-  - component: {fileID: 4017790612259735149}
   m_Layer: 5
   m_Name: "\u533A\u57DF\u5185"
   m_TagString: Untagged
@@ -462,24 +461,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e57737c65a4cebe4d9c6c816bfa2adef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  handCards: {fileID: 5919976111968552813}
-  equips: {fileID: 5919976113597785830}
   selectCards: []
   slider: {fileID: 5919976113677486620}
-  title: {fileID: 5919976113671066540}
   hint: {fileID: 6579724618116680788}
---- !u!114 &4017790612259735149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5919976113037844843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 062b01ae459fc9948aff1baaa0543f5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  handCards: {fileID: 5919976111968552813}
+  equips: {fileID: 5919976113597785830}
+  title: {fileID: 5919976113671066540}
 --- !u!1 &5919976113194613059
 GameObject:
   m_ObjectHideFlags: 0

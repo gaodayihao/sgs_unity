@@ -6,94 +6,32 @@ using UnityEngine.UI;
 
 namespace View
 {
-    public class 区域内 : Drag
+    public class 区域内 : CardPanel
     {
         // 手牌区
         public GameObject handCards;
         // 装备区
         public GameObject equips;
-        // 判定区
-        // public GameObject judges;
-
-        public List<Card> selectCards = new List<Card>();
-
-        // 进度条
-        public Slider slider;
         // 标题
         public Text title;
-        public Text hint;
+        // public Text hint;
 
-        public void Init(Model.CardPanel model)
+        protected override void Start()
         {
-            // gameObject.SetActive(true);
+            base.Start();
             title.text = model.Title;
-            hint.text = model.Hint;
 
-            // 从assetbundle中加载卡牌预制件
-            var card = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("Card");
-
-            // 实例化新卡牌，添加到手牌区，并根据卡牌id初始化
-            // if (model.dest.HandCardCount != 0)
-            // {
-            foreach (var i in model.dest.HandCards)
-            {
-                var instance = Instantiate(card);
-                instance.transform.SetParent(handCards.transform, false);
-                instance.GetComponent<Card>().InitInRegion(i, model.display);
-            }
-            // }
+            foreach (var i in model.dest.HandCards) InitCard(i, handCards.transform, model.display);
 
             foreach (var i in model.dest.Equipages.Values)
             {
-                if (i != null)
-                {
-                    var instance = Instantiate(card);
-                    instance.transform.SetParent(equips.transform, false);
-                    instance.GetComponent<Card>().InitInRegion(i);
-                }
+                if (i != null) InitCard(i, equips.transform);
             }
 
-            // if (model.dest.JudgeArea.Count != 0)
-            // {
             if (Model.CardPanel.Instance.judgeArea)
-                foreach (var i in model.dest.JudgeArea)
-                {
-                    var instance = Instantiate(card);
-                    instance.transform.SetParent(equips.transform, false);
-                    instance.GetComponent<Card>().InitInRegion(i);
-                }
-            // }
-
-            StartTimer(model.second);
-        }
-
-        public void UpdatePanel()
-        {
-            if (selectCards.Count > 0)
             {
-                StopAllCoroutines();
-                Model.CardPanel.Instance.SendResult(new List<int> { selectCards[0].Id }, true);
+                foreach (var i in model.dest.JudgeArea) InitCard(i, equips.transform);
             }
-        }
-
-        /// <summary>
-        /// 开始倒计时
-        /// </summary>
-        private void StartTimer(int second)
-        {
-            slider.value = 1;
-            StartCoroutine(UpdateTimer(second));
-        }
-
-        private IEnumerator UpdateTimer(int second)
-        {
-            while (slider.value > 0)
-            {
-                slider.value -= 0.1f / (second - 0.5f);
-                yield return new WaitForSeconds(0.1f);
-            }
-            StopAllCoroutines();
-            Model.CardPanel.Instance.SendResult();
         }
     }
 }

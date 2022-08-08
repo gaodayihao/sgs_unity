@@ -11,7 +11,8 @@ public enum Phase
 public enum TimerType
 {
     麒麟弓,
-    CardPanel
+    区域内,
+    手牌
 }
 
 public enum Damage

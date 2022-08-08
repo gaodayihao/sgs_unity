@@ -106,7 +106,7 @@ namespace View
 
             if (cardArea.Converted != null)
             {
-                foreach (var i in players)
+                foreach (var i in Players)
                 {
                     i.button.interactable = Model.TimerTask.Instance.ValidDest(i.model, cardArea.Converted, firstDest);
                 }
@@ -114,7 +114,7 @@ namespace View
 
             else if (skill != null)
             {
-                foreach (var player in players)
+                foreach (var player in Players)
                 {
                     // 设置不能指定的目标
                     player.button.interactable = skill.IsValidDest(player.model, cardArea.model, firstDest);
@@ -124,14 +124,14 @@ namespace View
             else
             {
                 var card = cardArea.SelectedCard.Count > 0 ? cardArea.SelectedCard[0].model : null;
-                foreach (var i in players)
+                foreach (var i in Players)
                 {
                     i.button.interactable = Model.TimerTask.Instance.ValidDest(i.model, card, firstDest);
                 }
             }
 
             // 对不能选择的角色设置阴影
-            foreach (var player in players) player.AddShadow();
+            foreach (var player in Players) player.AddShadow();
         }
 
     }

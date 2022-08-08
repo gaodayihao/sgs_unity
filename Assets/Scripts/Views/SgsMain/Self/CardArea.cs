@@ -56,7 +56,12 @@ namespace View
             bool active = operation.player == self.model;
             foreach (var i in cards)
             {
-                if (handcards.ContainsKey(i.Id)) continue;
+                if (handcards.ContainsKey(i.Id))
+                {
+                    handcards[i.Id].transform.SetAsLastSibling();
+                    continue;
+                }
+
                 var instance = Instantiate(card);
                 instance.SetActive(active);
                 instance.transform.SetParent(handCardArea.transform, false);
@@ -80,12 +85,12 @@ namespace View
             foreach (var i in operation.Cards)
             {
                 if (!handcards.ContainsKey(i.Id)) continue;
-                if (!self.model.Teammate.HandCards.Contains(i))
+                if (!operation.player.Teammate.HandCards.Contains(i))
                 {
                     Destroy(handcards[i.Id].gameObject);
                     handcards.Remove(i.Id);
                 }
-                else handcards[i.Id].gameObject.SetActive(self.model == operation.player);
+                else handcards[i.Id].gameObject.SetActive(self.model != operation.player);
             }
         }
 

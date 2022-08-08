@@ -37,7 +37,14 @@ namespace Model
             if (!getCardFromPile.InGetCardPhase || !await base.ShowTimer()) return;
             Execute();
 
-            getCardFromPile.Count-=TimerTask.Instance.Dests.Count;
+            getCardFromPile.Count -= TimerTask.Instance.Dests.Count;
+            foreach (var i in TimerTask.Instance.Dests)
+            {
+                if (Src.Teammate == i) CardPanel.Instance.display = true;
+                bool result = await CardPanel.Instance.Run(Src, i, TimerType.手牌);
+                var card = result ? CardPanel.Instance.Cards : new List<Card> { i.HandCards[0] };
+                await new GetCardFromElse(Src, i, card).Execute();
+            }
         }
     }
 }

@@ -140,29 +140,19 @@ namespace View
 
             switch (model.timerType)
             {
-                case TimerType.CardPanel:
-                    ShowCardPanel(model);
+                case TimerType.区域内:
+                    panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("区域内");
                     break;
                 case TimerType.麒麟弓:
-                    ShowQlg(model);
+                    panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("麒麟弓");
+                    break;
+                case TimerType.手牌:
+                    panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("手牌");
                     break;
             }
-        }
 
-        private void ShowCardPanel(Model.CardPanel model)
-        {
-            panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("区域内");
             panel = Instantiate(this.panel);
             panel.transform.SetParent(transform, false);
-            panel.GetComponent<区域内>().Init(model);
-        }
-
-        private void ShowQlg(Model.CardPanel model)
-        {
-            panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("麒麟弓");
-            panel = Instantiate(this.panel);
-            panel.transform.SetParent(transform, false);
-            panel.GetComponent<麒麟弓>().Init(model);
         }
 
         public void HidePanel(Model.CardPanel model)

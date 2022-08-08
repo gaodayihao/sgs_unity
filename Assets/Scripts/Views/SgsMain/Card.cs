@@ -104,7 +104,7 @@ namespace View
             shadow.color = new Color(0, 0, 0, 0);
         }
 
-        public void InitInPanel(Model.Card model, bool known)
+        public void InitInPanel(Model.Card model, bool known = true)
         {
             Id = model.Id;
             name = model.Name;
@@ -127,40 +127,35 @@ namespace View
             }
 
             button.interactable = true;
+            button.onClick.AddListener(ClickInPanel);
         }
 
-        public void InitInRegion(Model.Card model, bool known = true)
-        {
-            InitInPanel(model, known);
-            button.onClick.AddListener(ClickInRegion);
-        }
-
-        public void InitInQlg(Model.Card model)
-        {
-            InitInPanel(model, true);
-            button.onClick.AddListener(ClickInQlg);
-        }
+        // public void InitInQlg(Model.Card model)
+        // {
+        //     InitInPanel(model, true);
+        //     button.onClick.AddListener(ClickInQlg);
+        // }
 
         /// <summary>
         /// 点击卡牌
         /// </summary>
-        private void ClickInRegion()
+        private void ClickInPanel()
         {
             // 选中卡牌
             // if (!IsSelected) Select();
             // else Unselect();
-            var panel = GetComponentInParent<区域内>();
+            // var panel = ;
 
-            panel.selectCards.Add(this);
-            panel.UpdatePanel();
+            CardPanel.Instance.selectCards.Add(this);
+            CardPanel.Instance.UpdatePanel();
         }
 
-        private void ClickInQlg()
-        {
-            var panel = GetComponentInParent<麒麟弓>();
+        // private void ClickInQlg()
+        // {
+        //     var panel = GetComponentInParent<麒麟弓>();
 
-            panel.SelectCard = this;
-            panel.UpdatePanel();
-        }
+        //     panel.SelectCard = this;
+        //     panel.UpdatePanel();
+        // }
     }
 }
