@@ -1,7 +1,7 @@
 import os
 import paramiko
 
-instruct = "scp -r AssetBundles/WebGL django:~/sgs/game/static/AssetBundles"
+instruct = "scp -r Build/WebGL/StreamingAssets/AssetBundles/ django:~/sgs/game/static/AssetBundles"
 os.system(instruct)
 
 

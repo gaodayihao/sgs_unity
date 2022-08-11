@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public static class Urls
 {
     /// <summary>
@@ -18,21 +20,29 @@ public static class Urls
     /// <summary>
     /// Django静态文件地址
     /// </summary>
-    public const string STATIC_URL = DOMAIN_NAME + "static/";
-
-    public static string JSON_URL =
+    public static string STATIC_URL =
 #if UNITY_EDITOR
-        "file:///" + UnityEngine.Application.dataPath + "/../Json/";
+        "file://" + Application.streamingAssetsPath + "/";
 #else
-        STATIC_URL + "Json/";
+        Application.streamingAssetsPath + "/";
 #endif
+    // public const string STATIC_URL = DOMAIN_NAME + "static/";
+
+    public static string ABUrl = Urls.STATIC_URL + "AssetBundles/";
+
+    public static string JSON_URL = STATIC_URL + "Json/";
+    // #if UNITY_EDITOR
+    //         "file:///" + Application.dataPath + "/../Json/";
+    // #else
+    //         STATIC_URL + "Json/";
+    // #endif
 
     // 图片文件地址
-    public const string IMAGE_URL = STATIC_URL + "image/";
-    public const string GENERAL_IMAGE = IMAGE_URL + "general/";
-    
+    public static string IMAGE_URL = STATIC_URL + "Image/";
+    public static string GENERAL_IMAGE = IMAGE_URL + "General/";
+
     // 音频文件地址
-    public const string AUDIO_URL = STATIC_URL + "audio/";
+    public static string AUDIO_URL = STATIC_URL + "Audio/";
 
     public const string TEST_BACKGROUND_IMAGE = "https://web.sanguosha.com/220/h5/res/runtime/pc/wallpaper/bg/10.jpg";
 }

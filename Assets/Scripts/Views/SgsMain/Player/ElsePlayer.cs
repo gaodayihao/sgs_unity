@@ -147,8 +147,8 @@ namespace View
         {
             while (timer.value > 0)
             {
-                timer.value -= 0.1f / second;
-                yield return new WaitForSeconds(0.1f);
+                timer.value -= Time.deltaTime / second;
+                yield return null;
             }
         }
     }

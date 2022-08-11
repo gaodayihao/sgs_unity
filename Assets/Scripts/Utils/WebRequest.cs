@@ -12,6 +12,7 @@ public static class WebRequest
     /// </summary>
     public static async Task<string> GetString(string url)
     {
+            Debug.Log(url);
         UnityWebRequest www = UnityWebRequest.Get(url);
         www.SendWebRequest();
 

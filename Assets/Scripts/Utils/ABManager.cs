@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 public class ABManager : Singleton<ABManager>
 {
     // AB包路径
-    private string ABUrl
-    {
-        get
-        {
-#if UNITY_EDITOR
-            return "file:///" + Application.dataPath + "/../AssetBundles/WebGL/";
-            // return Urls.STATIC_URL + "AssetBundles/WebGL/";
-#elif UNITY_WEBGL
-            return Urls.STATIC_URL + "AssetBundles/WebGL/";
-#else
-            return "file:///" + Application.dataPath + "/../AssetBundles/StandaloneWindows/";
-#endif
-        }
-    }
+    //     private string ABUrl
+    //     {
+    //         get
+    //         {
+    // #if UNITY_EDITOR
+    //             return "file:///" + Application.dataPath + "/../AssetBundles/WebGL/";
+    //             // return Urls.STATIC_URL + "AssetBundles/WebGL/";
+    // #elif UNITY_WEBGL
+    //             return Urls.STATIC_URL + "AssetBundles/";
+    // #else
+    //             return "file:///" + Application.dataPath + "/../AssetBundles/StandaloneWindows/";
+    // #endif
+    //         }
+    //     }
 
     // 依赖项配置文件
     private AssetBundleManifest manifest = null;
@@ -45,7 +45,7 @@ public class ABManager : Singleton<ABManager>
     /// <param name="abName">Assetbundle name</param>
     private async Task GetABFromServer(string abName)
     {
-        UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(ABUrl + abName);
+        UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(Urls.ABUrl + abName);
         www.SendWebRequest();
 
         while (!www.isDone)
@@ -57,6 +57,7 @@ public class ABManager : Singleton<ABManager>
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(www.error);
+            Debug.Log(Urls.ABUrl + abName);
         }
         else
         {
@@ -71,15 +72,15 @@ public class ABManager : Singleton<ABManager>
     /// </summary>
     private async Task LoadManifest()
     {
-        string mainABName =
-#if UNITY_EDITOR
-        //"StandaloneWindows";
-        "WebGL";
-#elif UNITY_WEBGL
-        "WebGL";
-#else
-        "StandaloneWindows";
-#endif
+        string mainABName = "AssetBundles";
+        // #if UNITY_EDITOR
+        //         //"StandaloneWindows";
+        //         "WebGL";
+        // #elif UNITY_WEBGL
+        //         "WebGL";
+        // #else
+        //         "StandaloneWindows";
+        // #endif
         // 下载主包
         await GetABFromServer(mainABName);
 
@@ -132,19 +133,20 @@ public class ABManager : Singleton<ABManager>
 
     public void LoadSgsMain()
     {
+        string url = Application.streamingAssetsPath + "/AssetBundles/";
         if (!ABManager.Instance.ABMap.ContainsKey("sprite"))
         {
-            ABMap.Add("sprite", AssetBundle.LoadFromFile(Application.dataPath + "/../AssetBundles/WebGL/sprite"));
+            ABMap.Add("sprite", AssetBundle.LoadFromFile(url + "sprite"));
         }
-        
+
         if (!ABManager.Instance.ABMap.ContainsKey("sgsasset"))
         {
-            ABMap.Add("sgsasset", AssetBundle.LoadFromFile(Application.dataPath + "/../AssetBundles/WebGL/sgsasset"));
+            ABMap.Add("sgsasset", AssetBundle.LoadFromFile(url + "sgsasset"));
         }
 
         if (!ABManager.Instance.ABMap.ContainsKey("fonts"))
         {
-            ABMap.Add("fonts", AssetBundle.LoadFromFile(Application.dataPath + "/../AssetBundles/WebGL/fonts"));
+            ABMap.Add("fonts", AssetBundle.LoadFromFile(url + "fonts"));
         }
     }
 }

@@ -26,8 +26,8 @@ namespace View
             { typeof(Model.无懈可击), 13 },
             { typeof(Model.借刀杀人), 14 },
             { typeof(Model.乐不思蜀), 15 },
-            { typeof(Model.SubHorse), 18 },
-            { typeof(Model.PlusHorse), 18 },
+            // { typeof(Model.SubHorse), 18 },
+            // { typeof(Model.PlusHorse), 18 },
             { typeof(Model.火杀), 16 },
             { typeof(Model.雷杀), 17 },
             { typeof(Model.酒), 82 },
@@ -47,10 +47,10 @@ namespace View
                 {
                     url += "equipArmor.mp3";
                 }
-                // else if (card is Model.SubHorse || card is Model.PlusHorse)
-                // {
-                //     url += "equipHorse.mp3";
-                // }
+                else if (card is Model.SubHorse || card is Model.PlusHorse)
+                {
+                    url += "equipHorse.mp3";
+                }
                 else return;
             }
             else

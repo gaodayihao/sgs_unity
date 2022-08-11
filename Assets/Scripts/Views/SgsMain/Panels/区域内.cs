@@ -22,6 +22,7 @@ namespace View
             title.text = model.Title;
 
             foreach (var i in model.dest.HandCards) InitCard(i, handCards.transform, model.display);
+            handCards.GetComponent<GridLayoutGroup>().spacing = UpdateSpacing(handCards.transform.childCount);
 
             foreach (var i in model.dest.Equipages.Values)
             {

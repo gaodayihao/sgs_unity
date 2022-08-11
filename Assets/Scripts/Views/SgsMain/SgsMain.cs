@@ -12,9 +12,11 @@ namespace View
         public GameObject[] players;
         public Player self { get; private set; }
         public Button gameOver;
+        public RectTransform border;
 
         protected override void Awake()
         {
+            SetBorder();
             base.Awake();
 #if UNITY_EDITOR
             ABManager.Instance.LoadSgsMain();
@@ -39,6 +41,16 @@ namespace View
             Vector2 canvasSize = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>().sizeDelta;
             float radio = Mathf.Max(canvasSize.x / texture.width, canvasSize.y / texture.height);
             backgroundImage.rectTransform.sizeDelta *= radio;
+        }
+
+        public void SetBorder()
+        {
+            float x = GetComponent<RectTransform>().sizeDelta.x;
+            float y = GetComponent<RectTransform>().sizeDelta.y;
+            Debug.Log("canvas.x = " + x);
+            float d = x / y > 2 ? x * 0.5f - y : 0;
+            border.offsetMin = new Vector2(d, 0);
+            border.offsetMax = new Vector2(-d, 0);
         }
 
         /// <summary>

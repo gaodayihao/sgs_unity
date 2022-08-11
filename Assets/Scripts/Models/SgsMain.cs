@@ -116,7 +116,7 @@ namespace Model
             {
                 // debug
                 General self = null;
-                string name = "张辽";
+                string name = "吕布";
                 foreach (var i in json)
                 {
                     if (i.name == name)

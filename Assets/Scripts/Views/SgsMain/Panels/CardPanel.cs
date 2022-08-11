@@ -64,5 +64,18 @@ namespace View
             // StopAllCoroutines();
             Model.CardPanel.Instance.SendResult();
         }
+
+        /// <summary>
+        /// 更新卡牌间距
+        /// </summary>
+        protected Vector2 UpdateSpacing(int count)
+        {
+
+            // 若手牌数小于7，则不用设置负间距，直接返回
+            if (count < 8) return new Vector2(0, 0);
+
+            float spacing = -(count * 121.5f - 850) / (float)(count - 1) - 0.001f;
+            return new Vector2(spacing, 0);
+        }
     }
 }

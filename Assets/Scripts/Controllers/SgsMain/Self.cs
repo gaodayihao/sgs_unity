@@ -12,6 +12,7 @@ namespace Controller
         private View.DestArea destArea;
         private View.EquipArea equipArea;
         private View.SkillArea skillArea;
+        private View.队友手牌 teammate;
 
         void Start()
         {
@@ -21,6 +22,7 @@ namespace Controller
             destArea = GetComponent<View.DestArea>();
             equipArea = GetComponent<View.EquipArea>();
             skillArea = GetComponent<View.SkillArea>();
+            teammate = GameObject.Find("Canvas").transform.Find("队友手牌Panel").GetComponent<View.队友手牌>();
 
             // 阶段信息
             Model.TurnSystem.Instance.StartPhaseView += self.ShowPhase;
@@ -63,6 +65,10 @@ namespace Controller
             Model.TimerTask.Instance.MoveSeat += cardArea.UpdateHandCardText;
             Model.TimerTask.Instance.MoveSeat += equipArea.MoveSeat;
             Model.TimerTask.Instance.MoveSeat += skillArea.MoveSeat;
+
+            // 队友手牌
+            Model.GetCard.ActionView += teammate.AddHandCard;
+            Model.LoseCard.ActionView += teammate.RemoveHandCard;
         }
 
         private void OnDestroy()
@@ -98,6 +104,9 @@ namespace Controller
             Model.TimerTask.Instance.MoveSeat -= cardArea.UpdateHandCardText;
             Model.TimerTask.Instance.MoveSeat -= equipArea.MoveSeat;
             Model.TimerTask.Instance.MoveSeat -= skillArea.MoveSeat;
+
+            Model.GetCard.ActionView -= teammate.AddHandCard;
+            Model.LoseCard.ActionView -= teammate.RemoveHandCard;
         }
     }
 }

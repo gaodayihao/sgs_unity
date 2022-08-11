@@ -26,7 +26,7 @@ namespace Model
 
         public void RemoveToJudgeArea()
         {
-            Dests[0].JudgeArea.Remove(this);
+            Owner.JudgeArea.Remove(this);
             removeJudgeView?.Invoke(this);
         }
 

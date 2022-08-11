@@ -14,6 +14,7 @@ namespace View
             base.Start();
 
             foreach (var i in model.dest.HandCards) InitCard(i, handCards.transform, model.display);
+            handCards.GetComponent<GridLayoutGroup>().spacing = UpdateSpacing(handCards.transform.childCount);
         }
     }
 }

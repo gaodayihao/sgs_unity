@@ -245,7 +245,6 @@ namespace View
         /// <summary>
         /// 更新卡牌间距
         /// </summary>
-        /// <param name="count"></param>
         private void UpdateSpacing()
         {
             int count = 0;

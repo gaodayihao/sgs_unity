@@ -366,7 +366,7 @@ namespace Model
     {
         public async Task<Card> Execute()
         {
-            JudgeCard = await CardPile.Instance.Pop();
+            var JudgeCard = await CardPile.Instance.Pop();
             CardPile.Instance.AddToDiscard(JudgeCard);
             Debug.Log("判定结果为【" + JudgeCard.Name + JudgeCard.Suit + JudgeCard.Weight + "】");
 
@@ -375,7 +375,7 @@ namespace Model
             return JudgeCard;
         }
 
-        public Card JudgeCard { get; set; }
+        // public Card JudgeCard { get; set; }
 
         public EventSet<Judge> modifyJudge = new EventSet<Judge>();
     }

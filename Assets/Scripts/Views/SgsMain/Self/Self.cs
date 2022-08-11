@@ -16,6 +16,8 @@ namespace View
         private Dictionary<Phase, Sprite> phaseSprite;
 
         public Button changeSkin;
+        public Button teammate;
+        public GameObject teammatePanel;
 
         void Start()
         {
@@ -23,6 +25,7 @@ namespace View
 
             currentPhase.gameObject.SetActive(false);
             changeSkin.onClick.AddListener(ChangeSkin);
+            teammate.onClick.AddListener(ClickTeammate);
         }
 
         /// <summary>
@@ -47,9 +50,14 @@ namespace View
             currentPhase.gameObject.SetActive(false);
         }
 
-       private void ChangeSkin()
+        private void ChangeSkin()
         {
             self.UpdateSkin();
+        }
+
+        private void ClickTeammate()
+        {
+            teammatePanel.SetActive(!teammatePanel.activeSelf);
         }
     }
 }
