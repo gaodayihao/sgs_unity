@@ -144,7 +144,7 @@ namespace Model
                 case Phase.Discard:
 
                     var count = CurrentPlayer.HandCardCount - CurrentPlayer.HandCardLimit;
-                    if (count > 0) await Discard.DiscardFromHand(CurrentPlayer, count);
+                    if (count > 0) await TimerAction.DiscardFromHand(CurrentPlayer, count);
                     break;
             }
 
@@ -232,6 +232,20 @@ namespace Model
         public Action BeforeTurn;
         public Action AfterTurn;
         public Action AfterPerform;
+
+        public void SortDest(List<Player> dests)
+        {
+            dests.Sort((x, y) =>
+            {
+                Player i = CurrentPlayer;
+                while (true)
+                {
+                    if (x == i) return -1;
+                    else if (y == i) return 1;
+                    i = i.Next;
+                }
+            });
+        }
 
         private UnityAction<TurnSystem> startTurnView;
         private UnityAction<TurnSystem> finishTurnView;

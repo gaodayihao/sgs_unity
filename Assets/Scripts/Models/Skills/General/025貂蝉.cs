@@ -7,7 +7,7 @@ namespace Model
 {
     public class 离间 : Active
     {
-        public 离间(Player src) : base(src, "离间", false, 1) { }
+        public 离间(Player src) : base(src, "离间", 1) { }
 
         public override int MaxCard()
         {

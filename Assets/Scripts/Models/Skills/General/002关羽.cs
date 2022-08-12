@@ -53,7 +53,7 @@ namespace Model
     /// </summary>
     public class 义绝 : Active
     {
-        public 义绝(Player src) : base(src, "义绝", false, 1) { }
+        public 义绝(Player src) : base(src, "义绝", 1) { }
 
         public override int MaxCard()
         {
@@ -89,7 +89,7 @@ namespace Model
             await new Discard(Src, cards).Execute();
             // 展示手牌
             TimerTask.Instance.Hint = Src.PosStr + "号位对你发动义绝，请展示一张手牌。";
-            var showCard = await ShowCard.ShowCardTimer(Dest);
+            var showCard = await TimerAction.ShowCardTimer(Dest);
 
             // 红色
             if (showCard[0].Suit == "红桃" || showCard[0].Suit == "方片")

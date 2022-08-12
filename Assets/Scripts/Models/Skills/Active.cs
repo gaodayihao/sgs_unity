@@ -9,8 +9,8 @@ namespace Model
     /// </summary>
     public class Active : Skill
     {
-        public Active(Player src, string name, bool passive, int timeLimit)
-            : base(src, name, passive, timeLimit) { }
+        public Active(Player src, string name, int timeLimit)
+            : base(src, name, false, timeLimit) { }
 
         /// <summary>
         /// 发动技能

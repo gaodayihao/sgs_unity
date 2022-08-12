@@ -56,21 +56,16 @@ namespace View
             List<int> players = new List<int>();
             foreach (var player in destArea.SelectedPlayer) players.Add(player.model.Position);
 
-            // List<int> equips = new List<int>();
-            // foreach (var card in equipArea.SelectedCard) equips.Add(card.Id);
-
             string skill = "";
             if (skillArea.SelectedSkill != null) skill = skillArea.SelectedSkill.Name;
 
-            if (!timerTask.isWxkj)
-            {
-                timerTask.SendResult(cards, players, skill);
-            }
-            else
+            if (timerTask.isWxkj)
             {
                 bool isSelf = self.model.HandCards.Contains(Model.CardPile.Instance.cards[cards[0]]);
-                timerTask.SendWxkjResult((isSelf ? self.model : self.model.Teammate).Position, true, cards);
+                timerTask.SendResult((isSelf ? self.model : self.model.Teammate).Position, true, cards);
             }
+            else if (timerTask.isCompete) timerTask.SendResult(self.model.Position, true, cards);
+            else timerTask.SendResult(cards, players, skill);
         }
 
         /// <summary>
@@ -94,12 +89,14 @@ namespace View
             // SetResult
             StopAllCoroutines();
             HideTimer();
-            if (!timerTask.isWxkj) timerTask.SendResult();
-            else
+
+            if (timerTask.isWxkj)
             {
-                timerTask.SendWxkjResult(self.model.Position, false);
-                timerTask.SendWxkjResult(self.model.Teammate.Position, false);
+                timerTask.SendResult(self.model.Position, false);
+                timerTask.SendResult(self.model.Teammate.Position, false);
             }
+            // else if (timerTask.isCompete) timerTask.SendResult(self.model.Position, false);
+            else timerTask.SendResult();
         }
 
         /// <summary>
@@ -169,12 +166,9 @@ namespace View
         {
             while (timer.value > 0)
             {
-                // timer.value -= 0.1f / second;
-                // yield return new WaitForSeconds(0.1f);
                 timer.value -= Time.deltaTime / second;
                 yield return null;
             }
-            // ClickCancel();
         }
 
         /// <summary>

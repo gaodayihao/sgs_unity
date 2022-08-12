@@ -349,7 +349,7 @@ namespace Model
                 if (dest.HandCardCount == 0) continue;
 
                 TimerTask.Instance.Hint = Src.PosStr + "号位对你使用火攻，请展示一张手牌。";
-                var showCard = (await ShowCard.ShowCardTimer(dest))[0];
+                var showCard = (await TimerAction.ShowCardTimer(dest))[0];
 
                 TimerTask.Instance.Hint = "是否弃置手牌";
                 TimerTask.Instance.ValidCard = (card) => card.Suit == showCard.Suit;

@@ -152,6 +152,10 @@ namespace Model
                     case "利驭": skills.Add(str, new 利驭(this)); break;
                     case "离间": skills.Add(str, new 离间(this)); break;
                     case "闭月": skills.Add(str, new 闭月(this)); break;
+                    case "驱虎": skills.Add(str, new 驱虎(this)); break;
+                    case "节命": skills.Add(str, new 节命(this)); break;
+                    case "好施": skills.Add(str, new 好施(this)); break;
+                    case "缔盟": skills.Add(str, new 缔盟(this)); break;
                 }
 
                 // player.skills.Add(skill);

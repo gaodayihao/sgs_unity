@@ -63,7 +63,9 @@ namespace Model
             // 初始化牌堆
             await CardPile.Instance.Init();
 
+#if UNITY_EDITOR
             if (Room.Instance.IsSingle) await DebugCard();
+#endif
 
             foreach (var player in players) await new GetCardFromPile(player, 4).Execute();
 
@@ -114,9 +116,10 @@ namespace Model
 
             if (Room.Instance.IsSingle)
             {
+#if UNITY_EDITOR
                 // debug
                 General self = null;
-                string name = "吕布";
+                string name = "鲁肃";
                 foreach (var i in json)
                 {
                     if (i.name == name)
@@ -139,6 +142,14 @@ namespace Model
 
                     i.InitGeneral(general);
                 }
+#else
+                foreach (var i in players)
+                {
+                    var general = json[Random.Range(0, json.Count)];
+                    json.Remove(general);
+                    i.InitGeneral(general);
+                }
+#endif
             }
             else
                 foreach (var player in players)

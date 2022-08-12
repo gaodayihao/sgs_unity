@@ -10,12 +10,12 @@ namespace Model
 
         public override void OnEnabled()
         {
-            Src.playerEvents.getCard.AddEvent(Src, Execute);
+            Src.playerEvents.WhenGetCard.AddEvent(Src, Execute);
         }
 
         public override void OnDisabled()
         {
-            Src.playerEvents.getCard.RemoveEvent(Src, Execute);
+            Src.playerEvents.WhenGetCard.RemoveEvent(Src, Execute);
         }
 
         public override int MaxDest(List<Card> cards)
@@ -30,14 +30,14 @@ namespace Model
 
         private GetCardFromPile getCardFromPile;
 
-        public async Task Execute(GetCard getCard)
+        public async Task Execute(GetCardFromPile getCard)
         {
-            if (!(getCard is GetCardFromPile)) return;
-            getCardFromPile = getCard as GetCardFromPile;
-            if (!getCardFromPile.InGetCardPhase || !await base.ShowTimer()) return;
+            getCardFromPile = getCard;
+            if (!getCard.InGetCardPhase || !await base.ShowTimer()) return;
             Execute();
 
-            getCardFromPile.Count -= TimerTask.Instance.Dests.Count;
+            getCard.Count -= TimerTask.Instance.Dests.Count;
+            TurnSystem.Instance.SortDest(TimerTask.Instance.Dests);
             foreach (var i in TimerTask.Instance.Dests)
             {
                 if (Src.Teammate == i) CardPanel.Instance.display = true;

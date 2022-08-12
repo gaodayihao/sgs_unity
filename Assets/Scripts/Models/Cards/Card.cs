@@ -37,16 +37,7 @@ namespace Model
             // 目标角色排序
             if (Dests != null && Dests.Count > 1)
             {
-                Dests.Sort((x, y) =>
-                {
-                    Player i = TurnSystem.Instance.CurrentPlayer;
-                    while (true)
-                    {
-                        if (x == i) return -1;
-                        else if (y == i) return 1;
-                        i = i.Next;
-                    }
-                });
+                TurnSystem.Instance.SortDest(Dests);
             }
 
             // 使用者失去此手牌

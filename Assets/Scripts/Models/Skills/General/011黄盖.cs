@@ -7,7 +7,7 @@ namespace Model
 {
     public class 苦肉 : Active
     {
-        public 苦肉(Player src) : base(src, "苦肉", false, 1) { }
+        public 苦肉(Player src) : base(src, "苦肉", 1) { }
 
         public override int MaxCard()
         {

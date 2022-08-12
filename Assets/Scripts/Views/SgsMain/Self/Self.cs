@@ -17,6 +17,7 @@ namespace View
 
         public Button changeSkin;
         public Button teammate;
+        public Button surrender;
         public GameObject teammatePanel;
 
         void Start()
@@ -26,6 +27,7 @@ namespace View
             currentPhase.gameObject.SetActive(false);
             changeSkin.onClick.AddListener(ChangeSkin);
             teammate.onClick.AddListener(ClickTeammate);
+            surrender.onClick.AddListener(ClickSurrender);
         }
 
         /// <summary>
@@ -58,6 +60,11 @@ namespace View
         private void ClickTeammate()
         {
             teammatePanel.SetActive(!teammatePanel.activeSelf);
+        }
+
+        private void ClickSurrender()
+        {
+            SgsMain.Instance.GameOver();
         }
     }
 }

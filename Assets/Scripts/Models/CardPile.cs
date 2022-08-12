@@ -79,7 +79,7 @@ namespace Model
 
         public List<Card> cards;
 
-        private Dictionary<string, System.Type> cardMap = new Dictionary<string, System.Type>
+        public Dictionary<string, System.Type> cardMap = new Dictionary<string, System.Type>
         {
             { "杀", typeof(杀) },
             { "闪", typeof(闪) },

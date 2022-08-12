@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace Model
 {
-    public class DelayScheme : Card
+    public abstract class DelayScheme : Card
     {
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
@@ -30,11 +30,7 @@ namespace Model
             removeJudgeView?.Invoke(this);
         }
 
-        public virtual async Task Judge()
-        {
-            RemoveToJudgeArea();
-            judgeCard = await new Judge().Execute();
-        }
+        public abstract Task Judge();
 
         protected Card judgeCard;
 
@@ -64,7 +60,9 @@ namespace Model
         public override async Task Judge()
         {
             CardPile.Instance.AddToDiscard(this);
-            await base.Judge();
+            RemoveToJudgeArea();
+            if (await 无懈可击.Call(this, Owner)) return;
+            judgeCard = await new Judge().Execute();
 
             if (judgeCard.Suit != "红桃") TurnSystem.Instance.SkipPhase[Owner][Phase.Perform] = true;
         }
@@ -81,7 +79,9 @@ namespace Model
         public override async Task Judge()
         {
             CardPile.Instance.AddToDiscard(this);
-            await base.Judge();
+            RemoveToJudgeArea();
+            if (await 无懈可击.Call(this, Owner)) return;
+            judgeCard = await new Judge().Execute();
 
             if (judgeCard.Suit != "草花") TurnSystem.Instance.SkipPhase[Owner][Phase.Get] = true;
         }
@@ -102,7 +102,13 @@ namespace Model
 
         public override async Task Judge()
         {
-            await base.Judge();
+            RemoveToJudgeArea();
+            if (await 无懈可击.Call(this, Owner))
+            {
+                AddToJudgeArea(Owner.Next);
+                return;
+            }
+            judgeCard = await new Judge().Execute();
 
             if (judgeCard.Suit == "黑桃" && judgeCard.Weight >= 2 && judgeCard.Weight <= 9)
             {

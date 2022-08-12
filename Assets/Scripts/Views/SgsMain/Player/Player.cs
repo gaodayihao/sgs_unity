@@ -109,7 +109,8 @@ namespace View
             if (model != player) return;
             CurrentSkin = skin;
 
-            string url = Urls.GENERAL_IMAGE + player.general.id.ToString().PadLeft(3, '0') + "/" + skin.id + ".png";
+            // string url = Urls.GENERAL_IMAGE + player.general.id.ToString().PadLeft(3, '0') + "/" + skin.id + ".png";
+            string url = Urls.GENERAL_IMAGE + "Seat/" + skin.id + ".png";
             var texture = await WebRequest.GetTexture(url);
             generalImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
         }

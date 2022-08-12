@@ -44,13 +44,13 @@ namespace Model
 
         public override void OnEnabled()
         {
-            Src.playerEvents.getCard.AddEvent(Src, Execute);
+            Src.playerEvents.AfterGetCard.AddEvent(Src, Execute);
             TurnSystem.Instance.AfterTurn += Reset;
         }
 
         public override void OnDisabled()
         {
-            Src.playerEvents.getCard.RemoveEvent(Src, Execute);
+            Src.playerEvents.AfterGetCard.RemoveEvent(Src, Execute);
             TurnSystem.Instance.AfterTurn -= Reset;
         }
 

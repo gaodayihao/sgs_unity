@@ -22,7 +22,8 @@ namespace Model
                 finishPhaseEvents.Add(phase, new EventSet());
             }
 
-            getCard = new EventSet<GetCard>();
+            WhenGetCard = new EventSet<GetCardFromPile>();
+            AfterGetCard = new EventSet<GetCard>();
             loseCard = new EventSet<LoseCard>();
 
             recover = new EventSet<Recover>();
@@ -43,8 +44,10 @@ namespace Model
         // 阶段结束时事件
         public Dictionary<Phase, EventSet> finishPhaseEvents;
 
+        // 摸牌时事件
+        public EventSet<GetCardFromPile> WhenGetCard;
         // 获得牌后事件
-        public EventSet<GetCard> getCard;
+        public EventSet<GetCard> AfterGetCard;
         // 失去牌后事件
         public EventSet<LoseCard> loseCard;
 

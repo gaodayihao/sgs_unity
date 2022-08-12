@@ -62,7 +62,7 @@ namespace View
             UpdateDestArea();
 
             int c = 0;
-            foreach (var i in players)
+            foreach (var i in Players)
             {
                 if (i.button.interactable) c++;
             }

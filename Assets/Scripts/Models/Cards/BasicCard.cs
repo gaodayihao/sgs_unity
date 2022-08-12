@@ -20,12 +20,12 @@ namespace Model
         {
             if (src.weapon != null)
             {
-                Src=src;
-                Dests=dests;
+                Src = src;
+                Dests = dests;
                 if (src.weapon is 朱雀羽扇 && await (src.weapon as 朱雀羽扇).Skill(this)) return;
                 src.weapon.WhenUseSha(this);
             }
-            
+
             ShanCount = 1;
             DamageValue = 1;
             IgnoreArmor = false;

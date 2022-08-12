@@ -54,7 +54,7 @@ namespace Model
             actionView?.Invoke(this);
 
             // 执行获得牌后事件
-            await player.playerEvents.getCard.Execute(this);
+            await player.playerEvents.AfterGetCard.Execute(this);
         }
 
         // public async Task FromElse(Player dest)
@@ -82,6 +82,8 @@ namespace Model
 
         public override async Task Execute()
         {
+            await player.playerEvents.WhenGetCard.Execute(this);
+            if (Count == 0) return;
             Debug.Log(player.PosStr + "号位摸了" + Count.ToString() + "张牌");
             // 摸牌
             for (int i = 0; i < Count; i++) Cards.Add(await CardPile.Instance.Pop());
@@ -140,24 +142,6 @@ namespace Model
 
             // losecard
             await base.Execute();
-        }
-
-        /// <summary>
-        /// 弃手牌
-        /// </summary>
-        public static async Task DiscardFromHand(Player player, int count)
-        {
-            TimerTask.Instance.Hint = "请弃置" + count.ToString() + "张手牌。";
-            TimerTask.Instance.ValidCard = (card) => player.HandCards.Contains(card);
-            TimerTask.Instance.Refusable = false;
-            bool result = await TimerTask.Instance.Run(player, count, 0);
-            if (result) await new Discard(player, TimerTask.Instance.Cards).Execute();
-            else
-            {
-                List<Card> cards = new List<Card>();
-                for (int i = 0; i < count; i++) cards.Add(player.HandCards[i]);
-                await new Discard(player, cards).Execute();
-            }
         }
     }
 
@@ -313,6 +297,9 @@ namespace Model
             if (conduct) await Conduct();
         }
 
+        /// <summary>
+        /// 铁索连环传导
+        /// </summary>
         private async Task Conduct()
         {
             Player i = TurnSystem.Instance.CurrentPlayer;
@@ -355,7 +342,7 @@ namespace Model
             await new LoseCard(Dest, Cards).Execute();
 
             // 执行获得牌后事件
-            await player.playerEvents.getCard.Execute(this);
+            await player.playerEvents.AfterGetCard.Execute(this);
         }
     }
 
@@ -396,20 +383,6 @@ namespace Model
             await Task.Yield();
             actionView?.Invoke(this);
         }
-
-        /// <summary>
-        /// 展示手牌
-        /// </summary>
-        public static async Task<List<Card>> ShowCardTimer(Player player, int count = 1)
-        {
-            TimerTask.Instance.ValidCard = (card) => player.HandCards.Contains(card);
-            TimerTask.Instance.Refusable = false;
-            bool result = await TimerTask.Instance.Run(player, count, 0);
-            var cards = result ? TimerTask.Instance.Cards : player.HandCards.Take(count).ToList();
-            var showCard = new ShowCard(player, cards);
-            await showCard.Execute();
-            return showCard.Cards;
-        }
     }
 
     /// <summary>
@@ -429,6 +402,42 @@ namespace Model
             player.IsLocked = !player.IsLocked;
             actionView?.Invoke(this);
             await Task.Yield();
+        }
+    }
+
+    public class Compete : PlayerAction<Compete>
+    {
+        public Compete(Player player, Player dest) : base(player)
+        {
+            Dest = dest;
+        }
+
+        public Player Dest { get; private set; }
+        public Card Card0 { get; private set; }
+        public Card Card1 { get; private set; }
+        public bool Result { get; private set; }
+
+        public override async Task Execute()
+        {
+            TimerTask.Instance.Hint = "请选择一张手牌拼点";
+            if (player.Teammate == Dest)
+            {
+                Card0 = (await TimerAction.SelectHandCard(player, 1))[0];
+                Card1 = (await TimerAction.SelectHandCard(Dest, 1))[0];
+            }
+            else
+            {
+                await TimerTask.Instance.Compete(player, Dest);
+                Card0 = CardPile.Instance.cards[TimerTask.Instance.card0];
+                Card1 = CardPile.Instance.cards[TimerTask.Instance.card1];
+            }
+
+            CardPile.Instance.AddToDiscard(Card0);
+            CardPile.Instance.AddToDiscard(Card1);
+            await new LoseCard(player, new List<Card> { Card0 }).Execute();
+            await new LoseCard(Dest, new List<Card> { Card1 }).Execute();
+
+            Result = Card0.Weight > Card1.Weight;
         }
     }
 

@@ -7,7 +7,7 @@ namespace Model
 {
     public class 制衡 : Active
     {
-        public 制衡(Player src) : base(src, "制衡", false, 1) { }
+        public 制衡(Player src) : base(src, "制衡", 1) { }
 
         public override int MaxCard()
         {
