@@ -1,0 +1,70 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Threading.Tasks;
+
+namespace Model
+{
+    public class 明策 : Active
+    {
+        public 明策(Player src) : base(src, "明策", 1) { }
+
+        public override int MaxCard => 1;
+        public override int MinCard => 1;
+        public override bool IsValidCard(Card card) => !card.IsConvert && (card is 杀 || card is Equipage);
+
+        public override int MaxDest(List<Card> cards) => 2;
+        public override int MinDest(List<Card> cards) => 2;
+        public override bool IsValidDest(Player dest, Player first) => first is null || DestArea.UseSha(first, dest);
+
+        public override async Task Execute(List<Player> dests, List<Card> cards, string other)
+        {
+            await base.Execute(dests, cards, other);
+
+            await new GetCardFromElse(dests[0], Src, cards).Execute();
+
+            TimerTask.Instance.Hint = "视为对该角色使用一张杀，或摸一张牌";
+            TimerTask.Instance.ValidDest = (dest, card, first) => dest == dests[1];
+            bool result = await TimerTask.Instance.Run(dests[0], 0, 1);
+
+            if (result) await Card.Convert<杀>().UseCard(dests[0], TimerTask.Instance.Dests);
+            else await new GetCardFromPile(dests[0], 1).Execute();
+        }
+    }
+
+    public class 智迟 : Triggered
+    {
+        public 智迟(Player src) : base(src, "智迟", true) { }
+
+        public override void OnEnabled()
+        {
+            Src.playerEvents.afterDamaged.AddEvent(Src, Execute);
+        }
+
+        public override void OnDisabled()
+        {
+            Src.playerEvents.afterDamaged.RemoveEvent(Src, Execute);
+        }
+
+        public async Task Execute(Damaged damaged)
+        {
+            if (TurnSystem.Instance.CurrentPlayer == Src) return;
+
+            Execute();
+            Src.disabledForMe += Disable;
+            TurnSystem.Instance.AfterTurn += Reset;
+            await Task.Yield();
+        }
+
+        public bool Disable(Card card)
+        {
+            Execute();
+            return card is 杀 || card.Type == "锦囊牌";
+        }
+        protected override void Reset()
+        {
+            Src.disabledForMe -= Disable;
+            TurnSystem.Instance.AfterTurn -= Reset;
+        }
+    }
+}

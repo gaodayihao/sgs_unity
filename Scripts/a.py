@@ -9,7 +9,15 @@ def voice(dir, voice):
 
     for i in voice:
         for j in i["url"]:
-            os.system("wget -P " + audio_dir + dir + " " + s + dir + "/" + j + ".mp3")
+            b = False
+            for relpath, dirs, files in os.walk(audio_dir + dir):
+                if j + ".mp3" in files:
+                    b = True
+                    break
+            if not b:
+                os.system(
+                    "wget -P " + audio_dir + dir + " " + s + dir + "/" + j + ".mp3"
+                )
 
         for j in range(len(i["url"])):
             i["url"][j] = dir + "/" + i["url"][j]
@@ -37,15 +45,15 @@ def original(voice):
 
 
 data = {}
-data["id"] = 529702
-data["name"] = "公台献城"
+data["id"] = 403601
+data["name"] = "王佐之才"
 data["voice"] = [
-    {"name": "明策", "url": ["ChenGong_MingCe_01", "ChenGong_MingCe_02"]},
-    {"name": "智迟", "url": ["ChenGong_ZhiChi_01", "ChenGong_ZhiChi_02"]},
-    {"name": "阵亡", "url": ["ChenGong_Dead"]},
+    {"name": "驱虎", "url": ["XunYu_QuHu_01", "XunYu_QuHu_02"]},
+    {"name": "节命", "url": ["XunYu_JieMing_01", "XunYu_JieMing_02"]},
+    {"name": "阵亡", "url": ["XunYu_Dead"]},
 ]
 
-dir = "chengong04"
+dir = "xunyu01"
 voice(dir, data["voice"])
 # original(data['voice'])
 image_dir = "Assets/StreamingAssets/Image/General/"

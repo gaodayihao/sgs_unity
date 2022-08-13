@@ -157,6 +157,7 @@ namespace Model
         {
             // 重置出杀次数
             CurrentPlayer.ShaCount = 0;
+            CurrentPlayer.酒Count=0;
             CurrentPlayer.Use酒 = false;
             // 重置使用技能次数
             // foreach (var i in CurrentPlayer.skills.Values) if (i is Active) (i as Active).Time = 0;

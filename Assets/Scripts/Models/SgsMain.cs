@@ -93,7 +93,7 @@ namespace Model
         {
             List<string> list = new List<string>
             {
-                "火杀","无中生有","诸葛连弩","顺手牵羊","铁索连环","朱雀羽扇","闪电"
+                "火杀","无中生有","诸葛连弩","顺手牵羊","铁索连环","寒冰剑","闪电"
             };
 
             while (list.Count > 0)
@@ -103,6 +103,34 @@ namespace Model
                 if (!list.Contains(newCard.Name)) await new Discard(players[0], new List<Card> { newCard }).Execute();
                 else list.Remove(newCard.Name);
             }
+        }
+
+        /// <summary>
+        /// 当前最大体力值
+        /// </summary>
+        public int MaxHp(Player exp = null)
+        {
+            int maxHp = 0;
+            foreach (var i in AlivePlayers)
+            {
+                if (i == exp) continue;
+                if (i.Hp > maxHp) maxHp = i.Hp;
+            }
+            return maxHp;
+        }
+
+        /// <summary>
+        /// 当前最少手牌数
+        /// </summary>
+        public int MinHand(Player exp = null)
+        {
+            int minHand = int.MaxValue;
+            foreach (var i in AlivePlayers)
+            {
+                if (i == exp) continue;
+                if (i.HandCardCount < minHand) minHand = i.HandCardCount;
+            }
+            return minHand;
         }
 
         /// <summary>
@@ -119,7 +147,7 @@ namespace Model
 #if UNITY_EDITOR
                 // debug
                 General self = null;
-                string name = "鲁肃";
+                string name = "刘备";
                 foreach (var i in json)
                 {
                     if (i.name == name)

@@ -25,19 +25,16 @@ namespace Model
             if (result)
             {
                 Debug.Log(TimerTask.Instance.Cards[0].Name);
-                var wxkj = (无懈可击)TimerTask.Instance.Cards[0];
+                var wxkj = TimerTask.Instance.Cards[0] as 无懈可击;
                 await wxkj.UseCard(TimerTask.Instance.player);
                 if (!wxkj.isCountered) return true;
             }
-
             return false;
-
         }
 
         public override async Task UseCard(Player src, List<Player> dests = null)
         {
             await base.UseCard(src, dests);
-
             isCountered = await Call(this, null);
         }
 
@@ -60,6 +57,7 @@ namespace Model
             await base.UseCard(src, dests);
             foreach (var dest in Dests)
             {
+                if (Disabled(dest)) continue;
                 if (await 无懈可击.Call(this, dest)) continue;
 
                 CardPanel.Instance.Title = "过河拆桥";
@@ -92,6 +90,7 @@ namespace Model
             await base.UseCard(src, dests);
             foreach (var dest in Dests)
             {
+                if (Disabled(dest)) continue;
                 if (await 无懈可击.Call(this, dest)) continue;
 
                 CardPanel.Instance.Title = "顺手牵羊";
@@ -125,6 +124,7 @@ namespace Model
 
             foreach (var dest in Dests)
             {
+                if (Disabled(dest)) continue;
                 if (await 无懈可击.Call(this, dest)) continue;
 
                 var player = dest;
@@ -174,6 +174,7 @@ namespace Model
 
             foreach (var dest in Dests)
             {
+                if (Disabled(dest)) continue;
                 if (await 无懈可击.Call(this, dest)) continue;
 
                 if (!await 杀.Call(dest)) await new Damaged(dest, src, this).Execute();
@@ -202,6 +203,7 @@ namespace Model
 
             foreach (var dest in Dests)
             {
+                if (Disabled(dest)) continue;
                 if (await 无懈可击.Call(this, dest)) continue;
 
                 if (!await 闪.Call(dest)) await new Damaged(dest, src, this).Execute();
@@ -230,6 +232,7 @@ namespace Model
             foreach (var dest in Dests)
             {
                 if (dest.Hp >= dest.HpLimit) continue;
+                if (Disabled(dest)) continue;
                 if (await 无懈可击.Call(this, dest)) continue;
 
                 await new Recover(dest).Execute();
@@ -257,6 +260,7 @@ namespace Model
 
             foreach (var dest in Dests)
             {
+                if (Disabled(dest)) continue;
                 if (await 无懈可击.Call(this, dest)) continue;
 
                 await new GetCardFromPile(dest, 2).Execute();
@@ -280,15 +284,11 @@ namespace Model
             dests.RemoveAt(1);
             await base.UseCard(src, dests);
 
+            if (Disabled(dests[0])) return;
             if (await 无懈可击.Call(this, dests[0])) return;
 
-            TimerTask.Instance.ValidCard = (card) => card is 杀;
-            TimerTask.Instance.ValidDest = (player, card, fstPlayer) =>
-            {
-                // return player == ShaDest || fstPlayer==ShaDest && DestArea.UseSha(src, player);
-                return player == ShaDest;
-            };
-            // int maxDest = DestArea.ShaMaxDest(dests[0]);
+            TimerTask.Instance.ValidCard = card => card is 杀;
+            TimerTask.Instance.ValidDest = (dest, card, first) => dest == ShaDest;
 
             var result = await TimerTask.Instance.Run(dests[0], 1, 1);
             // 出杀
@@ -313,7 +313,6 @@ namespace Model
         {
             if (dests is null || dests.Count == 0)
             {
-
                 CardPile.Instance.AddToDiscard(this);
                 await new LoseCard(src, new List<Card> { this }).Execute();
                 await new GetCardFromPile(src, 1).Execute();
@@ -324,6 +323,7 @@ namespace Model
 
             foreach (var i in Dests)
             {
+                if (Disabled(i)) continue;
                 if (await 无懈可击.Call(this, i)) continue;
 
                 await new SetLock(i).Execute();
@@ -345,6 +345,7 @@ namespace Model
 
             foreach (var dest in Dests)
             {
+                if (Disabled(dest)) continue;
                 if (await 无懈可击.Call(this, dest)) continue;
                 if (dest.HandCardCount == 0) continue;
 
@@ -352,7 +353,7 @@ namespace Model
                 var showCard = (await TimerAction.ShowCardTimer(dest))[0];
 
                 TimerTask.Instance.Hint = "是否弃置手牌";
-                TimerTask.Instance.ValidCard = (card) => card.Suit == showCard.Suit;
+                TimerTask.Instance.ValidCard = card => card.Suit == showCard.Suit;
                 if (!await TimerTask.Instance.Run(Src, 1, 0)) return;
 
                 await new Discard(Src, TimerTask.Instance.Cards).Execute();

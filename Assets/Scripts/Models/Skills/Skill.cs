@@ -34,53 +34,34 @@ namespace Model
         /// <summary>
         /// 最大可选卡牌数
         /// </summary>
-        public virtual int MaxCard()
-        {
-            return 0;
-        }
+        public virtual int MaxCard => 0;
 
         /// <summary>
         /// 最小可选卡牌数
         /// </summary>
-        public virtual int MinCard()
-        {
-            return 0;
-        }
+        public virtual int MinCard => 0;
 
         /// <summary>
         /// 判断卡牌是否可选
         /// </summary>
-        public virtual bool IsValidCard(Card card)
-        {
-            return true;
-        }
+        public virtual bool IsValidCard(Card card) => true;
 
         /// <summary>
         /// 最大目标数
         /// </summary>
-        public virtual int MaxDest(List<Card> cards)
-        {
-            return 0;
-        }
+        public virtual int MaxDest(List<Card> cards) => 0;
 
         /// <summary>
         /// 最小目标数
         /// </summary>
-        public virtual int MinDest(List<Card> cards)
-        {
-            return 0;
-        }
+        public virtual int MinDest(List<Card> cards) => 0;
 
         /// <summary>
         /// 判断目标是否可选
         /// </summary>
         /// <param name="dest">目标</param>
-        /// <param name="cards">已选卡牌</param>
-        /// <param name="firstDest">第一个已选目标</param>
-        public virtual bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
-        {
-            return true;
-        }
+        /// <param name="first">第一个已选目标</param>
+        public virtual bool IsValidDest(Player dest, Player first) => true;
 
         /// <summary>
         /// 是否有效
@@ -111,10 +92,7 @@ namespace Model
         /// <summary>
         /// 技能是否满足条件
         /// </summary>
-        public virtual bool IsValid()
-        {
-            return Time < TimeLimit && Enabled > 0;
-        }
+        public virtual bool IsValid => Time < TimeLimit && Enabled > 0;
 
         public void Execute()
         {

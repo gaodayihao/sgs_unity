@@ -17,14 +17,14 @@ namespace Model
 
         public abstract Card Execute(List<Card> cards);
 
-        public override bool IsValidCard(Card card)
-        {
-            return !Src.DisabledCard(card);
-        }
+        public override int MaxCard => 1;
 
-        public override bool IsValid()
-        {
-            return base.IsValid() && TimerTask.Instance.ValidCard(Execute(null));
-        }
+        public override int MinCard => 1;
+
+        public override bool IsValidCard(Card card) => !Src.DisabledCard(card);
+
+        public override bool IsValid => base.IsValid
+            && TimerTask.Instance.maxCard > 0
+            && TimerTask.Instance.ValidCard(Execute(null));
     }
 }

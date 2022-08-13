@@ -9,19 +9,12 @@ namespace Model
     {
         public 苦肉(Player src) : base(src, "苦肉", 1) { }
 
-        public override int MaxCard()
-        {
-            return 1;
-        }
+        public override int MaxCard => 1;
+        public override int MinCard => 1;
 
-        public override int MinCard()
+        public override async Task Execute(List<Player> dests, List<Card> cards, string other)
         {
-            return 1;
-        }
-
-        public override async Task Execute(List<Player> dests, List<Card> cards, string additional)
-        {
-            await base.Execute(dests, cards, additional);
+            await base.Execute(dests, cards, other);
 
             await new Discard(Src, cards).Execute();
             await new UpdateHp(Src, -1).Execute();
@@ -63,10 +56,7 @@ namespace Model
             TurnSystem.Instance.AfterTurn += ResetEffect;
         }
 
-        private bool IsUnlimited(Card card, Player dest)
-        {
-            return card is 杀 && (card.Suit == "红桃" || card.Suit == "方片");
-        }
+        private bool IsUnlimited(Card card, Player dest) => card is 杀 && (card.Suit == "红桃" || card.Suit == "方片");
 
         private async Task WhenUseSha(Card card)
         {

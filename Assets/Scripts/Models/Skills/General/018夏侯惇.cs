@@ -54,34 +54,19 @@ namespace Model
             TurnSystem.Instance.AfterTurn -= Reset;
         }
 
-        public override int MaxCard()
-        {
-            return int.MaxValue;
-        }
+        public override int MaxCard => int.MaxValue;
 
-        public override int MinCard()
-        {
-            return 1;
-        }
+        public override int MinCard => 1;
 
-        public override int MaxDest(List<Card> cards)
-        {
-            return 1;
-        }
+        public override int MaxDest(List<Card> cards) => 1;
 
-        public override int MinDest(List<Card> cards)
-        {
-            return 1;
-        }
+        public override int MinDest(List<Card> cards) => 1;
 
-        public override bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
-        {
-            return dest != Src;
-        }
+        public override bool IsValidDest(Player dest, Player first) => dest != Src;
 
         public async Task Execute(GetCard getCard)
         {
-            if (!IsValid() || getCard is GetCardFromPile && (getCard as GetCardFromPile).InGetCardPhase) return;
+            if (!IsValid || getCard is GetCardFromPile && (getCard as GetCardFromPile).InGetCardPhase) return;
 
             if (!await base.ShowTimer()) return;
             Execute();

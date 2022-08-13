@@ -36,7 +36,7 @@ namespace View
         public int MinCount { get; private set; }
         // 是否已设置
         public bool IsSettled { get; private set; } = false;
-        public Model.Card Converted { get; private set; }
+        public Model.Card Converted { get; set; }
 
 
         /// <summary>
@@ -100,8 +100,8 @@ namespace View
 
             if (skill != null)
             {
-                MaxCount = skill.MaxCard();
-                MinCount = skill.MinCard();
+                MaxCount = skill.MaxCard;
+                MinCount = skill.MinCard;
             }
             else
             {
@@ -157,10 +157,16 @@ namespace View
         public void ResetCardArea()
         {
             // 重置手牌状态
-            foreach (var card in handcards.Values) if (card.gameObject.activeSelf) card.ResetCard();
+            foreach (var card in handcards.Values) card.ResetCard();
             if (timerTask.isWxkj)
             {
                 foreach (var i in handcards.Values) i.gameObject.SetActive(self.model.HandCards.Contains(i.model));
+                UpdateSpacing();
+            }
+            if (ConvertedCards.Count > 0)
+            {
+                foreach (var i in ConvertedCards.Values) Destroy(i.gameObject);
+                ConvertedCards.Clear();
                 UpdateSpacing();
             }
 
@@ -215,6 +221,39 @@ namespace View
             else Converted = null;
         }
 
+        public Dictionary<string, Card> ConvertedCards { get; set; } = new Dictionary<string, Card>();
+        public bool ConvertIsSettle { get; private set; }
+
+        public void InitConvertCard()
+        {
+            ConvertIsSettle = timerTask.MultiConvert.Count == 0;
+            if (!IsSettled || ConvertIsSettle) return;
+
+            foreach (var i in handcards.Values) i.button.interactable = false;
+            var card = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("Card");
+            foreach (var i in timerTask.MultiConvert)
+            {
+                var instance = Instantiate(card);
+                instance.transform.SetParent(handCardArea.transform, false);
+                ConvertedCards.Add(i.Name, instance.GetComponent<Card>());
+                ConvertedCards[i.Name].Init(i, true);
+            }
+            UpdateSpacing();
+
+            foreach (var i in ConvertedCards.Values)
+            {
+                Debug.Log(i.model.IsConvert);
+                i.button.interactable = timerTask.ValidCard(i.model);
+            }
+
+            foreach (var i in ConvertedCards.Values) if (i.gameObject.activeSelf) i.AddShadow();
+        }
+
+        public void UpdateConvertCard()
+        {
+            ConvertIsSettle = Converted != null;
+        }
+
         /// <summary>
         /// 更新手牌数与手牌上限信息
         /// </summary>
@@ -249,6 +288,7 @@ namespace View
         {
             int count = 0;
             foreach (var i in handcards.Values) if (i.gameObject.activeSelf) count++;
+            foreach (var i in ConvertedCards) count++;
 
             // 若手牌数小于7，则不用设置负间距，直接返回
             if (count < 8)

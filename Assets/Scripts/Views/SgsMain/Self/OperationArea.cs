@@ -65,7 +65,11 @@ namespace View
                 timerTask.SendResult((isSelf ? self.model : self.model.Teammate).Position, true, cards);
             }
             else if (timerTask.isCompete) timerTask.SendResult(self.model.Position, true, cards);
-            else timerTask.SendResult(cards, players, skill);
+            else
+            {
+                string other = cardArea.Converted is null ? "" : cardArea.Converted.Name;
+                timerTask.SendResult(cards, players, skill, other);
+            }
         }
 
         /// <summary>
@@ -113,7 +117,8 @@ namespace View
         /// </summary>
         public void ShowTimer(Model.TimerTask timerTask)
         {
-            if (!timerTask.isWxkj && self.model != timerTask.player) return;
+            if (!timerTask.isWxkj && !timerTask.isCompete && self.model != timerTask.player) return;
+            if (timerTask.isCompete && self.model != timerTask.player0 && self.model != timerTask.player1) return;
 
             this.timerTask = timerTask;
             operationArea.SetActive(true);
@@ -127,6 +132,7 @@ namespace View
 
             skillArea.InitSkillArea();
             cardArea.InitCardArea();
+            cardArea.InitConvertCard();
             destArea.InitDestArea();
             equipArea.InitEquipArea();
 
@@ -189,6 +195,7 @@ namespace View
 
             skillArea.InitSkillArea();
             cardArea.InitCardArea();
+            cardArea.InitConvertCard();
             destArea.InitDestArea();
             equipArea.InitEquipArea();
 

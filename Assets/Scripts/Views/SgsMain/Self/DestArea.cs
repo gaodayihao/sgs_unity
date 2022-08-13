@@ -36,7 +36,7 @@ namespace View
 
         public void InitDestArea()
         {
-            if (!cardArea.IsSettled) return;
+            if (!cardArea.IsSettled || !cardArea.ConvertIsSettle) return;
             var skill = SkillArea.Instance.SelectedSkill;
 
             if (cardArea.Converted != null)
@@ -117,7 +117,7 @@ namespace View
                 foreach (var player in Players)
                 {
                     // 设置不能指定的目标
-                    player.button.interactable = skill.IsValidDest(player.model, cardArea.model, firstDest);
+                    player.button.interactable = skill.IsValidDest(player.model, firstDest);
                 }
 
             }

@@ -19,13 +19,13 @@ namespace Model
         public int minDest { get; set; } = 0;
         public Func<List<Card>, int> MaxDest { get; set; }
         public Func<List<Card>, int> MinDest { get; set; }
-        public Func<Card, bool> ValidCard { get; set; } = (card) => !card.IsConvert;
-        public Func<Player, Card, Player, bool> ValidDest { get; set; } = (player, card, fstPlayer) => true;
+        public Func<Card, bool> ValidCard { get; set; } = card => !card.IsConvert;
+        public Func<Player, Card, Player, bool> ValidDest { get; set; } = (dest, card, first) => true;
         public bool isPerformPhase { get; set; } = false;
         public bool isWxkj { get; private set; } = false;
         public bool isCompete { get; private set; } = false;
         public bool Refusable { get; set; } = true;
-        public List<string> MultiConvert{get;set;}=new List<string>();
+        public List<Card> MultiConvert { get; set; } = new List<Card>();
 
         public string Hint { get; set; }
         public string GivenSkill { get; set; }
@@ -35,6 +35,7 @@ namespace Model
         public List<Card> Cards { get; private set; }
         public List<Player> Dests { get; private set; }
         public string Skill { get; private set; }
+        public string Other { get; private set; }
 
         /// <summary>
         /// 暂停主线程，并通过服务器或view开始计时
@@ -51,13 +52,14 @@ namespace Model
 
             if (SgsMain.Instance.GameIsOver) return true;
 
-            if (player.isSelf) moveSeat(player);
+            if (player.isSelf)
+            {
+                moveSeat(player);
+                StartCoroutine(SelfAutoResult());
+            }
+            else if (Room.Instance.IsSingle) StartCoroutine(AIAutoResult());
             startTimerView?.Invoke(this);
-
-            // if (Room.Instance.IsSingle) waitAction = new TaskCompletionSource<bool>();
-            if (player.isSelf) StartCoroutine(SelfAutoResult());
-            StartCoroutine(AIAutoResult());
-            var result = await WaitResult();
+            bool result = await WaitResult();
 
             stopTimerView(this);
 
@@ -68,8 +70,8 @@ namespace Model
             minDest = 0;
             MaxDest = null;
             MinDest = null;
-            ValidCard = (card) => !card.IsConvert;
-            ValidDest = (player, card, fstPlayer) => true;
+            ValidCard = card => !card.IsConvert;
+            ValidDest = (dest, card, first) => true;
             GivenSkill = "";
             Refusable = true;
             MultiConvert.Clear();
@@ -102,24 +104,17 @@ namespace Model
         /// <summary>
         /// 传入已选中的卡牌与目标，通过设置TaskCompletionSource返回值，继续主线程
         /// </summary>
-        public void SetResult(List<int> cards, List<int> dests, string skill)
+        public void SetResult(List<int> cards, List<int> dests, string skill, string other)
         {
             foreach (var id in cards) Cards.Add(CardPile.Instance.cards[id]);
             foreach (var id in dests) Dests.Add(SgsMain.Instance.players[id]);
             Skill = skill;
+            Other = other;
         }
 
-        public void SendResult(List<int> cards, List<int> dests, string skill, bool result = true)
+        public void SendResult(List<int> cards, List<int> dests, string skill, string other, bool result = true)
         {
             StopAllCoroutines();
-            // if (Room.Instance.IsSingle)
-            // {
-            //     if (result) SetResult(cards, dests, skill);
-            //     waitAction.TrySetResult(result);
-            // }
-            // // 多人模式
-            // else
-            // {
             var json = new TimerJson();
             json.eventname = "set_result";
             json.id = Wss.Instance.Count + 1;
@@ -127,15 +122,15 @@ namespace Model
             json.cards = cards;
             json.dests = dests;
             json.skill = skill;
+            json.other = other;
 
             if (Room.Instance.IsSingle) waitAction.TrySetResult(json);
             else Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
-            // }
         }
 
         public void SendResult()
         {
-            SendResult(null, null, null, false);
+            SendResult(null, null, null, null, false);
         }
 
         public async Task<bool> WaitResult()
@@ -157,7 +152,7 @@ namespace Model
                 if (json.result)
                 {
                     player = SgsMain.Instance.players[json.src];
-                    SetResult(json.cards, new List<int>(), "");
+                    SetResult(json.cards, new List<int>(), "", "");
                 }
                 else
                 {
@@ -168,7 +163,6 @@ namespace Model
                         return await WaitResult();
                     }
                 }
-                StopAllCoroutines();
             }
             else if (isCompete)
             {
@@ -176,12 +170,10 @@ namespace Model
                 if (json.src == player0.Position) card0 = json.cards.Count > 0 ? json.cards[0] : player0.HandCards[0].Id;
                 else card1 = json.cards.Count > 0 ? json.cards[1] : player1.HandCards[0].Id;
                 if (card0 == 0 || card1 == 0) await WaitResult();
-
-                // SetResult(json.cards, new List<int>(), "");
-                StopAllCoroutines();
             }
+            else if (json.result) SetResult(json.cards, json.dests, json.skill, json.other);
 
-            else if (json.result) SetResult(json.cards, json.dests, json.skill);
+            StopAllCoroutines();
             return json.result;
         }
 
@@ -192,7 +184,7 @@ namespace Model
             maxCard = 1;
             minCard = 1;
             isWxkj = true;
-            ValidCard = (card) => card is 无懈可击;
+            ValidCard = card => card is 无懈可击;
 
             Cards = new List<Card>();
             Dests = new List<Player>();
@@ -201,7 +193,7 @@ namespace Model
 
             startTimerView?.Invoke(this);
             StartCoroutine(WxkjAutoResult());
-            StartCoroutine(AIAutoResult());
+            if (Room.Instance.IsSingle) StartCoroutine(AIAutoResult());
             bool result = await WaitResult();
 
             stopTimerView?.Invoke(this);
@@ -209,25 +201,13 @@ namespace Model
             maxCard = 0;
             minCard = 0;
             isWxkj = false;
-            ValidCard = (card) => !card.IsConvert;
+            ValidCard = card => !card.IsConvert;
 
             return result;
         }
 
         public void SendResult(int src, bool result, List<int> cards = null, string skill = "")
         {
-            // if (Room.Instance.IsSingle)
-            // {
-            //     if (result)
-            //     {
-            //         player = SgsMain.Instance.players[src];
-            //         SetResult(cards, new List<int>(), "");
-            //     }
-            //     waitAction.TrySetResult(false);
-            // }
-            // // 多人模式
-            // else
-            // {
             var json = new TimerJson();
             json.eventname = "set_result";
             json.id = Wss.Instance.Count + 1;
@@ -236,8 +216,11 @@ namespace Model
             json.src = src;
 
             if (Room.Instance.IsSingle) waitAction.TrySetResult(json);
-            Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
-            // }
+            else
+            {
+                StopAllCoroutines();
+                Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+            }
         }
 
         public Player player0;
@@ -249,7 +232,7 @@ namespace Model
             maxCard = 1;
             minCard = 1;
             isCompete = true;
-            ValidCard = (card) => player0.HandCards.Contains(card) || player1.HandCards.Contains(card);
+            ValidCard = card => player0.HandCards.Contains(card) || player1.HandCards.Contains(card);
             this.player0 = player0;
             this.player1 = player1;
             card0 = 0;
@@ -258,10 +241,12 @@ namespace Model
             Cards = new List<Card>(2);
             Dests = new List<Player>();
 
-            waitAction = new TaskCompletionSource<TimerJson>();
+            if (player0.isSelf) moveSeat(player0);
+            else if (player1.isSelf) moveSeat(player1);
+
             startTimerView?.Invoke(this);
             StartCoroutine(CompeteAutoResult());
-            StartCoroutine(AIAutoResult());
+            if (Room.Instance.IsSingle) StartCoroutine(AIAutoResult());
             await WaitResult();
 
             stopTimerView?.Invoke(this);
@@ -269,36 +254,8 @@ namespace Model
             maxCard = 0;
             minCard = 0;
             isCompete = false;
-            ValidCard = (card) => !card.IsConvert;
+            ValidCard = card => !card.IsConvert;
         }
-
-        // public void SendResult(int src, bool result, List<int> cards = null)
-        // {
-        //     // if (Room.Instance.IsSingle)
-        //     // {
-        //     //     if (cards is null) cards = new List<int>();
-        //     //     if (src == player0.Position) card0 = cards.Count > 0 ? cards[0] : player0.HandCards[0].Id;
-        //     //     else card1 = cards.Count > 0 ? cards[1] : player1.HandCards[0].Id;
-        //     //     if (card0 == 0 || card1 == 0) return;
-
-        //     //     SetResult(cards, new List<int>(), "");
-        //     //     StopAllCoroutines();
-        //     //     waitAction.TrySetResult(true);
-        //     // }
-        //     // // 多人模式
-        //     // else
-        //     // {
-        //     var json = new TimerJson();
-        //     json.eventname = "set_result";
-        //     json.id = Wss.Instance.Count + 1;
-        //     json.result = result;
-        //     json.cards = cards;
-        //     json.src = src;
-
-        //     if (Room.Instance.IsSingle) waitAction.TrySetResult(json);
-        //     else Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
-        //     // }
-        // }
 
         private IEnumerator AIAutoResult()
         {
@@ -315,12 +272,18 @@ namespace Model
                 if (player0.isAI) SendResult(player0.Position, false);
                 if (player1.isAI) SendResult(player1.Position, false);
             }
-            else if (player.isAI) SendResult();
+            else SendResult();
         }
 
         private IEnumerator SelfAutoResult()
         {
-            yield return new WaitForSeconds(second);
+            // yield return new WaitForSeconds(second);
+            int s = second;
+            while (s > 0)
+            {
+                Debug.Log(s--);
+                yield return new WaitForSeconds(1);
+            }
             SendResult();
         }
 

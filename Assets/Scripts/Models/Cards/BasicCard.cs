@@ -45,7 +45,8 @@ namespace Model
             foreach (var dest in Dests)
             {
                 // 仁王盾 藤甲
-                if (!IgnoreArmor && dest.armor != null && dest.armor.Disable(this)) continue;
+                // if (!IgnoreArmor && dest.armor != null && dest.armor.Disable(this)) continue;
+                if (Disabled(dest)) continue;
 
                 IsDamage = false;
                 if (ShanCount == 0) IsDamage = true;
@@ -81,7 +82,7 @@ namespace Model
         public static async Task<bool> Call(Player player)
         {
             TimerTask.Instance.Hint = "请打出一张杀。";
-            TimerTask.Instance.ValidCard = (card) => card is 杀 && !player.DisabledCard(card);
+            TimerTask.Instance.ValidCard = card => card is 杀 && !player.DisabledCard(card);
             bool result = await TimerTask.Instance.Run(player, 1, 0);
 
             if (player.isAI)
@@ -122,7 +123,7 @@ namespace Model
             }
 
             TimerTask.Instance.Hint = "请使用一张闪。";
-            TimerTask.Instance.ValidCard = (card) => card is 闪 && !player.DisabledCard(card);
+            TimerTask.Instance.ValidCard = card => card is 闪 && !player.DisabledCard(card);
             result = await TimerTask.Instance.Run(player, 1, 0);
 
             if (player.isAI)
@@ -171,11 +172,9 @@ namespace Model
         public static async Task<bool> Call(Player player, Player dest)
         {
             TimerTask.Instance.Hint = "请使用一张桃。";
-            TimerTask.Instance.ValidCard = (card) =>
-            {
-                return (card is 桃 || card is 酒 && dest == player) && !player.DisabledCard(card);
-            };
-            TimerTask.Instance.ValidDest = (player, card, fstPlayer) => player == dest;
+            TimerTask.Instance.ValidCard = card => (card is 桃 || card is 酒 && dest == player)
+                && !player.DisabledCard(card);
+            TimerTask.Instance.ValidDest = (player, card, first) => player == dest;
             bool result = await TimerTask.Instance.Run(player, 1, 1);
 
             if (player.isAI && (player == dest || player.Teammate == dest))
@@ -233,7 +232,11 @@ namespace Model
             await base.UseCard(src, dests);
 
             if (Dests[0].Hp < 1) await new Recover(Dests[0]).Execute();
-            else Dests[0].Use酒 = true;
+            else
+            {
+                Dests[0].Use酒 = true;
+                Dests[0].酒Count++;
+            }
         }
     }
 }

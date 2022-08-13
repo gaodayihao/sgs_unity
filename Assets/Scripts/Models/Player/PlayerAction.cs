@@ -284,7 +284,7 @@ namespace Model
             Debug.Log(player.PosStr + "受到了" + (-Value).ToString() + "点伤害");
 
             // 受到伤害
-            if (player.IsLocked)
+            if (damageType != Damage.Normal && player.IsLocked)
             {
                 await new SetLock(player, true).Execute();
                 if (!IsConDucted) conduct = true;

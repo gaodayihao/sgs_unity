@@ -25,7 +25,7 @@ public class Wss : MonoBehaviour
 
     public WebSocket websocket { get; private set; }
     // public bool IsRunning { get; set; } = true;
-    public int Count { get; set; } = 0;
+    public int Count { get; set; }
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +55,7 @@ public class Wss : MonoBehaviour
 
             if (JsonUtility.FromJson<WebsocketJson>(message).eventname == "start_game")
             {
+                Count = 0;
                 View.Menu.Instance.StartGame(JsonUtility.FromJson<StartGameJson>(message));
             }
             else messages.Add(message);

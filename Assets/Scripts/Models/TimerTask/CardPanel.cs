@@ -8,7 +8,7 @@ namespace Model
 {
     public class CardPanel : SingletonMono<CardPanel>
     {
-        private TaskCompletionSource<bool> waitAction;
+        private TaskCompletionSource<TimerJson> waitAction;
 
         public Player player { get; private set; }
         public Player dest { get; private set; }
@@ -31,11 +31,10 @@ namespace Model
 
             // if (!Room.Instance.isSingle) Connection.Instance.IsRunning = false;
 
-            waitAction = new TaskCompletionSource<bool>();
             startTimerView?.Invoke(this);
-            StartCoroutine(SelfAutoResult());
+            if (player.isSelf) StartCoroutine(SelfAutoResult());
             StartCoroutine(AIAutoResult());
-            var result = Room.Instance.IsSingle ? await waitAction.Task : await ReceiveResult();
+            var result = await WaitAction();
             stopTimerView?.Invoke(this);
 
             Hint = "";
@@ -52,22 +51,16 @@ namespace Model
 
         public void SendResult(List<int> cards, bool result)
         {
-            if (Room.Instance.IsSingle)
-            {
-                if (result) SetResult(cards);
-                waitAction.TrySetResult(result);
-            }
-            // 多人模式
-            else
-            {
-                var json = new TimerJson();
-                json.eventname = "card_panel_result";
-                json.id = Wss.Instance.Count + 1;
-                json.result = result;
-                json.cards = cards;
+            StopAllCoroutines();
 
-                Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
-            }
+            var json = new TimerJson();
+            json.eventname = "card_panel_result";
+            json.id = Wss.Instance.Count + 1;
+            json.result = result;
+            json.cards = cards;
+
+            if (Room.Instance.IsSingle) waitAction.TrySetResult(json);
+            else Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
         }
 
         public void SendResult()
@@ -75,11 +68,20 @@ namespace Model
             SendResult(null, false);
         }
 
-        public async Task<bool> ReceiveResult()
+        public async Task<bool> WaitAction()
         {
-            // Debug.Log("ReceiveSetResult");
-            var msg = await Wss.Instance.PopSgsMsg();
-            var json = JsonUtility.FromJson<TimerJson>(msg);
+            TimerJson json;
+            if (Room.Instance.IsSingle)
+            {
+                waitAction = new TaskCompletionSource<TimerJson>();
+                json = await waitAction.Task;
+            }
+            else
+            {
+                var msg = await Wss.Instance.PopSgsMsg();
+                json = JsonUtility.FromJson<TimerJson>(msg);
+            }
+
             if (json.result) SetResult(json.cards);
             else SendResult();
             return json.result;
@@ -94,7 +96,7 @@ namespace Model
         private IEnumerator SelfAutoResult()
         {
             yield return new WaitForSeconds(second);
-            if (player.isSelf) SendResult();
+            SendResult();
         }
 
         public async Task<Card> SelectCard(Player player, Player dest, bool judgeArea = false)

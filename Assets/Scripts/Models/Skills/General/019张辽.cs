@@ -18,15 +18,9 @@ namespace Model
             Src.playerEvents.WhenGetCard.RemoveEvent(Src, Execute);
         }
 
-        public override int MaxDest(List<Card> cards)
-        {
-            return getCardFromPile.Count;
-        }
+        public override int MaxDest(List<Card> cards) => getCardFromPile.Count;
 
-        public override int MinDest(List<Card> cards)
-        {
-            return 1;
-        }
+        public override int MinDest(List<Card> cards) => 1;
 
         private GetCardFromPile getCardFromPile;
 
@@ -34,10 +28,10 @@ namespace Model
         {
             getCardFromPile = getCard;
             if (!getCard.InGetCardPhase || !await base.ShowTimer()) return;
+            TurnSystem.Instance.SortDest(TimerTask.Instance.Dests);
             Execute();
 
             getCard.Count -= TimerTask.Instance.Dests.Count;
-            TurnSystem.Instance.SortDest(TimerTask.Instance.Dests);
             foreach (var i in TimerTask.Instance.Dests)
             {
                 if (Src.Teammate == i) CardPanel.Instance.display = true;

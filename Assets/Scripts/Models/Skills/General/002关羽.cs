@@ -12,25 +12,10 @@ namespace Model
     {
         public 武圣(Player src) : base(src, "武圣", false, int.MaxValue, "杀") { }
 
-        public override Card Execute(List<Card> cards)
-        {
-            return Card.Convert<杀>(cards);
-        }
+        public override Card Execute(List<Card> cards) => Card.Convert<杀>(cards);
 
-        public override bool IsValidCard(Card card)
-        {
-            return (card.Suit == "红桃" || card.Suit == "方片") && base.IsValidCard(card);
-        }
-
-        public override int MaxCard()
-        {
-            return 1;
-        }
-
-        public override int MinCard()
-        {
-            return 1;
-        }
+        public override bool IsValidCard(Card card) => (card.Suit == "红桃" || card.Suit == "方片")
+            && base.IsValidCard(card);
 
         public override void OnEnabled()
         {
@@ -42,10 +27,7 @@ namespace Model
             Src.unlimitedDst -= IsUnlimited;
         }
 
-        private bool IsUnlimited(Card card, Player dest)
-        {
-            return card is 杀 && card.Suit == "方片";
-        }
+        private bool IsUnlimited(Card card, Player dest) => card is 杀 && card.Suit == "方片";
     }
 
     /// <summary>
@@ -55,30 +37,15 @@ namespace Model
     {
         public 义绝(Player src) : base(src, "义绝", 1) { }
 
-        public override int MaxCard()
-        {
-            return 1;
-        }
+        public override int MaxCard => 1;
 
-        public override int MinCard()
-        {
-            return 1;
-        }
+        public override int MinCard => 1;
 
-        public override int MaxDest(List<Card> cards)
-        {
-            return 1;
-        }
+        public override int MaxDest(List<Card> cards) => 1;
 
-        public override int MinDest(List<Card> cards)
-        {
-            return 1;
-        }
+        public override int MinDest(List<Card> cards) => 1;
 
-        public override bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
-        {
-            return dest.HandCardCount > 0 && dest != Src;
-        }
+        public override bool IsValidDest(Player dest, Player first) => dest.HandCardCount > 0 && dest != Src;
 
         public override async Task Execute(List<Player> dests, List<Card> cards, string additional)
         {
@@ -119,10 +86,7 @@ namespace Model
 
         Player Dest;
 
-        public bool DisabledCard(Card card)
-        {
-            return true;
-        }
+        public bool DisabledCard(Card card) => true;
 
         public async Task WhenDamaged(Damaged damaged)
         {

@@ -9,27 +9,15 @@ namespace Model
     {
         public 离间(Player src) : base(src, "离间", 1) { }
 
-        public override int MaxCard()
-        {
-            return 1;
-        }
+        public override int MaxCard => 1;
 
-        public override int MinCard()
-        {
-            return 1;
-        }
+        public override int MinCard => 1;
 
-        public override int MaxDest(List<Card> cards)
-        {
-            return 2;
-        }
+        public override int MaxDest(List<Card> cards) => 2;
 
-        public override int MinDest(List<Card> cards)
-        {
-            return 2;
-        }
+        public override int MinDest(List<Card> cards) => 2;
 
-        public override bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
+        public override bool IsValidDest(Player dest, Player first)
         {
             return dest != Src && dest.general.gender;
         }

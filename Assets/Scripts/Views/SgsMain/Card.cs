@@ -23,28 +23,39 @@ namespace View
         public int Id { get; private set; }
         // 是否被选中
         public bool IsSelected { get; private set; }
+        private bool isConvert;
 
         // 手牌区
         private CardArea cardArea { get => CardArea.Instance; }
 
-        public Model.Card model { get => Model.CardPile.Instance.cards[Id]; }
+        public Model.Card model { get; private set; }
 
         /// <summary>
         /// 初始化卡牌
         /// </summary>
-        public async void Init(Model.Card model)
+        public async void Init(Model.Card model, bool isConvert = false)
         {
-            Id = model.Id;
+            this.model = model;
             name = model.Name;
+            this.isConvert = isConvert;
 
             var sprites = Sprites.Instance;
             while (sprites.cardImage is null) await Task.Yield();
 
             // 初始化sprite
             image.sprite = sprites.cardImage[name];
-            suit.sprite = sprites.cardSuit[model.Suit];
-            if (model.Suit == "黑桃" || model.Suit == "草花") weight.sprite = sprites.blackWeight[model.Weight];
-            else weight.sprite = sprites.redWeight[model.Weight];
+            if (!isConvert)
+            {
+                Id = model.Id;
+                suit.sprite = sprites.cardSuit[model.Suit];
+                if (model.Suit == "黑桃" || model.Suit == "草花") weight.sprite = sprites.blackWeight[model.Weight];
+                else weight.sprite = sprites.redWeight[model.Weight];
+            }
+            else
+            {
+                suit.gameObject.SetActive(false);
+                weight.gameObject.SetActive(false);
+            }
 
             button.onClick.AddListener(ClickCard);
         }
@@ -58,7 +69,9 @@ namespace View
             if (!IsSelected) Select();
             else Unselect();
 
-            cardArea.UpdateCardArea();
+            if (!isConvert) cardArea.UpdateCardArea();
+            else cardArea.UpdateConvertCard();
+
             DestArea.Instance.ResetDestArea();
             DestArea.Instance.InitDestArea();
             OperationArea.Instance.UpdateButtonArea();
@@ -72,7 +85,12 @@ namespace View
             if (IsSelected) return;
             IsSelected = true;
             GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 20);
-            cardArea.SelectedCard.Add(this);
+            if (!isConvert) cardArea.SelectedCard.Add(this);
+            else
+            {
+                if (cardArea.Converted != null) cardArea.ConvertedCards[cardArea.Converted.Name].Unselect();
+                cardArea.Converted = model;
+            }
         }
 
         /// <summary>
@@ -83,7 +101,8 @@ namespace View
             if (!IsSelected) return;
             IsSelected = false;
             GetComponent<RectTransform>().anchoredPosition -= new Vector2(0, 20);
-            cardArea.SelectedCard.Remove(this);
+            if (!isConvert) cardArea.SelectedCard.Remove(this);
+            else cardArea.Converted = null;
         }
 
         /// <summary>
@@ -130,12 +149,6 @@ namespace View
             button.onClick.AddListener(ClickInPanel);
         }
 
-        // public void InitInQlg(Model.Card model)
-        // {
-        //     InitInPanel(model, true);
-        //     button.onClick.AddListener(ClickInQlg);
-        // }
-
         /// <summary>
         /// 点击卡牌
         /// </summary>
@@ -149,13 +162,5 @@ namespace View
             CardPanel.Instance.selectCards.Add(this);
             CardPanel.Instance.UpdatePanel();
         }
-
-        // private void ClickInQlg()
-        // {
-        //     var panel = GetComponentInParent<麒麟弓>();
-
-        //     panel.SelectCard = this;
-        //     panel.UpdatePanel();
-        // }
     }
 }

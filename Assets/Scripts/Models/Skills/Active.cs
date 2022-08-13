@@ -17,8 +17,8 @@ namespace Model
         /// </summary>
         /// <param name="dests">选中目标</param>
         /// <param name="cards">选中卡牌</param>
-        /// <param name="additional">附加信息</param>
-        public virtual async Task Execute(List<Player> dests, List<Card> cards, string additional)
+        /// <param name="other">附加信息</param>
+        public virtual async Task Execute(List<Player> dests, List<Card> cards, string other)
         {
             await Task.Yield();
             Debug.Log(Src.PosStr + "号位使用了" + Name);
@@ -26,10 +26,7 @@ namespace Model
             Execute();
         }
 
-        public override bool IsValid()
-        {
-            return TimerTask.Instance.isPerformPhase && base.IsValid();
-        }
+        public override bool IsValid => TimerTask.Instance.isPerformPhase && base.IsValid;
 
         public override void OnEnabled()
         {

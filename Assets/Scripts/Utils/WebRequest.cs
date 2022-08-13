@@ -12,7 +12,7 @@ public static class WebRequest
     /// </summary>
     public static async Task<string> GetString(string url)
     {
-            Debug.Log(url);
+            // Debug.Log(url);
         UnityWebRequest www = UnityWebRequest.Get(url);
         www.SendWebRequest();
 
@@ -53,7 +53,7 @@ public static class WebRequest
     /// </summary>
     public static async Task<AudioClip> GetClip(string url)
     {
-        Debug.Log(url);
+        // Debug.Log(url);
         UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG);
         www.SendWebRequest();
 
@@ -62,7 +62,7 @@ public static class WebRequest
         if (www.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(www.error);
-            // Debug.Log(url);
+            Debug.Log(url);
             return null;
         }
 

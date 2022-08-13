@@ -29,6 +29,9 @@ namespace Model
                     foreach (var i in player.JudgeArea) if (i is 闪电) return false;
                     return true;
 
+                case "酒":
+                    return player.酒Count < 1 || player.UnlimitedCard(card);
+
                 default:
                     return true;
             }

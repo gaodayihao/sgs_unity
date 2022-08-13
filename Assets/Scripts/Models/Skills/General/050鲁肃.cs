@@ -35,25 +35,17 @@ namespace Model
             if (Src.HandCardCount <= 5) return;
 
             int count = Src.HandCardCount / 2;
-            int min = int.MaxValue;
-            Player dest = null;
-            foreach (var i in SgsMain.Instance.AlivePlayers)
-            {
-                if (i != Src && i.HandCardCount < min)
-                {
-                    min = i.HandCardCount;
-                    dest = i;
-                }
-            }
+            int min = SgsMain.Instance.MinHand(Src);
 
             TimerTask.Instance.Hint = "请选择" + count + "张手牌，交给一名手牌最少的角色";
-            TimerTask.Instance.ValidDest = (player, card, firstPlayer) => player.HandCardCount == min;
-            TimerTask.Instance.ValidCard = (card) => Src.HandCards.Contains(card);
+            TimerTask.Instance.ValidDest = (dest, card, first) => dest.HandCardCount == min;
+            TimerTask.Instance.ValidCard = card => Src.HandCards.Contains(card);
             TimerTask.Instance.Refusable = false;
             bool result = await TimerTask.Instance.Run(Src, count, 1);
 
             var cards = result ? TimerTask.Instance.Cards : Src.HandCards.Take(count).ToList();
-            if (result) dest = TimerTask.Instance.Dests[0];
+            var dest = result ? TimerTask.Instance.Dests[0] :
+                SgsMain.Instance.AlivePlayers.Find(x => x.HandCardCount == min);
 
             await new GetCardFromElse(dest, Src, cards).Execute();
         }
@@ -70,26 +62,18 @@ namespace Model
     {
         public 缔盟(Player src) : base(src, "缔盟", 1) { }
 
-        public override int MaxDest(List<Card> cards)
-        {
-            return 2;
-        }
-
-        public override int MinDest(List<Card> cards)
-        {
-            return 2;
-        }
-
-        public override bool IsValidDest(Player dest, List<Card> cards, Player firstDest = null)
+        public override int MaxDest(List<Card> cards) => 2;
+        public override int MinDest(List<Card> cards) => 2;
+        public override bool IsValidDest(Player dest, Player first)
         {
             if (Src == dest) return false;
 
             int count = Src.HandCardCount;
             foreach (var i in Src.Equipages.Values) if (i != null) count++;
-            return firstDest is null || Mathf.Abs(firstDest.HandCardCount - dest.HandCardCount) <= count;
+            return first is null || Mathf.Abs(first.HandCardCount - dest.HandCardCount) <= count;
         }
 
-        public override async Task Execute(List<Player> dests, List<Card> cards, string additional)
+        public override async Task Execute(List<Player> dests, List<Card> cards, string other)
         {
             // 弃牌
             int count = Mathf.Abs(dests[0].HandCardCount - dests[1].HandCardCount);
@@ -113,7 +97,7 @@ namespace Model
             }
 
             TurnSystem.Instance.SortDest(dests);
-            await base.Execute(dests, cards, additional);
+            await base.Execute(dests, cards, other);
 
             List<Card> card0 = new List<Card>(dests[0].HandCards);
             List<Card> card1 = new List<Card>(dests[1].HandCards);

@@ -129,6 +129,32 @@
                     ]
                 }
             ]
+        },
+        {
+            "id": 403601,
+            "name": "王佐之才",
+            "voice": [
+                {
+                    "name": "驱虎",
+                    "url": [
+                        "xunyu01/XunYu_QuHu_01",
+                        "xunyu01/XunYu_QuHu_02"
+                    ]
+                },
+                {
+                    "name": "节命",
+                    "url": [
+                        "xunyu01/XunYu_JieMing_01",
+                        "xunyu01/XunYu_JieMing_02"
+                    ]
+                },
+                {
+                    "name": "阵亡",
+                    "url": [
+                        "xunyu01/XunYu_Dead"
+                    ]
+                }
+            ]
         }
     ]
 }

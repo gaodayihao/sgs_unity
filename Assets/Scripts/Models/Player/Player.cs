@@ -70,12 +70,14 @@ namespace Model
         public int DstSub { get; set; } = 0;
         // 攻击范围
         public int AttackRange { get; set; } = 1;
+        // 出杀次数
+        public int ShaCount { get; set; }
         public bool Use酒 { get; set; } = false;
+        public int 酒Count{get;set;}
 
         /// <summary>
         /// 计算距离
         /// </summary>
-        /// <param name="dest">目标角色</param>
         public int GetDistance(Player dest)
         {
             if (!dest.IsAlive || dest == this) return 0;
@@ -95,16 +97,20 @@ namespace Model
         /// <summary>
         /// 判断区域内是否有牌
         /// </summary>
+        public bool RegionHaveCard()
+        {
+            // if (HandCardCount != 0) return true;
+            // foreach (var i in Equipages.Values) if (i != null) return true;
+            return HaveCard() || JudgeArea.Count != 0;
+            // return false;
+        }
+
         public bool HaveCard()
         {
             if (HandCardCount != 0) return true;
             foreach (var i in Equipages.Values) if (i != null) return true;
-            if (JudgeArea.Count != 0) return true;
             return false;
         }
-
-        // 出杀次数
-        public int ShaCount { get; set; }
 
         /// <summary>
         /// 按类型查找手牌(人机)
@@ -138,6 +144,7 @@ namespace Model
             {
                 switch (str)
                 {
+                    case "仁德": skills.Add(str, new 仁德(this)); break;
                     case "武圣": skills.Add(str, new 武圣(this)); break;
                     case "义绝": skills.Add(str, new 义绝(this)); break;
                     case "咆哮": skills.Add(str, new 咆哮(this)); break;
@@ -156,6 +163,12 @@ namespace Model
                     case "节命": skills.Add(str, new 节命(this)); break;
                     case "好施": skills.Add(str, new 好施(this)); break;
                     case "缔盟": skills.Add(str, new 缔盟(this)); break;
+                    case "恩怨": skills.Add(str, new 恩怨(this)); break;
+                    case "眩惑": skills.Add(str, new 眩惑(this)); break;
+                    case "散谣": skills.Add(str, new 散谣(this)); break;
+                    case "制蛮": skills.Add(str, new 制蛮(this)); break;
+                    case "明策": skills.Add(str, new 明策(this)); break;
+                    case "智迟": skills.Add(str, new 智迟(this)); break;
                 }
 
                 // player.skills.Add(skill);
@@ -182,6 +195,19 @@ namespace Model
         public bool DisabledCard(Card card)
         {
             foreach (Func<Card, bool> i in disabledCard.GetInvocationList())
+            {
+                if (i(card)) return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 卡牌对你无效
+        /// </summary>
+        public Func<Card, bool> disabledForMe = (card) => false;
+        public bool DisabledForMe(Card card)
+        {
+            foreach (Func<Card, bool> i in disabledForMe.GetInvocationList())
             {
                 if (i(card)) return true;
             }

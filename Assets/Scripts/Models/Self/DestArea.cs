@@ -82,10 +82,10 @@ namespace Model
                     return UseSha(src, dest);
 
                 case "过河拆桥":
-                    return src != dest && dest.HaveCard();
+                    return src != dest && dest.RegionHaveCard();
 
                 case "顺手牵羊":
-                    return src.GetDistance(dest) == 1 && dest.HaveCard();
+                    return src.GetDistance(dest) == 1 && dest.RegionHaveCard();
 
                 case "借刀杀人":
                     if (firstdest is null) return src != dest && dest.weapon != null;

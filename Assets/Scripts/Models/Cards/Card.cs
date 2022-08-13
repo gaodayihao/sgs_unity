@@ -58,6 +58,8 @@ namespace Model
             await Src.playerEvents.afterUseCard.Execute(this);
         }
 
+        public bool Disabled(Player dest) => dest.DisabledForMe(this);
+
         /// <summary>
         /// 打出牌
         /// </summary>
@@ -162,6 +164,7 @@ namespace Model
             }
             return list;
         }
+        
 
         private static UnityAction<Card> useCardView;
         public static event UnityAction<Card> UseCardView

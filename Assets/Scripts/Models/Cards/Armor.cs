@@ -15,10 +15,10 @@ namespace Model
         //     await base.AddEquipage(owner);
         // }
 
-        public virtual bool Disable(Card card)
-        {
-            return false;
-        }
+        // public virtual bool Disable(Card card)
+        // {
+        //     return false;
+        // }
 
         public virtual void WhenDamaged(Damaged damaged) { }
     }
@@ -41,10 +41,23 @@ namespace Model
 
     public class 藤甲 : Armor
     {
-        public override bool Disable(Card card)
+        public override async Task AddEquipage(Player owner)
         {
-            return !(card is 雷杀 || card is 火杀);
+            await base.AddEquipage(owner);
+            Owner.disabledForMe += Disable;
         }
+
+        public override async Task RemoveEquipage()
+        {
+            await base.RemoveEquipage();
+            Owner.disabledForMe -= Disable;
+        }
+        public bool Disable(Card card) => card is 杀
+            && card is not 雷杀
+            && card is not 火杀
+            && !(card as 杀).IgnoreArmor
+            || card is 南蛮入侵
+            || card is 万箭齐发;
 
         public override void WhenDamaged(Damaged damaged)
         {
@@ -54,18 +67,29 @@ namespace Model
 
     public class 仁王盾 : Armor
     {
-        public override bool Disable(Card card)
+        public override async Task AddEquipage(Player owner)
         {
-            return card is 杀 && (card.Suit == "黑桃" || card.Suit == "草花" || card.Suit == "黑色");
+            await base.AddEquipage(owner);
+            Owner.disabledForMe += Disable;
         }
+
+        public override async Task RemoveEquipage()
+        {
+            await base.RemoveEquipage();
+            Owner.disabledForMe -= Disable;
+        }
+
+        public bool Disable(Card card) => card is 杀
+            && !(card as 杀).IgnoreArmor
+            && (card.Suit == "黑桃" || card.Suit == "草花" || card.Suit == "黑色");
     }
 
     public class 白银狮子 : Armor
     {
         public override async Task RemoveEquipage()
         {
-           await base.RemoveEquipage();
-           await new Recover(Owner).Execute();
+            await base.RemoveEquipage();
+            await new Recover(Owner).Execute();
         }
         public override void WhenDamaged(Damaged damaged)
         {

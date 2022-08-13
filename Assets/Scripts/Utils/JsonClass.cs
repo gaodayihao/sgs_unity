@@ -103,6 +103,7 @@ public class TimerJson
     public List<int> dests;
     public string skill;
     public int src;
+    public string other;
 }
 
 [Serializable]

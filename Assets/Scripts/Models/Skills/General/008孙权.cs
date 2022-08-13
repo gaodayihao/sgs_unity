@@ -9,15 +9,9 @@ namespace Model
     {
         public 制衡(Player src) : base(src, "制衡", 1) { }
 
-        public override int MaxCard()
-        {
-            return int.MaxValue;
-        }
+        public override int MaxCard => int.MaxValue;
 
-        public override int MinCard()
-        {
-            return 1;
-        }
+        public override int MinCard => 1;
 
         public override async Task Execute(List<Player> dests, List<Card> cards, string additional)
         {
