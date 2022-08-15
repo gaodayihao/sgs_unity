@@ -177,7 +177,7 @@ namespace Model
             TimerTask.Instance.ValidDest = (player, card, first) => player == dest;
             bool result = await TimerTask.Instance.Run(player, 1, 1);
 
-            if (player.isAI && (player == dest || player.Teammate == dest))
+            if (player.isAI && (player == dest || player.team == dest.team))
             {
                 var card = player.FindCard<酒>() as Card;
                 if (card is null) card = player.FindCard<桃>();

@@ -11,34 +11,19 @@ namespace Model
         public async void Start()
         {
             // 初始化玩家
-            PlayersCount = 4;
-            players = new Player[PlayersCount];
+            players = new Player[4];
+            List<string> users = Room.Instance.IsSingle ? new List<string> { "AI", "user" } : Room.Instance.Users;
+            User.Instance.team = users[0] == User.Instance.Username ? Team.Blue : Team.Red;
+            players[0] = new Player(Team.Blue);
+            players[1] = new Player(Team.Red);
+            players[2] = new Player(Team.Red);
+            players[3] = new Player(Team.Blue);
 
-            if (Room.Instance.IsSingle)
+            foreach (var i in players)
             {
-                // 初始化位置
-                for (int i = 0; i < PlayersCount; i++)
-                {
-                    players[i] = new Player();
-                    players[i].isAI = true;
-                    AlivePlayers.Add(players[i]);
-                }
-
-                // self
-                players[0].isSelf = true;
-                players[0].isAI = false;
-                players[3].isSelf = true;
-                players[3].isAI = false;
-            }
-            else
-            {
-                players = Room.Instance.players.ToArray();
-                foreach (var i in players)
-                {
-                    if (i.Username == User.Instance.Username) i.isSelf = true;
-                    i.isAI = i.Username == "AI";
-                    AlivePlayers.Add(i);
-                }
+                i.isSelf = i.team == User.Instance.team;
+                i.isAI = Room.Instance.IsSingle && !i.isSelf;
+                AlivePlayers.Add(i);
             }
 
             players[0].Teammate = players[3];
@@ -46,18 +31,21 @@ namespace Model
             players[2].Teammate = players[1];
             players[3].Teammate = players[0];
 
-            for (int i = 0; i < PlayersCount; i++) players[i].Position = i;
-            for (int i = 1; i < PlayersCount; i++) players[i].Last = players[i - 1];
-            for (int i = 0; i < PlayersCount - 1; i++) players[i].Next = players[i + 1];
+            for (int i = 0; i < 4; i++) players[i].Position = i;
+            for (int i = 1; i < 4; i++) players[i].Last = players[i - 1];
+            for (int i = 0; i < 4 - 1; i++) players[i].Next = players[i + 1];
 
-            players[PlayersCount - 1].Next = players[0];
-            players[0].Last = players[PlayersCount - 1];
+            players[3].Next = players[0];
+            players[0].Last = players[3];
 
             await Task.Yield();
             positionView(players);
 
+            await BanPick.Instance.Execute();
+
             // 初始化武将
-            await InitGeneral();
+            // await InitGeneral();
+            await Task.Yield();
             generalView();
 
             // 初始化牌堆
@@ -77,7 +65,7 @@ namespace Model
         // 模式
         // public Mode mode { get; private set; }
         // 玩家人数
-        public int PlayersCount { get; private set; }
+        // public int PlayersCount { get; private set; }
         // 玩家
         public Player[] players;
         public List<Player> AlivePlayers { get; private set; } = new List<Player>();
@@ -182,7 +170,7 @@ namespace Model
             else
                 foreach (var player in players)
                 {
-                    var general = json[Room.Instance.RandomGeneral[player.Position]];
+                    var general = json[Room.Instance.Generals[player.Position]];
                     player.InitGeneral(general);
                 }
         }

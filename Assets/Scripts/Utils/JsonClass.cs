@@ -87,6 +87,24 @@ public class StartGameJson
 }
 
 [Serializable]
+public class BanpickJson
+{
+    public string eventname;
+    public int id;
+    public int general;
+}
+
+[Serializable]
+public class SelfpickJson
+{
+    public string eventname;
+    public int id;
+    public Team team;
+    public int general0;
+    public int general1;
+}
+
+[Serializable]
 public class SgsJson
 {
     public string eventname;

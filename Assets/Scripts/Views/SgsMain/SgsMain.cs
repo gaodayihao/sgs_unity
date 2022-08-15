@@ -13,6 +13,7 @@ namespace View
         public Player self { get; private set; }
         public Button gameOver;
         public RectTransform border;
+        public GameObject bp;
 
         protected override void Awake()
         {
@@ -51,6 +52,11 @@ namespace View
             float d = x / y > 2 ? x * 0.5f - y : 0;
             border.offsetMin = new Vector2(d, 0);
             border.offsetMax = new Vector2(-d, 0);
+        }
+
+        public void ShowBP()
+        {
+            bp.SetActive(true);
         }
 
         /// <summary>

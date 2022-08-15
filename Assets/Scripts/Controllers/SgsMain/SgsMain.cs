@@ -6,23 +6,13 @@ namespace Controller
 {
     public class SgsMain : SingletonCtrl<SgsMain>
     {
-        private View.SgsMain view;
-
-        //         private void Awake()
-        //         {
-        // #if UNITY_EDITOR
-        //             ABManager.Instance.LoadSgsMain();
-        // #else
-        //             ABManager.Instance.LoadAssetBundle("sgsasset");
-        // #endif
-
-        //         }
+        private View.SgsMain view => View.SgsMain.Instance;
 
         // Start is called before the first frame update
         void Start()
         {
 
-            view = GetComponent<View.SgsMain>();
+            // view = GetComponent<View.SgsMain>();
 
             Model.SgsMain.Instance.GameOverView += view.GameOver;
 
@@ -32,6 +22,8 @@ namespace Controller
             Model.CardPanel.Instance.StopTimerView += view.HidePanel;
 
             Model.TimerTask.Instance.MoveSeat += view.MoveSeat;
+
+            Model.BanPick.Instance.ShowPanelView += view.ShowBP;
 
             // Model.SgsMain.Instance.StartGame();
         }

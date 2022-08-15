@@ -83,7 +83,7 @@ namespace Model
             }
 
             if (json.result) SetResult(json.cards);
-            else SendResult();
+            // else SendResult();
             return json.result;
         }
 

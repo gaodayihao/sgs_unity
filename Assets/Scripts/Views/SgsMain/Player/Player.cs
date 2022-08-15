@@ -19,7 +19,7 @@ namespace View
         public Image nationBack;
         public Image nation;
         public Material gray;
-        public Image camp;
+        public Image team;
 
         // 体力
         public GameObject imageGroup;
@@ -67,16 +67,20 @@ namespace View
             model = player;
             IsSelf = model.isSelf;
             positionImage.sprite = Sprites.Instance.position[model.Position];
-            camp.sprite = Sprites.Instance.camp[IsSelf ? 0 : 1];
+            team.sprite = Sprites.Instance.camp[IsSelf ? 0 : 1];
         }
 
         public async void InitGeneral()
         {
             // if (this.model != model) return;
+            nation.transform.parent.gameObject.SetActive(true);
+            imageGroup.transform.parent.gameObject.SetActive(true);
 
             generalName.text = model.general.name;
             nationBack.sprite = Sprites.Instance.nationBack[model.general.nation];
             nation.sprite = Sprites.Instance.nation[model.general.nation];
+
+            gameObject.AddComponent<GeneralInfoButton>();
 
             // if (IsSelf) SkillArea.Instance.InitSkill(model);
 

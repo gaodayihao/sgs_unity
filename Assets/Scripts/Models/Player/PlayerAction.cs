@@ -163,7 +163,7 @@ namespace Model
             actionView?.Invoke(this);
 
             // 执行事件(濒死)
-            if (player.Hp < 1) await NearDeath();
+            if (player.Hp < 1 && Value < 0) await NearDeath();
             // 失去体力
             if (Value < 0 && !(this is Damaged)) await player.playerEvents.afterLoseHp.Execute(this);
         }
@@ -420,7 +420,7 @@ namespace Model
         public override async Task Execute()
         {
             TimerTask.Instance.Hint = "请选择一张手牌拼点";
-            if (player.Teammate == Dest)
+            if (player.team == Dest.team)
             {
                 Card0 = (await TimerAction.SelectHandCard(player, 1))[0];
                 Card1 = (await TimerAction.SelectHandCard(Dest, 1))[0];

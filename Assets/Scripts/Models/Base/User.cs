@@ -8,16 +8,18 @@ namespace Model
     {
         // Start is called before the first frame update
         // 用户名
-        public string Username { get; private set; }
+        public string Username { get; private set; } = "user";
         // 昵称
 
         // 头像
-        public string Portrait { get; private set; }
+        // public string Portrait { get; private set; }
+
+        public Team team { get; set; }
 
         public void Init(GetinfoResponse getinfoResponse)
         {
             Username = getinfoResponse.username;
-            Portrait = getinfoResponse.portrait;
+            // Portrait = getinfoResponse.portrait;
         }
     }
 }

@@ -6,19 +6,18 @@ namespace Model
 {
     public class Player
     {
-        public Player()
+        public Player(Team team)
         {
+            this.team = team;
             playerEvents = new PlayerEvents(this);
-            HpLimit = 5;
-            Hp = HpLimit;
         }
-        public string Username { get; set; }
 
         public PlayerEvents playerEvents;
 
         public bool isSelf { get; set; } = false;
         public bool isAI { get; set; }
         public Player Teammate { get; set; }
+        public Team team { get; private set; }
 
         // 武将
         public General general { get; private set; }
@@ -73,7 +72,7 @@ namespace Model
         // 出杀次数
         public int ShaCount { get; set; }
         public bool Use酒 { get; set; } = false;
-        public int 酒Count{get;set;}
+        public int 酒Count { get; set; }
 
         /// <summary>
         /// 计算距离

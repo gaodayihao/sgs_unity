@@ -11,7 +11,7 @@ namespace View
         public GameObject operationArea;
         // 倒计时读条
         public Slider timer;
-        // 提示词
+        // 提示
         public Text hint;
         // 按键栏
         public GameObject buttonBar;
@@ -22,11 +22,11 @@ namespace View
         // 回合结束键
         public Button finishPhase;
 
-        private Player self { get => GameObject.FindObjectOfType<SgsMain>().self; }
-        private CardArea cardArea { get => CardArea.Instance; }
-        private DestArea destArea { get => DestArea.Instance; }
-        private EquipArea equipArea { get => EquipArea.Instance; }
-        private SkillArea skillArea { get => SkillArea.Instance; }
+        private Player self => SgsMain.Instance.self;
+        private CardArea cardArea => CardArea.Instance;
+        private DestArea destArea => DestArea.Instance;
+        private EquipArea equipArea => EquipArea.Instance;
+        private SkillArea skillArea => SkillArea.Instance;
 
         private Model.TimerTask timerTask;
 
@@ -39,8 +39,8 @@ namespace View
             HideTimer();
         }
 
-        private Model.Player player { get => self.model; }
-        private List<Model.Card> cards { get => Model.CardPile.Instance.cards; }
+        private Model.Player player => self.model;
+        private List<Model.Card> cards => Model.CardPile.Instance.cards;
 
         /// <summary>
         /// 点击确定键
@@ -137,7 +137,7 @@ namespace View
             equipArea.InitEquipArea();
 
             UpdateButtonArea();
-            StartTimer(timerTask.second);
+            StartCoroutine(StartTimer(timerTask.second));
         }
 
         /// <summary>
@@ -162,14 +162,14 @@ namespace View
         /// <summary>
         /// 开始倒计时
         /// </summary>
-        private void StartTimer(int second)
+        // private void StartTimer(int second)
+        // {
+        //     StartCoroutine(UpdateTimer(second));
+        // }
+
+        private IEnumerator StartTimer(int second)
         {
             timer.value = 1;
-            StartCoroutine(UpdateTimer(second));
-        }
-
-        private IEnumerator UpdateTimer(int second)
-        {
             while (timer.value > 0)
             {
                 timer.value -= Time.deltaTime / second;

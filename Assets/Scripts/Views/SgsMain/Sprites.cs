@@ -10,6 +10,7 @@ namespace View
         public Sprite[] seat;
         public Sprite[] selfseat;
         public Sprite[] card;
+        public Sprite[] select;
 
         // seat
 
@@ -52,6 +53,10 @@ namespace View
 
         public Dictionary<string, Sprite> equipImage;
 
+        // select
+        public Sprite blueSelect;
+        public Sprite redSelect;
+
         public Sprites()
         {
             // 初始化sprites
@@ -59,6 +64,7 @@ namespace View
 
             seat = assetBundle.LoadAssetWithSubAssets<Sprite>("seat");
             selfseat = assetBundle.LoadAssetWithSubAssets<Sprite>("selfseat");
+            select = assetBundle.LoadAssetWithSubAssets<Sprite>("selectselectTongShuaiGeneral");
             card = assetBundle.LoadAssetWithSubAssets<Sprite>("card");
 
             // player
@@ -353,6 +359,9 @@ namespace View
                 {"乐不思蜀", card[110]},
                 {"八卦阵", card[118]},
             };
+
+            blueSelect = select[9];
+            redSelect = select[8];
         }
     }
 }
