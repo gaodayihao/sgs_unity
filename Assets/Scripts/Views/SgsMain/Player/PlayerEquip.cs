@@ -12,7 +12,7 @@ namespace View
         public Image suit;
         public Image weight;
 
-        private Sprites sprites{ get => Sprites.Instance; }
+        private Sprites sprites => Sprites.Instance;
 
         public void Init(Model.Equipage card)
         {

@@ -24,9 +24,9 @@ namespace View
             }
         }
 
-        private Player self { get => SgsMain.Instance.self; }
-        private CardArea cardArea { get => CardArea.Instance; }
-        private Model.TimerTask timerTask { get => Model.TimerTask.Instance; }
+        private Player self => SgsMain.Instance.self;
+        private CardArea cardArea => CardArea.Instance;
+        private Model.TimerTask timerTask => Model.TimerTask.Instance;
 
         public List<PlayerButton> SelectedPlayer { get; private set; } = new List<PlayerButton>();
         private int maxCount;

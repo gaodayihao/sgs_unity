@@ -169,7 +169,11 @@ namespace Model
                 if (json.cards is null) json.cards = new List<int>();
                 if (json.src == player0.Position) card0 = json.cards.Count > 0 ? json.cards[0] : player0.HandCards[0].Id;
                 else card1 = json.cards.Count > 0 ? json.cards[1] : player1.HandCards[0].Id;
-                if (card0 == 0 || card1 == 0) await WaitResult();
+                if (card0 == 0 || card1 == 0)
+                {
+                    Wss.Instance.Count--;
+                    await WaitResult();
+                }
             }
             else if (json.result) SetResult(json.cards, json.dests, json.skill, json.other);
 
@@ -277,13 +281,13 @@ namespace Model
 
         private IEnumerator SelfAutoResult()
         {
-            // yield return new WaitForSeconds(second);
-            int s = second;
-            while (s > 0)
-            {
-                Debug.Log(s--);
-                yield return new WaitForSeconds(1);
-            }
+            yield return new WaitForSeconds(second);
+            // int s = second;
+            // while (s > 0)
+            // {
+            //     Debug.Log(s--);
+            //     yield return new WaitForSeconds(1);
+            // }
             SendResult();
         }
 

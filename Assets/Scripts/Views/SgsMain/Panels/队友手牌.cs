@@ -8,10 +8,11 @@ namespace View
     public class 队友手牌 : SingletonMono<队友手牌>
     {
         public GameObject handCardArea;
+        public Image image;
         public Dictionary<int, Card> handcards = new Dictionary<int, Card>();
-        private Model.Player self { get => SgsMain.Instance.self.model; }
+        private Model.Player self => SgsMain.Instance.self.model;
 
-        void OnEnable()
+        async void OnEnable()
         {
             transform.SetAsLastSibling();
             int count = 0;
@@ -24,8 +25,14 @@ namespace View
                 }
                 else i.gameObject.SetActive(false);
             }
-            handCardArea.GetComponent<GridLayoutGroup>().spacing = UpdateSpacing(count);
+            handCardArea.GetComponent<HorizontalLayoutGroup>().spacing = UpdateSpacing(count);
+
+            int id = SgsMain.Instance.players[self.Teammate.Position].GetComponent<Player>().CurrentSkin.id;
+            string url = Urls.GENERAL_IMAGE + "Window/" + id + ".png";
+            var texture = await WebRequest.GetTexture(url);
+            image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
         }
+
 
         public void AddHandCard(Model.GetCard operation)
         {
@@ -70,14 +77,13 @@ namespace View
             }
         }
 
-        private Vector2 UpdateSpacing(int count)
+        private float UpdateSpacing(int count)
         {
 
             // 若手牌数小于7，则不用设置负间距，直接返回
-            if (count < 8) return new Vector2(0, 0);
+            if (count < 7) return 0;
 
-            float spacing = -(count * 121.5f - 850) / (float)(count - 1) - 0.001f;
-            return new Vector2(spacing, 0);
+            return -(count * 121.5f - 820) / (float)(count - 1) - 0.001f;
         }
     }
 }

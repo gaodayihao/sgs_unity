@@ -6,11 +6,11 @@ namespace Controller
 {
     public class Player : MonoBehaviour
     {
-        private View.Player player;
+        private View.Player player => GetComponent<View.Player>();
 
         private void Start()
         {
-            player = GetComponent<View.Player>();
+            // player = GetComponent<View.Player>();
 
             // 武将
             Model.SgsMain.Instance.GeneralView += player.UpdateHpLimit;

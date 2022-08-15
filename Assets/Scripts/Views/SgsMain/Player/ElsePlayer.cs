@@ -15,9 +15,9 @@ namespace View
         public PlayerEquip[] equipArray;
         public Dictionary<string, PlayerEquip> equipages;
 
-        private Sprites sprites { get => Sprites.Instance; }
+        private Sprites sprites => Sprites.Instance;
 
-        public Model.Player model { get => GetComponentInParent<Player>().model; }
+        public Model.Player model => GetComponentInParent<Player>().model;
 
         void Start()
         {

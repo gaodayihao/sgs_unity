@@ -13,8 +13,8 @@ namespace View
 
         public Model.Skill model { get; set; }
         public bool IsSelected { get; private set; }
-        public OperationArea operationArea { get => OperationArea.Instance; }
-        public SkillArea skillArea { get => SkillArea.Instance; }
+        public OperationArea operationArea => OperationArea.Instance;
+        public SkillArea skillArea => SkillArea.Instance;
 
         // Start is called before the first frame update
         void Start()

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class SgsMenu : MonoBehaviour
 {
-    private View.SgsMenu view;
+    private View.SgsMenu view => GetComponent<View.SgsMenu>();
 
     void Start()
     {
-        view = GetComponent<View.SgsMenu>();
+        // view = GetComponent<View.SgsMenu>();
 
         Model.CardPile.Instance.PileCountView += view.UpdatePileCount;
     }

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
 namespace View
 {
     public class PlayerButton : MonoBehaviour
@@ -15,12 +17,14 @@ namespace View
         // 是否被选中
         public bool IsSelected { get; private set; }
 
-        private DestArea destArea { get => DestArea.Instance; }
-        public Model.Player model { get => GetComponent<Player>().model; }
+        private DestArea destArea => DestArea.Instance;
+        public Model.Player model => GetComponent<Player>().model;
+
 
         void Start()
         {
             button.onClick.AddListener(ClickPlayer);
+            // OnLongClick+=ShowInfo;
         }
 
         public void ClickPlayer()
@@ -73,6 +77,5 @@ namespace View
             Unselect();
             heroImage.color = new Color(1, 1, 1);
         }
-
     }
 }

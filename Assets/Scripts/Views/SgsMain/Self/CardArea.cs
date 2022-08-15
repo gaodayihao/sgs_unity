@@ -15,10 +15,10 @@ namespace View
         // 手牌
         public Dictionary<int, Card> handcards = new Dictionary<int, Card>();
 
-        private Player self { get => SgsMain.Instance.self; }
-        private EquipArea equipArea { get => EquipArea.Instance; }
-        private Model.TimerTask timerTask { get => Model.TimerTask.Instance; }
-        private Model.Skill skill { get => SkillArea.Instance.SelectedSkill; }
+        private Player self => SgsMain.Instance.self;
+        private EquipArea equipArea => EquipArea.Instance;
+        private Model.TimerTask timerTask => Model.TimerTask.Instance;
+        private Model.Skill skill => SkillArea.Instance.SelectedSkill;
 
         // 被选中卡牌
         public List<Card> SelectedCard { get; private set; } = new List<Card>();

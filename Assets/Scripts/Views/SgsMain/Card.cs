@@ -26,7 +26,7 @@ namespace View
         private bool isConvert;
 
         // 手牌区
-        private CardArea cardArea { get => CardArea.Instance; }
+        private CardArea cardArea => CardArea.Instance;
 
         public Model.Card model { get; private set; }
 

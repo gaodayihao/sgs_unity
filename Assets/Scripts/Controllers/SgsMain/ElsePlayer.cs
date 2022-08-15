@@ -6,10 +6,10 @@ namespace Controller
 {
     public class ElsePlayer : MonoBehaviour
     {
-        private View.ElsePlayer elsePlayer;
+        private View.ElsePlayer elsePlayer => GetComponent<View.ElsePlayer>();
         void Start()
         {
-            elsePlayer = GetComponent<View.ElsePlayer>();
+            // elsePlayer = GetComponent<View.ElsePlayer>();
 
             // 阶段信息
             Model.TurnSystem.Instance.StartPhaseView += elsePlayer.ShowPhase;

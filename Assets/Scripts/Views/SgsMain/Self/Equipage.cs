@@ -16,9 +16,9 @@ namespace View
         public bool IsSelected { get; private set; }
         public bool UseSkill { get; private set; }
 
-        public EquipArea equipArea { get => EquipArea.Instance; }
-        public OperationArea operationArea { get => OperationArea.Instance; }
-        public Model.Card model { get => Model.CardPile.Instance.cards[Id]; }
+        public EquipArea equipArea => EquipArea.Instance;
+        public OperationArea operationArea => OperationArea.Instance;
+        public Model.Card model => Model.CardPile.Instance.cards[Id];
 
         void Start()
         {

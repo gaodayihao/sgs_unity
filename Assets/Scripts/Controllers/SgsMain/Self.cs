@@ -6,22 +6,16 @@ namespace Controller
 {
     public class Self : MonoBehaviour
     {
-        private View.Self self;
-        private View.CardArea cardArea;
-        private View.OperationArea operationArea;
-        private View.DestArea destArea;
-        private View.EquipArea equipArea;
-        private View.SkillArea skillArea;
+        private View.Self self => View.Self.Instance;
+        private View.CardArea cardArea => View.CardArea.Instance;
+        private View.OperationArea operationArea => View.OperationArea.Instance;
+        private View.DestArea destArea => View.DestArea.Instance;
+        private View.EquipArea equipArea => View.EquipArea.Instance;
+        private View.SkillArea skillArea => View.SkillArea.Instance;
         private View.队友手牌 teammate;
 
         void Start()
         {
-            self = GetComponent<View.Self>();
-            cardArea = GetComponent<View.CardArea>();
-            operationArea = GetComponent<View.OperationArea>();
-            destArea = GetComponent<View.DestArea>();
-            equipArea = GetComponent<View.EquipArea>();
-            skillArea = GetComponent<View.SkillArea>();
             teammate = GameObject.Find("Canvas").transform.Find("队友手牌Panel").GetComponent<View.队友手牌>();
 
             // 阶段信息
@@ -69,6 +63,8 @@ namespace Controller
             // 队友手牌
             Model.GetCard.ActionView += teammate.AddHandCard;
             Model.LoseCard.ActionView += teammate.RemoveHandCard;
+
+            Model.SgsMain.Instance.GeneralView += self.ShowLeftMenu;
         }
 
         private void OnDestroy()
@@ -107,6 +103,8 @@ namespace Controller
 
             Model.GetCard.ActionView -= teammate.AddHandCard;
             Model.LoseCard.ActionView -= teammate.RemoveHandCard;
+
+            Model.SgsMain.Instance.GeneralView -= self.ShowLeftMenu;
         }
     }
 }

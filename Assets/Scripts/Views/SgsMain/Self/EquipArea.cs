@@ -8,10 +8,10 @@ namespace View
     {
         private Dictionary<string, Equipage> equipages;
         public List<Equipage> SelectedCard { get; private set; } = new List<Equipage>();
-        private Model.TimerTask timerTask { get => Model.TimerTask.Instance; }
-        private Model.Skill skill { get => SkillArea.Instance.SelectedSkill; }
+        private Model.TimerTask timerTask => Model.TimerTask.Instance;
+        private Model.Skill skill => SkillArea.Instance.SelectedSkill;
 
-        private Player self { get => SgsMain.Instance.self; }
+        private Player self => SgsMain.Instance.self;
 
         void Start()
         {

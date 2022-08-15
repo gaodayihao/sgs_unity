@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 namespace View
 {
-    public class Self : MonoBehaviour
+    public class Self : SingletonMono<Self>
     {
-        private Player self { get => SgsMain.Instance.self; }
+        private Player self => SgsMain.Instance.self;
 
         // 阶段信息
         public Image currentPhase;
@@ -65,6 +65,11 @@ namespace View
         private void ClickSurrender()
         {
             SgsMain.Instance.GameOver();
+        }
+
+        public void ShowLeftMenu()
+        {
+            changeSkin.transform.parent.gameObject.SetActive(true);
         }
     }
 }

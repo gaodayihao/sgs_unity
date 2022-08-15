@@ -6,11 +6,11 @@ namespace Controller
 {
     public class DiscardArea : MonoBehaviour
     {
-        private View.DiscardArea view;
+        private View.DiscardArea view => GetComponent<View.DiscardArea>();
 
         void Start()
         {
-            view = GetComponent<View.DiscardArea>();
+            // view = GetComponent<View.DiscardArea>();
 
             // 添加卡牌
             Model.CardPile.Instance.DiscardView += view.AddDiscard;

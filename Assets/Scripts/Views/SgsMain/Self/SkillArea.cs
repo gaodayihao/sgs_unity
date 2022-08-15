@@ -10,8 +10,8 @@ namespace View
         public List<Skill> Skills { get; private set; } = new List<Skill>();
         // 已选技能
         public Model.Skill SelectedSkill { get; set; }
-        private Player self { get => SgsMain.Instance.self; }
-        private Model.TimerTask timerTask { get => Model.TimerTask.Instance; }
+        private Player self => SgsMain.Instance.self;
+        private Model.TimerTask timerTask => Model.TimerTask.Instance;
 
         public Transform Long;
         public Transform Short;

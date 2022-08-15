@@ -20,6 +20,7 @@ namespace Model
         public int hp_limit;
         // 技能
         public List<string> skill;
+        public List<string> discribe;
         // 皮肤
         // public List<int> /skin;
     }

@@ -6,11 +6,11 @@ namespace Controller
 {
     public class Audio : MonoBehaviour
     {
-        private View.Audio view;
+        private View.Audio view => GetComponent<View.Audio>();
 
         void Start()
         {
-            view = GetComponent<View.Audio>();
+            // view = GetComponent<View.Audio>();
 
             Model.Card.UseCardView += view.CardVoice;
             Model.UpdateHp.ActionView += view.OnDamage;
