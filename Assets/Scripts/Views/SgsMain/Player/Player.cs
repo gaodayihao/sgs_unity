@@ -122,6 +122,7 @@ namespace View
         private int index = 0;
         public void UpdateSkin()
         {
+            if (skins is null) return;
             UpdateSkin(model, skins[index++ % skins.Count]);
         }
 

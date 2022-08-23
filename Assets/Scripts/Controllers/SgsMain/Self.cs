@@ -64,7 +64,7 @@ namespace Controller
             Model.GetCard.ActionView += teammate.AddHandCard;
             Model.LoseCard.ActionView += teammate.RemoveHandCard;
 
-            Model.SgsMain.Instance.GeneralView += self.ShowLeftMenu;
+            Model.SgsMain.Instance.GeneralView += self.ShowTeammateButton;
         }
 
         private void OnDestroy()
@@ -104,7 +104,7 @@ namespace Controller
             Model.GetCard.ActionView -= teammate.AddHandCard;
             Model.LoseCard.ActionView -= teammate.RemoveHandCard;
 
-            Model.SgsMain.Instance.GeneralView -= self.ShowLeftMenu;
+            Model.SgsMain.Instance.GeneralView -= self.ShowTeammateButton;
         }
     }
 }

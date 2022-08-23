@@ -21,7 +21,7 @@ namespace Model
             {
                 Pool = json.OrderBy(x => Random.value).Take(12).ToList();
 #if UNITY_EDITOR
-                string name = "刘备";
+                string name = "夏侯惇";
                 General self = json.Find(x => x.name == name);
                 if (!Pool.Contains(self)) Pool[11] = self;
 #endif
@@ -29,11 +29,7 @@ namespace Model
             else
             {
                 Pool = new List<General>();
-                foreach (var i in Room.Instance.Generals)
-                {
-                    Pool.Add(json[i]);
-                    // Debug.Log(Pool[Pool.Count - 1].id);
-                }
+                foreach (var i in Room.Instance.Generals) Pool.Add(json[i]);
 
             }
             TeamPool = new Dictionary<Team, Dictionary<int, General>>
@@ -44,13 +40,19 @@ namespace Model
 
             showPanelView();
 
-            // while (startTimerView is null) await Task.Yield();
             await Task.Yield();
             await Ban();
+            if (SgsMain.Instance.GameIsOver) return;
             await Ban();
-            while (Pool.Count > 0) await Pick();
+            if (SgsMain.Instance.GameIsOver) return;
+            while (Pool.Count > 0)
+            {
+                await Pick();
+                if (SgsMain.Instance.GameIsOver) return;
+            }
 
             await SelfPick();
+            if (SgsMain.Instance.GameIsOver) return;
         }
 
         private Team Not(Team t) => t == Team.Blue ? Team.Red : Team.Blue;
@@ -65,8 +67,10 @@ namespace Model
             if (User.Instance.team == Current || Room.Instance.IsSingle) StartCoroutine(BpAutoResult());
             startBanView();
             int id = await WaitBp();
+            if (SgsMain.Instance.GameIsOver) return;
             var general = Pool.Find(x => x.id == id);
             Pool.Remove(general);
+            while (banView is null) await Task.Yield();
             banView(id);
             StopAllCoroutines();
             Current = Not(Current);
@@ -79,12 +83,14 @@ namespace Model
             while (TeamPool[Current].Count < TeamPool[Not(Current)].Count + 1 && Pool.Count > 0)
             {
                 int id = await WaitBp();
+                if (SgsMain.Instance.GameIsOver) return;
                 var general = Pool.Find(x => x.id == id);
                 Pool.Remove(general);
                 TeamPool[Current].Add(id, general);
                 onPickView(id);
             }
             StopAllCoroutines();
+            // await Task.Yield();
             Current = Not(Current);
         }
 
@@ -113,6 +119,8 @@ namespace Model
                 json = JsonUtility.FromJson<BanpickJson>(msg);
             }
 
+            if (SgsMain.Instance.GameIsOver) return 0;
+
             return json.general;
         }
 
@@ -125,6 +133,7 @@ namespace Model
 
         public async Task SelfPick()
         {
+            // await Task.Yield();
             selfPickView();
             StartCoroutine(SelfAutoResult());
             if (Room.Instance.IsSingle) StartCoroutine(AiAutoResult());
@@ -161,6 +170,8 @@ namespace Model
                 json = JsonUtility.FromJson<SelfpickJson>(msg);
             }
 
+            if (SgsMain.Instance.GameIsOver) return;
+
             if (json.team == Team.Blue)
             {
                 SgsMain.Instance.players[3].InitGeneral(TeamPool[json.team][json.general0]);
@@ -183,8 +194,7 @@ namespace Model
         private IEnumerator SelfAutoResult()
         {
             yield return new WaitForSeconds(second);
-            // int n = Mathf.Min(TeamPool[Not(Current)].Count - TeamPool[Current].Count + 1, Pool.Count);
-            // for (int i = 0; i < n; i++) SendBpResult(Pool[0].id);
+
             var team = User.Instance.team;
             var list = TeamPool[team].Values.ToList();
             var general0 = list[Random.Range(0, list.Count)];

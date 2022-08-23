@@ -64,7 +64,11 @@ namespace View
                 bool isSelf = self.model.HandCards.Contains(Model.CardPile.Instance.cards[cards[0]]);
                 timerTask.SendResult((isSelf ? self.model : self.model.Teammate).Position, true, cards);
             }
-            else if (timerTask.isCompete) timerTask.SendResult(self.model.Position, true, cards);
+            else if (timerTask.isCompete)
+            {
+                HideTimer();
+                timerTask.SendResult(self.model.Position, true, cards);
+            }
             else
             {
                 string other = cardArea.Converted is null ? "" : cardArea.Converted.Name;
@@ -91,7 +95,6 @@ namespace View
             }
 
             // SetResult
-            StopAllCoroutines();
             HideTimer();
 
             if (timerTask.isWxkj)
@@ -155,18 +158,13 @@ namespace View
 
         public void HideTimer(Model.TimerTask timerTask)
         {
-            if (!timerTask.isWxkj && self.model != timerTask.player) return;
+            if (!timerTask.isWxkj && !timerTask.isCompete && self.model != timerTask.player) return;
             HideTimer();
         }
 
         /// <summary>
         /// 开始倒计时
         /// </summary>
-        // private void StartTimer(int second)
-        // {
-        //     StartCoroutine(UpdateTimer(second));
-        // }
-
         private IEnumerator StartTimer(int second)
         {
             timer.value = 1;

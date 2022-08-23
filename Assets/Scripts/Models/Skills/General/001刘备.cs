@@ -19,7 +19,7 @@ namespace Model
 
         public override bool IsValidCard(Card card) => Src.HandCards.Contains(card);
 
-        public override bool IsValidDest(Player dest, Player first) => !invalidDest.Contains(dest);
+        public override bool IsValidDest(Player dest, Player first) => dest != Src && !invalidDest.Contains(dest);
 
         private List<Player> invalidDest = new List<Player>();
         private int count = 0;
@@ -38,7 +38,7 @@ namespace Model
             {
                 Card.Convert<杀>(), Card.Convert<火杀>(), Card.Convert<雷杀>(), Card.Convert<酒>(), Card.Convert<桃>()
             };
-            foreach(var i in list) TimerTask.Instance.MultiConvert.Add(i);
+            foreach (var i in list) TimerTask.Instance.MultiConvert.Add(i);
             TimerTask.Instance.ValidCard = CardArea.ValidCard;
             TimerTask.Instance.MaxDest = DestArea.MaxDest;
             TimerTask.Instance.ValidDest = DestArea.ValidDest;

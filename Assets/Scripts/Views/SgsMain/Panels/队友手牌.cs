@@ -33,6 +33,10 @@ namespace View
             image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
         }
 
+        void Update()
+        {
+            if (Input.GetMouseButtonDown(0)) gameObject.SetActive(false);
+        }
 
         public void AddHandCard(Model.GetCard operation)
         {

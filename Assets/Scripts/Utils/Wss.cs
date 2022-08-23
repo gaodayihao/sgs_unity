@@ -56,7 +56,13 @@ public class Wss : MonoBehaviour
             if (JsonUtility.FromJson<WebsocketJson>(message).eventname == "start_game")
             {
                 Count = 0;
+                messages.Clear();
                 View.Menu.Instance.StartGame(JsonUtility.FromJson<StartGameJson>(message));
+            }
+            else if (JsonUtility.FromJson<WebsocketJson>(message).eventname == "surrender")
+            {
+                Model.SgsMain.Instance.GameOver(JsonUtility.FromJson<SurrenderJson>(message).team);
+                messages.Add(message);
             }
             else messages.Add(message);
         };
@@ -87,7 +93,7 @@ public class Wss : MonoBehaviour
     {
         var msg = await PopMsg();
         var id = JsonUtility.FromJson<SgsJson>(msg).id;
-        if (id <= Count) return await PopSgsMsg();
+        if (id != Count + 1 && !Model.SgsMain.Instance.GameIsOver) return await PopSgsMsg();
         else
         {
             Count++;

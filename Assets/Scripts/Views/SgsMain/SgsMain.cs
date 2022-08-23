@@ -1,17 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace View
 {
     public class SgsMain : SingletonMono<SgsMain>
     {
-        public RawImage backgroundImage;
+        public RawImage background;
 
         public GameObject[] players;
         public Player self { get; private set; }
-        public Button gameOver;
+        public GameObject gameOver;
         public RectTransform border;
         public GameObject bp;
 
@@ -26,22 +27,9 @@ namespace View
 
         void Start()
         {
-            SetBackgroundImage(Urls.TEST_BACKGROUND_IMAGE);
+            index = Random.Range(0, bgUrl.Count);
+            ChangeBg();
             Bgm.Instance.Load(Urls.AUDIO_URL + "bgm/bgm_1.mp3");
-            gameOver.onClick.AddListener(ClickGameOver);
-        }
-
-        public async void SetBackgroundImage(string url)
-        {
-            backgroundImage.texture = await WebRequest.GetTexture(url);
-            // 调整原始图像大小，以使其像素精准。
-            backgroundImage.SetNativeSize();
-
-            // 适应屏幕
-            Texture texture = backgroundImage.texture;
-            Vector2 canvasSize = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>().sizeDelta;
-            float radio = Mathf.Max(canvasSize.x / texture.width, canvasSize.y / texture.height);
-            backgroundImage.rectTransform.sizeDelta *= radio;
         }
 
         public void SetBorder()
@@ -82,14 +70,7 @@ namespace View
 
         public void GameOver()
         {
-            gameOver.gameObject.SetActive(true);
-        }
-
-        public void ClickGameOver()
-        {
-            Debug.Log("gameover");
-            string scene = Model.Room.Instance.IsSingle ? "Login" : "Menu";
-            SceneManager.Instance.LoadSceneFromAB(scene);
+            gameOver.SetActive(true);
         }
 
         /// <summary>
@@ -177,6 +158,35 @@ namespace View
         {
             if (self.model != model.player) return;
             Destroy(panel);
+        }
+
+        private List<string> bgUrl = new List<string>
+        {
+            "10",
+            "autoChessbeijing_s",
+            "boyunjianri_s",
+            "chengneidenghuo_s",
+            "qunxiongbeijing_s",
+            "shuguobeijing_s",
+            "weiguobeijing_s",
+            "wuguobeijing_s",
+            "zhanchangbeijing_s"
+        };
+
+        int index;
+
+        public async void ChangeBg()
+        {
+            string url = Urls.IMAGE_URL + "Background/" + bgUrl[index++ % bgUrl.Count] + ".jpeg";
+            background.texture = await WebRequest.GetTexture(url);
+
+            // 调整原始图像大小，以使其像素精准。
+            background.SetNativeSize();
+            // 适应屏幕
+            Texture texture = background.texture;
+            Vector2 canvasSize = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>().sizeDelta;
+            float radio = Mathf.Max(canvasSize.x / texture.width, canvasSize.y / texture.height);
+            background.rectTransform.sizeDelta *= radio;
         }
     }
 }

@@ -1,0 +1,740 @@
+fileFormatVersion: 2
+guid: 1c236017c2ac54669bb5cdf0cb9b1bea
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 1031
+        width: 152
+        height: 178
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9dfe1aa9cb87475c9ae4a7bea54bc6b
+      internalID: -1128189486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_1
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 1056
+        width: 223
+        height: 158
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a62092678202e4eb58a25b8527aea907
+      internalID: 1027043945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_2
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 970
+        width: 276
+        height: 253
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4beeb39fa91bb41c7a08b081178720d4
+      internalID: 494539772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_3
+      rect:
+        serializedVersion: 2
+        x: 658
+        y: 948
+        width: 170
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fad6fe63b1b245cdb2f2c67b8f62e63
+      internalID: -1056405078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_4
+      rect:
+        serializedVersion: 2
+        x: 830
+        y: 986
+        width: 320
+        height: 189
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c8bcb06c2f4e4062b2c7df10fd14ceb
+      internalID: -1098323287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_5
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 682
+        width: 215
+        height: 347
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81120e41fb1874e36bddf1035ca194f2
+      internalID: 1452005964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_6
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 955
+        width: 98
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce49852af1902402e8ea761ad3c13c9e
+      internalID: -1454690744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_7
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 681
+        width: 298
+        height: 287
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ce32d07f2fbf4767aebd591986815fe
+      internalID: 1642207412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_8
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 720
+        width: 264
+        height: 264
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63e1624d857a949b3b2eb7c9f050766e
+      internalID: 1093874166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_9
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 824
+        width: 112
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ba9e808ec7b144e6ad1fc8c068aed59
+      internalID: -1305311304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_10
+      rect:
+        serializedVersion: 2
+        x: 644
+        y: 720
+        width: 272
+        height: 226
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cb7a49f9f13941c289e67e71e59dea4
+      internalID: 553369999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_11
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 682
+        width: 111
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67f78e41ff94445f5bd56cf02179c3a5
+      internalID: -754453046
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_12
+      rect:
+        serializedVersion: 2
+        x: 659
+        y: 553
+        width: 509
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 948d55f994f1b4098ab57421d3f34f5a
+      internalID: -274350679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_13
+      rect:
+        serializedVersion: 2
+        x: 1170
+        y: 625
+        width: 70
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a2cf433c46814961a6f2ff2428e5ca8
+      internalID: 1667746037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_14
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 661
+        width: 20
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 205ec75253fad468e8d3f8d2143db087
+      internalID: 666523720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_15
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 667
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b7ca849e44fb41a99f7f3ad3e3f03e7
+      internalID: -1884784427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_16
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 668
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a258149a567ec44f19f7442dfe1b1efa
+      internalID: 2070624237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_17
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 671
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cbec1c7090804a7d832c2f082585839
+      internalID: 1126023595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_18
+      rect:
+        serializedVersion: 2
+        x: 537
+        y: 671
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8e2a4cdecaa94680baba1ad45695490
+      internalID: 1104377435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_19
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 596
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f86de0468bda843e18457a37a7cd78a1
+      internalID: -1489136548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_20
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 382
+        width: 321
+        height: 273
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4034200e59bf42d78e9af57636bd931
+      internalID: -868774620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_21
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 382
+        width: 313
+        height: 283
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 120a8a264950f44418e8a862de7a3432
+      internalID: 391987961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_22
+      rect:
+        serializedVersion: 2
+        x: 1170
+        y: 545
+        width: 63
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3e5a4e5a3b8c453090326c6e689a27a
+      internalID: -1405886029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_23
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 585
+        width: 20
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adbdae7459bbe4262a3e76c56e6c97a9
+      internalID: 1406334147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_24
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 2
+        width: 672
+        height: 378
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aeb8123140a044151a1c359dc8cdfd43
+      internalID: 1498944975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_25
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 293
+        width: 548
+        height: 255
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c38d26322e354d58ad77c0dcbd520cd
+      internalID: -133362475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SF_jiesuan_eff_shibai_26
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 2
+        width: 549
+        height: 289
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2cbee789932447bba2450cd58a7f04f
+      internalID: -388002745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      SF_jiesuan_eff_shibai_26: -388002745
+      SF_jiesuan_eff_shibai_21: 391987961
+      SF_jiesuan_eff_shibai_24: 1498944975
+      SF_jiesuan_eff_shibai_7: 1642207412
+      SF_jiesuan_eff_shibai_11: -754453046
+      SF_jiesuan_eff_shibai_0: -1128189486
+      SF_jiesuan_eff_shibai_17: 1126023595
+      SF_jiesuan_eff_shibai_25: -133362475
+      SF_jiesuan_eff_shibai_1: 1027043945
+      SF_jiesuan_eff_shibai_19: -1489136548
+      SF_jiesuan_eff_shibai_16: 2070624237
+      SF_jiesuan_eff_shibai_3: -1056405078
+      SF_jiesuan_eff_shibai_13: 1667746037
+      SF_jiesuan_eff_shibai_23: 1406334147
+      SF_jiesuan_eff_shibai_22: -1405886029
+      SF_jiesuan_eff_shibai_2: 494539772
+      SF_jiesuan_eff_shibai_5: 1452005964
+      SF_jiesuan_eff_shibai_4: -1098323287
+      SF_jiesuan_eff_shibai_18: 1104377435
+      SF_jiesuan_eff_shibai_15: -1884784427
+      SF_jiesuan_eff_shibai_10: 553369999
+      SF_jiesuan_eff_shibai_12: -274350679
+      SF_jiesuan_eff_shibai_20: -868774620
+      SF_jiesuan_eff_shibai_8: 1093874166
+      SF_jiesuan_eff_shibai_9: -1305311304
+      SF_jiesuan_eff_shibai_6: -1454690744
+      SF_jiesuan_eff_shibai_14: 666523720
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

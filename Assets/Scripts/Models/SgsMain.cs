@@ -12,8 +12,10 @@ namespace Model
         {
             // 初始化玩家
             players = new Player[4];
-            List<string> users = Room.Instance.IsSingle ? new List<string> { "AI", "user" } : Room.Instance.Users;
-            User.Instance.team = users[0] == User.Instance.Username ? Team.Blue : Team.Red;
+            // List<string> users = Room.Instance.IsSingle ? new List<string> { "AI", "user" } : Room.Instance.Users;
+            if (Room.Instance.IsSingle) User.Instance.team = Random.value < 0.5f ? Team.Blue : Team.Red;
+            else User.Instance.team = Room.Instance.Users[0] == User.Instance.Username ? Team.Blue : Team.Red;
+
             players[0] = new Player(Team.Blue);
             players[1] = new Player(Team.Red);
             players[2] = new Player(Team.Red);
@@ -42,6 +44,7 @@ namespace Model
             positionView(players);
 
             await BanPick.Instance.Execute();
+            if (GameIsOver) return;
 
             // 初始化武将
             // await InitGeneral();
@@ -51,9 +54,9 @@ namespace Model
             // 初始化牌堆
             await CardPile.Instance.Init();
 
-#if UNITY_EDITOR
-            if (Room.Instance.IsSingle) await DebugCard();
-#endif
+            // #if UNITY_EDITOR
+            //             if (Room.Instance.IsSingle) await DebugCard();
+            // #endif
 
             foreach (var player in players) await new GetCardFromPile(player, 4).Execute();
 
@@ -69,11 +72,15 @@ namespace Model
         // 玩家
         public Player[] players;
         public List<Player> AlivePlayers { get; private set; } = new List<Player>();
+
         public bool GameIsOver { get; private set; } = false;
-        public async Task GameOver()
+        public Team Loser { get; private set; }
+        public void GameOver(Team loser)
         {
             GameIsOver = true;
-            await Delay(2);
+            Loser = loser;
+            foreach (var i in AlivePlayers) i.IsAlive = false;
+            AlivePlayers.Clear();
             gameOverView();
         }
 
@@ -81,7 +88,7 @@ namespace Model
         {
             List<string> list = new List<string>
             {
-                "火杀","无中生有","诸葛连弩","顺手牵羊","铁索连环","寒冰剑","闪电"
+                "火杀", "无中生有", "诸葛连弩", "顺手牵羊", "铁索连环", "寒冰剑", "闪电"
             };
 
             while (list.Count > 0)
@@ -119,60 +126,6 @@ namespace Model
                 if (i.HandCardCount < minHand) minHand = i.HandCardCount;
             }
             return minHand;
-        }
-
-        /// <summary>
-        /// 初始化武将
-        /// </summary>
-        private async Task InitGeneral()
-        {
-
-            string url = Urls.JSON_URL + "general.json";
-            List<General> json = JsonList<General>.FromJson(await WebRequest.GetString(url));
-
-            if (Room.Instance.IsSingle)
-            {
-#if UNITY_EDITOR
-                // debug
-                General self = null;
-                string name = "刘备";
-                foreach (var i in json)
-                {
-                    if (i.name == name)
-                    {
-                        self = i;
-                        break;
-                    }
-                }
-                json.Remove(self);
-
-                foreach (var i in players)
-                {
-                    General general;
-
-                    // debug
-                    if (i.Position == 0) general = self;
-
-                    else general = json[Random.Range(0, json.Count)];
-                    json.Remove(general);
-
-                    i.InitGeneral(general);
-                }
-#else
-                foreach (var i in players)
-                {
-                    var general = json[Random.Range(0, json.Count)];
-                    json.Remove(general);
-                    i.InitGeneral(general);
-                }
-#endif
-            }
-            else
-                foreach (var player in players)
-                {
-                    var general = json[Room.Instance.Generals[player.Position]];
-                    player.InitGeneral(general);
-                }
         }
 
         private UnityAction<Player[]> positionView;

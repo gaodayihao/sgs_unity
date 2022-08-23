@@ -82,6 +82,8 @@ namespace Model
                 json = JsonUtility.FromJson<TimerJson>(msg);
             }
 
+            if (SgsMain.Instance.GameIsOver) return false;
+
             if (json.result) SetResult(json.cards);
             // else SendResult();
             return json.result;

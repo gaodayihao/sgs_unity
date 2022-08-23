@@ -29,7 +29,7 @@ namespace Model
 
                 var card = await new Judge().Execute();
                 if (card.Suit == "红桃" || card.Suit == "方片") await new Damaged(damaged.Src, Src).Execute();
-                else
+                else if (damaged.Src.HaveCard())
                 {
                     CardPanel.Instance.Hint = "对" + damaged.Src.PosStr + "号位发动刚烈，弃置其一张牌";
                     var c = await CardPanel.Instance.SelectCard(Src, damaged.Src);
@@ -70,7 +70,29 @@ namespace Model
 
             if (!await base.ShowTimer()) return;
             Execute();
-            await new GetCardFromElse(TimerTask.Instance.Dests[0], Src, TimerTask.Instance.Cards).Execute();
+
+            dest = TimerTask.Instance.Dests[0];
+            offset = 0;
+
+            if (TimerTask.Instance.Cards.Find(x => x.Type == "基本牌") != null) offset++;
+            if (TimerTask.Instance.Cards.Find(x => x.Type == "锦囊牌" || x.Type == "延时锦囊") != null) offset++;
+            if (TimerTask.Instance.Cards.Find(x => x is Equipage) != null) offset++;
+            dest.HandCardLimitOffset += offset;
+
+            await new GetCardFromElse(dest, Src, TimerTask.Instance.Cards).Execute();
+        }
+
+        private Player dest;
+        private int offset;
+
+        protected override void Reset()
+        {
+            base.Reset();
+            if (dest != null)
+            {
+                dest.HandCardLimitOffset -= offset;
+                dest = null;
+            }
         }
     }
 }

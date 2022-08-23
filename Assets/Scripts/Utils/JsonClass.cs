@@ -87,6 +87,20 @@ public class StartGameJson
 }
 
 [Serializable]
+public class SurrenderJson
+{
+    public string eventname;
+    public Team team;
+}
+
+[Serializable]
+public class SgsJson
+{
+    public string eventname;
+    public int id;
+}
+
+[Serializable]
 public class BanpickJson
 {
     public string eventname;
@@ -102,13 +116,6 @@ public class SelfpickJson
     public Team team;
     public int general0;
     public int general1;
-}
-
-[Serializable]
-public class SgsJson
-{
-    public string eventname;
-    public int id;
 }
 
 [Serializable]

@@ -128,7 +128,7 @@ namespace Model
             if (eventDic is null) return;
 
             Player player = TurnSystem.Instance.CurrentPlayer;
-            if (player is null) return;
+            if (player is null || !player.IsAlive) return;
             while (true)
             {
                 if (eventDic.ContainsKey(player))

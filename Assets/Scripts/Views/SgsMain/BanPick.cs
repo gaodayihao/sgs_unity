@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 namespace View
 {
@@ -31,7 +32,6 @@ namespace View
                 Pool.Add(GameObject.Find("General" + i.ToString()).GetComponent<General>());
                 Pool[i].Init(Model.BanPick.Instance.Pool[i]);
             }
-            Debug.Log(poolObj.transform.childCount);
         }
 
         public void ShowTimer()
@@ -55,19 +55,20 @@ namespace View
 
         public void OnPick(int id)
         {
-            // StopAllCoroutines();
-            // timer.gameObject.SetActive(false);
             var general = Pool.Find(x => x.Id == id);
+            if (general is null)
+            {
+                StopAllCoroutines();
+                return;
+            }
             general.button.interactable = false;
             Pool.Remove(general);
             if (model.Current == team)
             {
-                general.transform.SetParent(SelfPool.transform);
+                general.transform.SetParent(SelfPool.transform, false);
             }
             else
             {
-                // general.transform.SetParent(OppoPool.transform);
-                // Debug.Log("onpick");
                 OppoPoolList.Add(general);
                 general.OnPick(model.Current);
             }
@@ -77,11 +78,9 @@ namespace View
         {
             StopAllCoroutines();
             StartCoroutine(StartTimer(model.second));
-            // Debug.Log(model.Current);
-            // Debug.Log(team);
+
             if (model.Current == team)
             {
-                // timer.gameObject.SetActive(true);
                 foreach (var i in Pool) i.button.interactable = true;
                 hint.text = "请点击禁用武将";
             }
@@ -95,9 +94,14 @@ namespace View
         public void OnBan(int id)
         {
             var general = Pool.Find(x => x.Id == id);
+            if (general is null)
+            {
+                StopAllCoroutines();
+                return;
+            }
             general.button.interactable = false;
             Pool.Remove(general);
-            general.generalImage.color = new Color(0.5f, 0.5f, 0.5f);
+            general.generalImage.color = new Color(0.4f, 0.4f, 0.4f);
         }
 
         public General general0;
@@ -109,22 +113,9 @@ namespace View
         public Button button;
         // public GameObject border;
 
-        public void SelfPick()
+        public async void SelfPick()
         {
-            foreach (var i in OppoPoolList)
-            {
-                i.transform.SetParent(OppoPool.transform);
-                // Destroy(i.gameObject);
-                // i.isPicked.gameObject.SetActive(false);
-            }
-            // int n = poolObj.transform.childCount;
-            // while (n-- > 0)
-            // {
-            //     var i = poolObj.transform.GetChild(0);
-            //     Debug.Log(i.name);
-            //     if (i.GetComponent<General>().isPicked.gameObject.activeSelf) i.SetParent(OppoPool.transform);
-            //     else Destroy(i.gameObject);
-            // }
+            foreach (var i in OppoPoolList) i.transform.SetParent(OppoPool.transform);
 
             hint.text = "请选择己方要出场的武将";
             OppoPool.SetActive(true);
@@ -134,10 +125,11 @@ namespace View
             tsf.anchorMax = new Vector2(0.5f, 1);
             tsf.pivot = new Vector2(0.5f, 1);
             tsf.anchoredPosition = new Vector2(0, -250);
-            // SelfPool.transform.position=new Vector3()
 
             selfPick.SetActive(true);
-            Destroy(SelfPool.GetComponent<HorizontalLayoutGroup>());
+            int current = Time.frameCount;
+            while (Time.frameCount == current) await Task.Yield();
+            SelfPool.GetComponent<HorizontalLayoutGroup>().enabled = false;
             foreach (Transform i in SelfPool.transform) i.GetComponent<General>().SelfPick();
 
             var posSprites = Sprites.Instance.position;
@@ -155,7 +147,6 @@ namespace View
         public void OnClick()
         {
             model.SendSelfResult(team, general0.Id, general1.Id);
-            // border.SetActive(true);
             Destroy(gameObject);
         }
 

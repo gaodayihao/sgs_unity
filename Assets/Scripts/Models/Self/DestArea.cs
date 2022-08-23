@@ -97,6 +97,9 @@ namespace Model
                 case "火攻":
                     return dest.HandCardCount != 0;
 
+                case "兵粮寸断":
+                    return src.GetDistance(dest) == 1;
+
                 default:
                     return true;
             }

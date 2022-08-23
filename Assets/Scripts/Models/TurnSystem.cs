@@ -49,21 +49,21 @@ namespace Model
             // 单机模式
             // if (Room.Instance.isSingle)
             // {
-            while (!SgsMain.Instance.GameIsOver)
+            while (true)
             {
                 // Debug.Log("CurrentPlayer is " + CurrentPlayer.Position.ToString());
 
                 // 执行回合
                 startTurnView?.Invoke(this);
+                BeforeTurn?.Invoke();
                 for (CurrentPhase = Phase.Prepare; CurrentPhase <= Phase.End; CurrentPhase++)
                 {
                     // if (!Room.Instance.IsSingle) await Sync();
-                    BeforeTurn?.Invoke();
                     await ExecutePhase();
-                    if (SgsMain.Instance.GameIsOver) break;
-                    AfterTurn?.Invoke();
+                    if (SgsMain.Instance.GameIsOver) return;
                 }
                 finishTurnView?.Invoke(this);
+                AfterTurn?.Invoke();
 
                 CurrentPlayer = CurrentPlayer.Next;
                 // turnCount++;
@@ -92,6 +92,7 @@ namespace Model
 
         private async Task ExecutePhase()
         {
+            if (!CurrentPlayer.IsAlive) return;
             // 执行阶段开始时view事件
             startPhaseView?.Invoke(this);
 
@@ -148,6 +149,8 @@ namespace Model
                     break;
             }
 
+            if (!CurrentPlayer.IsAlive) return;
+
             // 执行阶段结束时事件
             await playerEvents.finishPhaseEvents[CurrentPhase].Execute();
             finishPhaseView?.Invoke(this);
@@ -157,7 +160,7 @@ namespace Model
         {
             // 重置出杀次数
             CurrentPlayer.ShaCount = 0;
-            CurrentPlayer.酒Count=0;
+            CurrentPlayer.酒Count = 0;
             CurrentPlayer.Use酒 = false;
             // 重置使用技能次数
             // foreach (var i in CurrentPlayer.skills.Values) if (i is Active) (i as Active).Time = 0;
@@ -165,7 +168,7 @@ namespace Model
             bool performIsDone = false;
             var timerTask = TimerTask.Instance;
 
-            while (!performIsDone && !SgsMain.Instance.GameIsOver)
+            while (!performIsDone && !SgsMain.Instance.GameIsOver && CurrentPlayer.IsAlive)
             {
                 // 暂停线程,显示进度条
                 timerTask.Hint = "出牌阶段，请选择一张牌。";

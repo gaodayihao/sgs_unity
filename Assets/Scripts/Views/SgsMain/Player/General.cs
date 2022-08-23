@@ -35,15 +35,13 @@ namespace View
 
         private void Start()
         {
-            // generalImage.material = null;
-            // death.gameObject.SetActive(false);
             button.onClick.AddListener(SetBpResult);
         }
 
         public void SetBpResult()
         {
-            Model.BanPick.Instance.SendBpResult(Id);
             button.interactable = false;
+            Model.BanPick.Instance.SendBpResult(Id);
         }
 
         public void SelfPick()
@@ -155,22 +153,9 @@ namespace View
 
         public void OnPick(Team team)
         {
-            generalImage.color = new Color(0.5f, 0.5f, 0.5f);
+            generalImage.color = new Color(0.4f, 0.4f, 0.4f);
             isPicked.gameObject.SetActive(true);
             isPicked.sprite = team == Team.Red ? Sprites.Instance.redSelect : Sprites.Instance.blueSelect;
         }
-
-        // public void OnBan()
-        // {
-        //     generalImage.color = new Color(0.5f, 0.5f, 0.5f);
-        // }
-
-        /// <summary>
-        /// 设置阴影
-        /// </summary>
-        // public void SetShadow()
-        // {
-        //     // else generalImage.color = new Color(1, 1, 1);
-        // }
     }
 }

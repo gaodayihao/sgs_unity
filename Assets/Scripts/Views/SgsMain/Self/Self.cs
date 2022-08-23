@@ -16,6 +16,7 @@ namespace View
         private Dictionary<Phase, Sprite> phaseSprite;
 
         public Button changeSkin;
+        public Button changeBg;
         public Button teammate;
         public Button surrender;
         public GameObject teammatePanel;
@@ -26,6 +27,7 @@ namespace View
 
             currentPhase.gameObject.SetActive(false);
             changeSkin.onClick.AddListener(ChangeSkin);
+            changeBg.onClick.AddListener(ChangeBg);
             teammate.onClick.AddListener(ClickTeammate);
             surrender.onClick.AddListener(ClickSurrender);
         }
@@ -57,19 +59,31 @@ namespace View
             self.UpdateSkin();
         }
 
+        private void ChangeBg()
+        {
+            SgsMain.Instance.ChangeBg();
+        }
+
         private void ClickTeammate()
         {
-            teammatePanel.SetActive(!teammatePanel.activeSelf);
+            teammatePanel.SetActive(true);
         }
 
         private void ClickSurrender()
         {
-            SgsMain.Instance.GameOver();
+            if (Model.Room.Instance.IsSingle) Model.SgsMain.Instance.GameOver(self.model.team);
+            else
+            {
+                var json = new SurrenderJson();
+                json.eventname = "surrender";
+                json.team = Model.User.Instance.team;
+                Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
+            }
         }
 
-        public void ShowLeftMenu()
+        public void ShowTeammateButton()
         {
-            changeSkin.transform.parent.gameObject.SetActive(true);
+            teammate.gameObject.SetActive(true);
         }
     }
 }

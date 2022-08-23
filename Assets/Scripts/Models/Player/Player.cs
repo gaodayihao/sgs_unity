@@ -34,7 +34,7 @@ namespace Model
         public int Hp { get; set; }
         // 位置
         public int Position { get; set; }
-        public string PosStr { get => (Position + 1).ToString(); }
+        public string PosStr => (Position + 1).ToString();
         // 上家
         public Player Last { get; set; }
         // 下家
@@ -43,9 +43,11 @@ namespace Model
         // 手牌
         public List<Card> HandCards { get; set; } = new List<Card>();
         // 手牌数
-        public int HandCardCount { get => HandCards.Count; }
+        public int HandCardCount => HandCards.Count;
         // 手牌上限
-        public int HandCardLimit { get => Hp; }
+        public int HandCardLimit => Hp + HandCardLimitOffset;
+        // 手牌上线偏移
+        public int HandCardLimitOffset { get; set; } = 0;
 
         // 铁锁
         public bool IsLocked { get; set; } = false;

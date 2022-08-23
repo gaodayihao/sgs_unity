@@ -181,7 +181,7 @@ namespace Model
                 if (i == TurnSystem.Instance.CurrentPlayer) break;
             }
 
-            if (this is Damaged) await new Die(player, ((Damaged)this).Src).Execute();
+            if (this is Damaged) await new Die(player, (this as Damaged).Src).Execute();
             else await new Die(player, null).Execute();
         }
     }
@@ -203,6 +203,7 @@ namespace Model
             actionView?.Invoke(this);
 
             player.skills.Clear();
+            if (player.IsLocked) await new SetLock(player).Execute();
             player.IsAlive = false;
             player.Next.Last = player.Last;
             player.Last.Next = player.Next;
@@ -214,10 +215,9 @@ namespace Model
             foreach (var i in player.Equipages.Values) if (i != null) cards.Add(i);
             foreach (var i in player.JudgeArea) cards.Add(i);
             // CardPile.Instance.AddToDiscard(cards);
-            foreach (var i in cards) Debug.Log(i.Id);
             await new Discard(player, cards).Execute();
 
-            if (!player.Teammate.IsAlive) await SgsMain.Instance.GameOver();
+            if (!player.Teammate.IsAlive) SgsMain.Instance.GameOver(player.team);
             else await new GetCardFromPile(player.Teammate, 1).Execute();
         }
     }
@@ -291,8 +291,10 @@ namespace Model
             }
             await base.Execute();
 
+            if (SgsMain.Instance.GameIsOver) return;
+
             // 受到伤害后
-            await player.playerEvents.afterDamaged.Execute(this);
+            if (player.IsAlive) await player.playerEvents.afterDamaged.Execute(this);
 
             if (conduct) await Conduct();
         }
@@ -303,7 +305,7 @@ namespace Model
         private async Task Conduct()
         {
             Player i = TurnSystem.Instance.CurrentPlayer;
-            while (true)
+            while (!SgsMain.Instance.GameIsOver)
             {
                 if (i.IsLocked)
                 {

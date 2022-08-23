@@ -22,6 +22,8 @@ namespace Model
 
         public override int MinDest(List<Card> cards) => 1;
 
+        public override bool IsValidDest(Player dest, Player first) => dest.HandCardCount > 0;
+
         private GetCardFromPile getCardFromPile;
 
         public async Task Execute(GetCardFromPile getCard)

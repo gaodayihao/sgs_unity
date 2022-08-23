@@ -50,7 +50,7 @@ namespace Model
             Dests = new List<Player>();
             Skill = "";
 
-            if (SgsMain.Instance.GameIsOver) return true;
+            if (SgsMain.Instance.GameIsOver) return false;
 
             if (player.isSelf)
             {
@@ -124,7 +124,7 @@ namespace Model
             json.skill = skill;
             json.other = other;
 
-            if (Room.Instance.IsSingle) waitAction.TrySetResult(json);
+            if (Room.Instance.IsSingle) waitAction?.TrySetResult(json);
             else Wss.Instance.SendWebSocketMessage(JsonUtility.ToJson(json));
         }
 
@@ -147,6 +147,8 @@ namespace Model
                 json = JsonUtility.FromJson<TimerJson>(message);
             }
 
+            if (SgsMain.Instance.GameIsOver) return false;
+
             if (isWxkj)
             {
                 if (json.result)
@@ -168,7 +170,7 @@ namespace Model
             {
                 if (json.cards is null) json.cards = new List<int>();
                 if (json.src == player0.Position) card0 = json.cards.Count > 0 ? json.cards[0] : player0.HandCards[0].Id;
-                else card1 = json.cards.Count > 0 ? json.cards[1] : player1.HandCards[0].Id;
+                else card1 = json.cards.Count > 0 ? json.cards[0] : player1.HandCards[0].Id;
                 if (card0 == 0 || card1 == 0)
                 {
                     Wss.Instance.Count--;
