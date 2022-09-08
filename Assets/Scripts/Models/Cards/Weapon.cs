@@ -267,7 +267,7 @@ namespace Model
             if (dest.HandCardCount != 0) return;
             await Task.Yield();
             SkillView();
-            sha.DamageValue++;
+            sha.DamageValue[dest.Position]++;
         }
     }
 
@@ -286,7 +286,7 @@ namespace Model
             if (!await TimerTask.Instance.Run(Owner)) return;
 
             SkillView();
-            sha.DamageValue = 0;
+            sha.DamageValue[dest.Position] = 0;
             var card = await CardPanel.Instance.SelectCard(Owner, dest);
             await new Discard(dest, new List<Card> { card }).Execute();
             card = await CardPanel.Instance.SelectCard(Owner, dest);

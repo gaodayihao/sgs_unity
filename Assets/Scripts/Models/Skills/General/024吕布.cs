@@ -29,17 +29,21 @@ namespace Model
 
         public async Task Execute杀(Card card)
         {
-            if (!(card is 杀)) return;
-            if ((card as 杀).ShanCount != 1) return;
+            if (card is not 杀) return;
+            // if ((card as 杀).ShanCount != 1) return;
 
             await Task.Yield();
             Execute();
-            (card as 杀).ShanCount = 2;
+            foreach (var i in card.Dests)
+            {
+                if ((card as 杀).ShanCount[i.Position] == 1) (card as 杀).ShanCount[i.Position] = 2;
+            }
+            // (card as 杀).ShanCount = 2;
         }
 
         public async Task Execute决斗(Card card)
         {
-            if (!(card is 决斗)) return;
+            if (card is not 决斗) return;
             if (card.Src != Src && !card.Dests.Contains(Src)) return;
 
             await Task.Yield();

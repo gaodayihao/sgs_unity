@@ -45,17 +45,17 @@ def original(voice):
 
 
 data = {}
-data["id"] = 403601
-data["name"] = "王佐之才"
+data["id"] = 502702
+data["name"] = "佻身飞镞"
 data["voice"] = [
-    {"name": "驱虎", "url": ["XunYu_QuHu_01", "XunYu_QuHu_02"]},
-    {"name": "节命", "url": ["XunYu_JieMing_01", "XunYu_JieMing_02"]},
-    {"name": "阵亡", "url": ["XunYu_Dead"]},
+    {"name": "烈弓", "url": ["HuangZhong_LieGong_01", "HuangZhong_LieGong_02"]},
+    # {"name": "节命", "url": ["XunYu_JieMing_01", "XunYu_JieMing_02"]},
+    {"name": "阵亡", "url": ["HuangZhong_Dead"]},
 ]
 
-dir = "xunyu01"
+dir = "huangzhong07"
 voice(dir, data["voice"])
-# original(data['voice'])
+# original(data["voice"])
 image_dir = "Assets/StreamingAssets/Image/General/"
 os.system(
     "wget -P "

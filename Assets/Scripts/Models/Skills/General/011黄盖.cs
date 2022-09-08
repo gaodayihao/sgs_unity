@@ -63,7 +63,7 @@ namespace Model
             if (card is 杀 && (card.Suit == "红桃" || card.Suit == "方片" || card.Suit == "红色"))
             {
                 await Task.Yield();
-                (card as 杀).ShanCount = 0;
+                foreach (var i in card.Dests) (card as 杀).ShanCount[i.Position] = 0;
             }
         }
 

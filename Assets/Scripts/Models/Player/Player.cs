@@ -170,6 +170,7 @@ namespace Model
                     case "制蛮": skills.Add(str, new 制蛮(this)); break;
                     case "明策": skills.Add(str, new 明策(this)); break;
                     case "智迟": skills.Add(str, new 智迟(this)); break;
+                    case "烈弓": skills.Add(str, new 烈弓(this)); break;
                 }
 
                 // player.skills.Add(skill);

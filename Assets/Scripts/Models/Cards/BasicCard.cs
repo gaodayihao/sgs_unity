@@ -26,18 +26,20 @@ namespace Model
                 src.weapon.WhenUseSha(this);
             }
 
-            ShanCount = 1;
-            DamageValue = 1;
+            for (int i = 0; i < ShanCount.Length; i++) ShanCount[i] = 1;
+            for (int i = 0; i < DamageValue.Length; i++) DamageValue[i] = 1;
+            // DamageValue = 1;
             IgnoreArmor = false;
+
+            src.ShaCount++;
+            await base.UseCard(src, dests);
+
 
             if (src.Use酒)
             {
                 src.Use酒 = false;
-                DamageValue++;
+                for (int i = 0; i < DamageValue.Length; i++) DamageValue[i]++;
             }
-
-            src.ShaCount++;
-            await base.UseCard(src, dests);
 
             // 青釭剑 雌雄双股剑
             if (src.weapon != null) await src.weapon.AfterUseSha(this);
@@ -49,10 +51,10 @@ namespace Model
                 if (Disabled(dest)) continue;
 
                 IsDamage = false;
-                if (ShanCount == 0) IsDamage = true;
+                if (ShanCount[dest.Position] == 0) IsDamage = true;
                 else
                 {
-                    for (int i = 0; i < ShanCount; i++)
+                    for (int i = 0; i < ShanCount[dest.Position]; i++)
                     {
                         if (!await 闪.Call(dest, this))
                         {
@@ -69,13 +71,13 @@ namespace Model
                     if (src.weapon != null) await src.weapon.WhenDamage(this, dest);
                     if (!IsDamage) continue;
                     Damage type = this is 火杀 ? Damage.Fire : this is 雷杀 ? Damage.Thunder : Damage.Normal;
-                    await new Damaged(dest, Src, this, DamageValue, type).Execute();
+                    await new Damaged(dest, Src, this, DamageValue[dest.Position], type).Execute();
                 }
             }
         }
 
-        public int ShanCount { get; set; }
-        public int DamageValue { get; set; }
+        public int[] ShanCount { get; set; } = new int[4];
+        public int[] DamageValue { get; set; } = new int[4];
         public bool IgnoreArmor { get; set; }
         public bool IsDamage { get; set; }
 
