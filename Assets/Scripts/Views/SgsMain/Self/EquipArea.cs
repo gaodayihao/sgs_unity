@@ -6,17 +6,16 @@ namespace View
 {
     public class EquipArea : SingletonMono<EquipArea>
     {
-        private Dictionary<string, Equipage> equipages;
-        public List<Equipage> SelectedCard { get; private set; } = new List<Equipage>();
+        public Dictionary<string, Equipage> Equips { get; private set; }
         private Model.TimerTask timerTask => Model.TimerTask.Instance;
-        private Model.Skill skill => SkillArea.Instance.SelectedSkill;
+        private Model.Skill skill => Model.Operation.Instance.skill;
 
         private Player self => SgsMain.Instance.self;
 
         void Start()
         {
             var parent = transform.Find("装备区");
-            equipages = new Dictionary<string, Equipage>
+            Equips = new Dictionary<string, Equipage>
             {
                 {"武器", parent.transform.Find("武器").GetComponent<Equipage>()},
                 {"防具", parent.transform.Find("防具").GetComponent<Equipage>()},
@@ -29,7 +28,7 @@ namespace View
         {
             if (Model.TimerTask.Instance.GivenSkill != null)
             {
-                foreach (var i in equipages.Values)
+                foreach (var i in Equips.Values)
                 {
                     if (i.name == Model.TimerTask.Instance.GivenSkill)
                     {
@@ -41,43 +40,37 @@ namespace View
 
             if (CardArea.Instance.MaxCount == 0)
             {
-                foreach (var i in equipages.Values) i.button.interactable = false;
+                foreach (var i in Equips.Values) i.button.interactable = false;
             }
 
             else if (skill != null)
             {
-                foreach (var i in equipages.Values) i.button.interactable = skill.IsValidCard(i.model);
+                foreach (var i in Equips.Values) i.button.interactable = skill.IsValidCard(i.model);
             }
 
             else
             {
-                foreach (var i in equipages.Values) i.button.interactable = timerTask.ValidCard(i.model);
+                foreach (var i in Equips.Values) i.button.interactable = timerTask.IsValidCard(i.model);
 
-                if (equipages["武器"].name == "丈八蛇矛" && timerTask.ValidCard(Model.Card.Convert<Model.杀>()))
+                if (Equips["武器"].name == "丈八蛇矛" && timerTask.IsValidCard(Model.Card.Convert<Model.杀>()))
                 {
-                    equipages["武器"].button.interactable = true;
+                    Equips["武器"].button.interactable = true;
                 }
             }
         }
 
         public void ResetEquipArea()
         {
-            // 重置装备牌状态
-            foreach (var card in equipages.Values) card.ResetCard();
-        }
-
-        public void ResetEquipArea(Model.TimerTask timerTask)
-        {
             if (self.model != timerTask.player) return;
-
-            ResetEquipArea();
+            // 重置装备牌状态
+            foreach (var card in Equips.Values) card.ResetCard();
         }
 
         public void MoveSeat(Model.Player model)
         {
             foreach (var i in model.Equipages)
             {
-                var equip = equipages[i.Key];
+                var equip = Equips[i.Key];
                 if (i.Value is null) equip.gameObject.SetActive(false);
                 else
                 {
@@ -91,16 +84,16 @@ namespace View
         {
             if (card.Src != self.model) return;
 
-            equipages[card.Type].gameObject.SetActive(true);
-            equipages[card.Type].Init(card);
+            Equips[card.Type].gameObject.SetActive(true);
+            Equips[card.Type].Init(card);
         }
 
         public void HideEquipage(Model.Equipage card)
         {
             if (card.Owner != self.model) return;
-            if (card.Id != equipages[card.Type].Id) return;
+            if (card.Id != Equips[card.Type].Id) return;
 
-            equipages[card.Type].gameObject.SetActive(false);
+            Equips[card.Type].gameObject.SetActive(false);
         }
     }
 }

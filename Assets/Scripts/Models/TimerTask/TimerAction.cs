@@ -14,7 +14,7 @@ namespace Model
         /// </summary>
         public static async Task<List<Card>> SelectHandCard(Player player, int count)
         {
-            TimerTask.Instance.ValidCard = (card) => player.HandCards.Contains(card);
+            TimerTask.Instance.IsValidCard = (card) => player.HandCards.Contains(card);
             TimerTask.Instance.Refusable = false;
             bool result = await TimerTask.Instance.Run(player, count, 0);
             return result ? TimerTask.Instance.Cards : player.HandCards.Take(count).ToList();

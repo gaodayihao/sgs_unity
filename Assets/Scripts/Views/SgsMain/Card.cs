@@ -30,6 +30,12 @@ namespace View
 
         public Model.Card model { get; private set; }
 
+        private Model.Card Converted
+        {
+            get => Model.Operation.Instance.Converted;
+            set => Model.Operation.Instance.Converted = value;
+        }
+
         /// <summary>
         /// 初始化卡牌
         /// </summary>
@@ -85,11 +91,11 @@ namespace View
             if (IsSelected) return;
             IsSelected = true;
             GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 20);
-            if (!isConvert) cardArea.SelectedCard.Add(this);
+            if (!isConvert) Model.Operation.Instance.Cards.Add(model);
             else
             {
-                if (cardArea.Converted != null) cardArea.ConvertedCards[cardArea.Converted.Name].Unselect();
-                cardArea.Converted = model;
+                if (Converted != null) cardArea.ConvertedCards[Converted.Name].Unselect();
+                Converted = model;
             }
         }
 
@@ -101,8 +107,8 @@ namespace View
             if (!IsSelected) return;
             IsSelected = false;
             GetComponent<RectTransform>().anchoredPosition -= new Vector2(0, 20);
-            if (!isConvert) cardArea.SelectedCard.Remove(this);
-            else cardArea.Converted = null;
+            if (!isConvert) Model.Operation.Instance.Cards.Remove(model);
+            else Converted = null;
         }
 
         /// <summary>
@@ -154,11 +160,6 @@ namespace View
         /// </summary>
         private void ClickInPanel()
         {
-            // 选中卡牌
-            // if (!IsSelected) Select();
-            // else Unselect();
-            // var panel = ;
-
             CardPanel.Instance.selectCards.Add(this);
             CardPanel.Instance.UpdatePanel();
         }

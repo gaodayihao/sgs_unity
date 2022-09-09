@@ -38,8 +38,8 @@ namespace Model
             int min = SgsMain.Instance.MinHand(Src);
 
             TimerTask.Instance.Hint = "请选择" + count + "张手牌，交给一名手牌最少的角色";
-            TimerTask.Instance.ValidDest = (dest, card, first) => dest.HandCardCount == min;
-            TimerTask.Instance.ValidCard = card => Src.HandCards.Contains(card);
+            TimerTask.Instance.IsValidDest = dest => dest.HandCardCount == min;
+            TimerTask.Instance.IsValidCard = card => Src.HandCards.Contains(card);
             TimerTask.Instance.Refusable = false;
             bool result = await TimerTask.Instance.Run(Src, count, 1);
 
@@ -62,15 +62,12 @@ namespace Model
     {
         public 缔盟(Player src) : base(src, "缔盟", 1) { }
 
-        public override int MaxDest(List<Card> cards) => 2;
-        public override int MinDest(List<Card> cards) => 2;
-        public override bool IsValidDest(Player dest, Player first)
+        public override int MaxDest => 2;
+        public override int MinDest => 2;
+        public override bool IsValidDest(Player dest)
         {
             if (Src == dest) return false;
-
-            int count = Src.HandCardCount;
-            foreach (var i in Src.Equipages.Values) if (i != null) count++;
-            return first is null || Mathf.Abs(first.HandCardCount - dest.HandCardCount) <= count;
+            return firstDest is null || Mathf.Abs(firstDest.HandCardCount - dest.HandCardCount) <= Src.CardCount;
         }
 
         public override async Task Execute(List<Player> dests, List<Card> cards, string other)

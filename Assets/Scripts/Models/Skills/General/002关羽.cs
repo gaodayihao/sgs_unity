@@ -38,14 +38,11 @@ namespace Model
         public 义绝(Player src) : base(src, "义绝", 1) { }
 
         public override int MaxCard => 1;
-
         public override int MinCard => 1;
+        public override int MaxDest => 1;
+        public override int MinDest => 1;
 
-        public override int MaxDest(List<Card> cards) => 1;
-
-        public override int MinDest(List<Card> cards) => 1;
-
-        public override bool IsValidDest(Player dest, Player first) => dest.HandCardCount > 0 && dest != Src;
+        public override bool IsValidDest(Player dest) => dest.HandCardCount > 0 && dest != Src;
 
         public override async Task Execute(List<Player> dests, List<Card> cards, string additional)
         {
@@ -83,20 +80,17 @@ namespace Model
         }
 
         private bool isDone;
-
         Player Dest;
 
         public bool DisabledCard(Card card) => true;
 
         public async Task WhenDamaged(Damaged damaged)
         {
-            if (isDone) return;
             await Task.Yield();
-            if (damaged.Src == Src && damaged.SrcCard is 杀 && damaged.SrcCard.Suit == "红桃")
+            if (!isDone && damaged.Src == Src && damaged.SrcCard is 杀 && damaged.SrcCard.Suit == "红桃")
             {
                 damaged.Value--;
                 isDone = true;
-                // Dest.playerEvents.whenDamaged.RemoveEvent(Src, WhenDamaged);
             }
         }
 

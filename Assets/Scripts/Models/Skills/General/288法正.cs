@@ -37,7 +37,7 @@ namespace Model
             {
                 if (!await base.ShowTimer()) return;
                 TimerTask.Instance.Hint = "点确定交给法正一张手牌，点取消失去一点体力";
-                TimerTask.Instance.ValidCard = card => damaged.Src.HandCards.Contains(card);
+                TimerTask.Instance.IsValidCard = card => damaged.Src.HandCards.Contains(card);
                 bool result = await TimerTask.Instance.Run(damaged.Src, 1, 0);
                 if (result)
                 {
@@ -65,16 +65,13 @@ namespace Model
         }
 
         public override int MaxCard => 2;
-
         public override int MinCard => 2;
-
-        public override int MaxDest(List<Card> cards) => 2;
-
-        public override int MinDest(List<Card> cards) => 2;
+        public override int MaxDest => 2;
+        public override int MinDest => 2;
 
         public override bool IsValidCard(Card card) => Src.HandCards.Contains(card);
 
-        public override bool IsValidDest(Player dest, Player first) => first != null || dest != Src;
+        public override bool IsValidDest(Player dest) => Operation.Instance.Dests.Count > 0 || dest != Src;
 
         public new async Task Execute()
         {
@@ -91,8 +88,8 @@ namespace Model
                 Card.Convert<决斗>(),
             };
             foreach (var i in list) TimerTask.Instance.MultiConvert.Add(i);
-            TimerTask.Instance.ValidCard = card => true;
-            TimerTask.Instance.ValidDest = (player, card, first) => player == dest1;
+            TimerTask.Instance.IsValidCard = card => true;
+            TimerTask.Instance.IsValidDest = player => player == dest1;
             bool result = await TimerTask.Instance.Run(dest0, 0, 1);
             if (result)
             {

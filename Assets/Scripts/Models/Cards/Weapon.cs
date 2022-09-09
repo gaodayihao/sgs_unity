@@ -49,8 +49,8 @@ namespace Model
         {
             TimerTask.Instance.GivenSkill = "青龙偃月刀";
             TimerTask.Instance.Hint = "是否发动青龙偃月刀？";
-            TimerTask.Instance.ValidCard = card => card is 杀;
-            TimerTask.Instance.ValidDest = (player, card, first) => player == dest;
+            TimerTask.Instance.IsValidCard = card => card is 杀;
+            TimerTask.Instance.IsValidDest = player => player == dest;
             bool result = await TimerTask.Instance.Run(Owner, 1, 1);
 
             if (!result) return;
@@ -113,7 +113,7 @@ namespace Model
                 }
 
                 TimerTask.Instance.Hint = Src.PosStr + "号位对你发动雌雄双股剑，请弃一张手牌或令其摸一张牌";
-                TimerTask.Instance.ValidCard = card => i.HandCards.Contains(card);
+                TimerTask.Instance.IsValidCard = card => i.HandCards.Contains(card);
                 bool result = await TimerTask.Instance.Run(i, 1, 0);
                 if (result) await new Discard(i, TimerTask.Instance.Cards).Execute();
                 else await new GetCardFromPile(sha.Src, 1).Execute();
@@ -214,7 +214,7 @@ namespace Model
         {
             TimerTask.Instance.GivenSkill = "贯石斧";
             TimerTask.Instance.Hint = "是否发动贯石斧？";
-            TimerTask.Instance.ValidCard = card => card != Owner.weapon && !card.IsConvert;
+            TimerTask.Instance.IsValidCard = card => card != Owner.weapon && !card.IsConvert;
             if (!await TimerTask.Instance.Run(Owner, 2, 0)) return;
 
             await new Discard(Owner, TimerTask.Instance.Cards).Execute();
@@ -280,7 +280,7 @@ namespace Model
 
         public override async Task WhenDamage(杀 sha, Player dest)
         {
-            if (!dest.HaveCard()) return;
+            if (dest.CardCount == 0) return;
             TimerTask.Instance.GivenSkill = "寒冰剑";
             TimerTask.Instance.Hint = "是否发动寒冰剑？";
             if (!await TimerTask.Instance.Run(Owner)) return;

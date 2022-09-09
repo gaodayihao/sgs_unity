@@ -111,7 +111,7 @@ namespace View
         public Image pos0;
         public Image pos1;
         public Button button;
-        // public GameObject border;
+        public GameObject border;
 
         public async void SelfPick()
         {
@@ -137,6 +137,7 @@ namespace View
             pos1.sprite = team == Team.Blue ? posSprites[0] : posSprites[2];
 
             button.onClick.AddListener(OnClick);
+            border.SetActive(true);
         }
 
         public void UpdateButton()

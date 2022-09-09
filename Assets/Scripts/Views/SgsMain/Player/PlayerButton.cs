@@ -45,7 +45,7 @@ namespace View
             if (IsSelected) return;
             IsSelected = true;
             border.gameObject.SetActive(true);
-            destArea.SelectedPlayer.Add(this);
+            Model.Operation.Instance.Dests.Add(model);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace View
             if (!IsSelected) return;
             IsSelected = false;
             border.gameObject.SetActive(false);
-            destArea.SelectedPlayer.Remove(this);
+            Model.Operation.Instance.Dests.Remove(model);
         }
 
         /// <summary>

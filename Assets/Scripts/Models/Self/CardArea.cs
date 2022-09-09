@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Model
 {
-    public class CardArea
+    public class CardArea : SingletonMono<CardArea>
     {
-        public static bool ValidCard(Card card)
+        public bool ValidCard(Card card)
         {
             var player = TurnSystem.Instance.CurrentPlayer;
             if (!player.HandCards.Contains(card) && !card.IsConvert) return false;
@@ -37,7 +37,7 @@ namespace Model
             }
         }
 
-        public static bool UseSha(Player player, Card card = null)
+        public bool UseSha(Player player, Card card = null)
         {
             if (card is null) card = Card.Convert<杀>();
             return player.ShaCount < 1 || player.UnlimitedCard(card);

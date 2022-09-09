@@ -84,7 +84,7 @@ namespace Model
         public static async Task<bool> Call(Player player)
         {
             TimerTask.Instance.Hint = "请打出一张杀。";
-            TimerTask.Instance.ValidCard = card => card is 杀 && !player.DisabledCard(card);
+            TimerTask.Instance.IsValidCard = card => card is 杀 && !player.DisabledCard(card);
             bool result = await TimerTask.Instance.Run(player, 1, 0);
 
             if (player.isAI)
@@ -125,7 +125,7 @@ namespace Model
             }
 
             TimerTask.Instance.Hint = "请使用一张闪。";
-            TimerTask.Instance.ValidCard = card => card is 闪 && !player.DisabledCard(card);
+            TimerTask.Instance.IsValidCard = card => card is 闪 && !player.DisabledCard(card);
             result = await TimerTask.Instance.Run(player, 1, 0);
 
             if (player.isAI)
@@ -174,9 +174,9 @@ namespace Model
         public static async Task<bool> Call(Player player, Player dest)
         {
             TimerTask.Instance.Hint = "请使用一张桃。";
-            TimerTask.Instance.ValidCard = card => (card is 桃 || card is 酒 && dest == player)
+            TimerTask.Instance.IsValidCard = card => (card is 桃 || card is 酒 && dest == player)
                 && !player.DisabledCard(card);
-            TimerTask.Instance.ValidDest = (player, card, first) => player == dest;
+            TimerTask.Instance.IsValidDest = player => player == dest;
             bool result = await TimerTask.Instance.Run(player, 1, 1);
 
             if (player.isAI && (player == dest || player.team == dest.team))

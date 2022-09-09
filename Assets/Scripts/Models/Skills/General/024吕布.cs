@@ -79,7 +79,7 @@ namespace Model
 
             // 触发条件
             if (damaged.Src != Src || !(damaged.SrcCard is 杀)) return;
-            if (!dest.HaveCard()) return;
+            if (dest.CardCount == 0) return;
 
             if (!await base.ShowTimer()) return;
             Execute();
@@ -97,7 +97,7 @@ namespace Model
 
                 // 指定角色
                 TimerTask.Instance.Hint = Src.PosStr + "号位对你发动利驭，选择一名角色";
-                TimerTask.Instance.ValidDest = (player, card, fstPlayer) => player != Src && player != dest;
+                TimerTask.Instance.IsValidDest = player => player != Src && player != dest;
                 bool result = await TimerTask.Instance.Run(dest, 0, 1);
 
                 Player dest1 = null;

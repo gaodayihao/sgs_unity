@@ -25,7 +25,7 @@ namespace View
         /// <summary>
         /// 点击技能
         /// </summary>
-        private void ClickSkill()
+        public void ClickSkill()
         {
             if (!IsSelected)
             {
@@ -48,7 +48,7 @@ namespace View
 
             IsSelected = true;
             effect.SetActive(true);
-            skillArea.SelectedSkill = model;
+            Model.Operation.Instance.skill = model;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace View
             if (!IsSelected) return;
             IsSelected = false;
             effect.SetActive(false);
-            skillArea.SelectedSkill = null;
+            Model.Operation.Instance.skill = null;
         }
 
         /// <summary>

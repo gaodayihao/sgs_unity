@@ -172,10 +172,10 @@ namespace Model
             {
                 // 暂停线程,显示进度条
                 timerTask.Hint = "出牌阶段，请选择一张牌。";
-                timerTask.MaxDest = DestArea.MaxDest;
-                timerTask.MinDest = DestArea.MinDest;
-                timerTask.ValidCard = CardArea.ValidCard;
-                timerTask.ValidDest = DestArea.ValidDest;
+                timerTask.MaxDest = DestArea.Instance.MaxDest;
+                timerTask.MinDest = DestArea.Instance.MinDest;
+                timerTask.IsValidCard = CardArea.Instance.ValidCard;
+                timerTask.IsValidDest = DestArea.Instance.ValidDest;
                 timerTask.isPerformPhase = true;
                 performIsDone = !await timerTask.Run(CurrentPlayer, 1, 0);
                 timerTask.isPerformPhase = false;
@@ -194,7 +194,7 @@ namespace Model
                     }
                 }
 
-                else if (CurrentPlayer.isAI && CardArea.UseSha(CurrentPlayer))
+                else if (CurrentPlayer.isAI && CardArea.Instance.UseSha(CurrentPlayer))
                 {
                     foreach (var card in CurrentPlayer.HandCards)
                     {
@@ -203,7 +203,7 @@ namespace Model
                             var dest = CurrentPlayer.Next;
                             do
                             {
-                                if (DestArea.UseSha(CurrentPlayer, dest))
+                                if (DestArea.Instance.UseSha(CurrentPlayer, dest))
                                 {
                                     await card.UseCard(CurrentPlayer, new List<Player> { dest });
                                     performIsDone = false;

@@ -29,7 +29,7 @@ namespace Model
 
                 var card = await new Judge().Execute();
                 if (card.Suit == "红桃" || card.Suit == "方片") await new Damaged(damaged.Src, Src).Execute();
-                else if (damaged.Src.HaveCard())
+                else if (damaged.Src.CardCount > 0)
                 {
                     CardPanel.Instance.Hint = "对" + damaged.Src.PosStr + "号位发动刚烈，弃置其一张牌";
                     var c = await CardPanel.Instance.SelectCard(Src, damaged.Src);
@@ -55,14 +55,11 @@ namespace Model
         }
 
         public override int MaxCard => int.MaxValue;
-
         public override int MinCard => 1;
+        public override int MaxDest => 1;
+        public override int MinDest => 1;
 
-        public override int MaxDest(List<Card> cards) => 1;
-
-        public override int MinDest(List<Card> cards) => 1;
-
-        public override bool IsValidDest(Player dest, Player first) => dest != Src;
+        public override bool IsValidDest(Player dest) => dest != Src;
 
         public async Task Execute(GetCard getCard)
         {

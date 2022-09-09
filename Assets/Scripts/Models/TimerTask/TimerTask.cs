@@ -15,12 +15,10 @@ namespace Model
         public Player player { get; private set; }
         public int maxCard { get; set; } = 0;
         public int minCard { get; set; } = 0;
-        public int maxDest { get; set; } = 0;
-        public int minDest { get; set; } = 0;
-        public Func<List<Card>, int> MaxDest { get; set; }
-        public Func<List<Card>, int> MinDest { get; set; }
-        public Func<Card, bool> ValidCard { get; set; } = card => !card.IsConvert;
-        public Func<Player, Card, Player, bool> ValidDest { get; set; } = (dest, card, first) => true;
+        public Func<int> MaxDest { get; set; }
+        public Func<int> MinDest { get; set; }
+        public Func<Card, bool> IsValidCard { get; set; } = card => !card.IsConvert;
+        public Func<Player, bool> IsValidDest { get; set; } = dest => true;
         public bool isPerformPhase { get; set; } = false;
         public bool isWxkj { get; private set; } = false;
         public bool isCompete { get; private set; } = false;
@@ -28,7 +26,7 @@ namespace Model
         public List<Card> MultiConvert { get; set; } = new List<Card>();
 
         public string Hint { get; set; }
-        public string GivenSkill { get; set; }
+        public string GivenSkill { get; set; } = "";
 
         public int second;
 
@@ -58,20 +56,18 @@ namespace Model
                 StartCoroutine(SelfAutoResult());
             }
             else if (Room.Instance.IsSingle) StartCoroutine(AIAutoResult());
-            startTimerView?.Invoke(this);
+            startTimerView();
             bool result = await WaitResult();
 
-            stopTimerView(this);
+            stopTimerView();
 
             Hint = "";
             maxCard = 0;
             minCard = 0;
-            maxDest = 0;
-            minDest = 0;
-            MaxDest = null;
-            MinDest = null;
-            ValidCard = card => !card.IsConvert;
-            ValidDest = (dest, card, first) => true;
+            MaxDest = () => 0;
+            MinDest = () => 0;
+            IsValidCard = card => !card.IsConvert;
+            IsValidDest = dest => true;
             GivenSkill = "";
             Refusable = true;
             MultiConvert.Clear();
@@ -96,8 +92,8 @@ namespace Model
         {
             this.maxCard = maxCard;
             this.minCard = minCard;
-            this.maxDest = maxDest;
-            this.minDest = minDest;
+            if (maxDest > 0) this.MaxDest = () => maxDest;
+            if (minDest > 0) this.MinDest = () => minDest;
             return await Run(player);
         }
 
@@ -190,24 +186,24 @@ namespace Model
             maxCard = 1;
             minCard = 1;
             isWxkj = true;
-            ValidCard = card => card is 无懈可击;
+            IsValidCard = card => card is 无懈可击;
 
             Cards = new List<Card>();
             Dests = new List<Player>();
 
             wxkjDone = 0;
 
-            startTimerView?.Invoke(this);
+            startTimerView();
             StartCoroutine(WxkjAutoResult());
             if (Room.Instance.IsSingle) StartCoroutine(AIAutoResult());
             bool result = await WaitResult();
 
-            stopTimerView?.Invoke(this);
+            stopTimerView();
 
             maxCard = 0;
             minCard = 0;
             isWxkj = false;
-            ValidCard = card => !card.IsConvert;
+            IsValidCard = card => !card.IsConvert;
 
             return result;
         }
@@ -238,7 +234,7 @@ namespace Model
             maxCard = 1;
             minCard = 1;
             isCompete = true;
-            ValidCard = card => player0.HandCards.Contains(card) || player1.HandCards.Contains(card);
+            IsValidCard = card => player0.HandCards.Contains(card) || player1.HandCards.Contains(card);
             this.player0 = player0;
             this.player1 = player1;
             card0 = 0;
@@ -250,17 +246,17 @@ namespace Model
             if (player0.isSelf) moveSeat(player0);
             else if (player1.isSelf) moveSeat(player1);
 
-            startTimerView?.Invoke(this);
+            startTimerView();
             StartCoroutine(CompeteAutoResult());
             if (Room.Instance.IsSingle) StartCoroutine(AIAutoResult());
             await WaitResult();
 
-            stopTimerView?.Invoke(this);
+            stopTimerView();
 
             maxCard = 0;
             minCard = 0;
             isCompete = false;
-            ValidCard = card => !card.IsConvert;
+            IsValidCard = card => !card.IsConvert;
         }
 
         private IEnumerator AIAutoResult()
@@ -311,14 +307,14 @@ namespace Model
             if (card1 == 0) SendResult(player1.Position, false);
         }
 
-        private UnityAction<TimerTask> startTimerView;
-        private UnityAction<TimerTask> stopTimerView;
+        private UnityAction startTimerView;
+        private UnityAction stopTimerView;
         private UnityAction<Player> moveSeat;
 
         /// <summary>
         /// 开始计时触发事件
         /// </summary>
-        public event UnityAction<TimerTask> StartTimerView
+        public event UnityAction StartTimerView
         {
             add => startTimerView += value;
             remove => startTimerView -= value;
@@ -326,7 +322,7 @@ namespace Model
         /// <summary>
         /// 结束计时触发事件
         /// </summary>
-        public event UnityAction<TimerTask> StopTimerView
+        public event UnityAction StopTimerView
         {
             add => stopTimerView += value;
             remove => stopTimerView -= value;

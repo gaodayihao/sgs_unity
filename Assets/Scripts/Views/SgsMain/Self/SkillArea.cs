@@ -9,7 +9,7 @@ namespace View
         // 技能表
         public List<Skill> Skills { get; private set; } = new List<Skill>();
         // 已选技能
-        public Model.Skill SelectedSkill { get; set; }
+        private Model.Skill SelectedSkill => Model.Operation.Instance.skill;
         private Player self => SgsMain.Instance.self;
         private Model.TimerTask timerTask => Model.TimerTask.Instance;
 
@@ -54,10 +54,7 @@ namespace View
 
         public void MoveSeat(Model.Player model)
         {
-            foreach (var i in Skills)
-            {
-                i.gameObject.SetActive(i.model.Src == model);
-            }
+            foreach (var i in Skills) i.gameObject.SetActive(i.model.Src == model);
         }
 
         /// <summary>
@@ -65,17 +62,8 @@ namespace View
         /// </summary>
         public void InitSkillArea()
         {
-            if (Model.TimerTask.Instance.GivenSkill != "")
-            {
-                foreach (var i in Skills)
-                {
-                    if (i.name == Model.TimerTask.Instance.GivenSkill)
-                    {
-                        i.Select();
-                        break;
-                    }
-                }
-            }
+            if (timerTask.GivenSkill != "") Skills.Find(x => x.name == timerTask.GivenSkill).Select();
+
             if (SelectedSkill != null)
             {
                 foreach (var i in Skills) i.button.interactable = i.model == SelectedSkill;
@@ -89,7 +77,7 @@ namespace View
         /// <summary>
         /// 重置技能区
         /// </summary>
-        public void ResetSkillArea(Model.TimerTask timerTask)
+        public void ResetSkillArea()
         {
             if (!timerTask.isWxkj && self.model != timerTask.player) return;
 

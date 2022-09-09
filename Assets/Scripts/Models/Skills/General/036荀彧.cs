@@ -9,9 +9,9 @@ namespace Model
     {
         public 驱虎(Player src) : base(src, "驱虎", 1) { }
 
-        public override int MaxDest(List<Card> cards) => 1;
-        public override int MinDest(List<Card> cards) => 1;
-        public override bool IsValidDest(Player dest, Player first) => dest.Hp > Src.Hp && dest.HandCardCount > 0;
+        public override int MaxDest => 1;
+        public override int MinDest => 1;
+        public override bool IsValidDest(Player dest) => dest.Hp > Src.Hp && dest.HandCardCount > 0;
 
         public override bool IsValid => base.IsValid && Src.HandCardCount > 0;
 
@@ -24,7 +24,7 @@ namespace Model
             if (compete.Result)
             {
                 TimerTask.Instance.Hint = "请选择一名角色";
-                TimerTask.Instance.ValidDest = (player, card, fstPlayer) => DestArea.UseSha(dests[0], player);
+                TimerTask.Instance.IsValidDest = dest => DestArea.Instance.UseSha(dests[0], dest);
                 await TimerTask.Instance.Run(Src, 0, 1);
                 await new Damaged(TimerTask.Instance.Dests[0], dests[0]).Execute();
             }
@@ -36,8 +36,8 @@ namespace Model
     {
         public 节命(Player src) : base(src, "节命", false) { }
 
-        public override int MaxDest(List<Card> cards) => 1;
-        public override int MinDest(List<Card> cards) => 1;
+        public override int MaxDest => 1;
+        public override int MinDest => 1;
 
         public override void OnEnabled()
         {

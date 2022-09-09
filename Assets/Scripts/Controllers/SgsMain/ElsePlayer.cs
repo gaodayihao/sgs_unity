@@ -9,8 +9,6 @@ namespace Controller
         private View.ElsePlayer elsePlayer => GetComponent<View.ElsePlayer>();
         void Start()
         {
-            // elsePlayer = GetComponent<View.ElsePlayer>();
-
             // 阶段信息
             Model.TurnSystem.Instance.StartPhaseView += elsePlayer.ShowPhase;
             Model.TurnSystem.Instance.FinishPhaseView += elsePlayer.HidePhase;

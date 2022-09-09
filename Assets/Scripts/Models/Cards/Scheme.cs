@@ -287,8 +287,8 @@ namespace Model
             if (Disabled(dests[0])) return;
             if (await 无懈可击.Call(this, dests[0])) return;
 
-            TimerTask.Instance.ValidCard = card => card is 杀;
-            TimerTask.Instance.ValidDest = (dest, card, first) => dest == ShaDest;
+            TimerTask.Instance.IsValidCard = card => card is 杀;
+            TimerTask.Instance.IsValidDest = dest => dest == ShaDest;
 
             var result = await TimerTask.Instance.Run(dests[0], 1, 1);
             // 出杀
@@ -353,7 +353,7 @@ namespace Model
                 var showCard = (await TimerAction.ShowCardTimer(dest))[0];
 
                 TimerTask.Instance.Hint = "是否弃置手牌";
-                TimerTask.Instance.ValidCard = card => card.Suit == showCard.Suit;
+                TimerTask.Instance.IsValidCard = card => card.Suit == showCard.Suit;
                 if (!await TimerTask.Instance.Run(Src, 1, 0)) return;
 
                 await new Discard(Src, TimerTask.Instance.Cards).Execute();

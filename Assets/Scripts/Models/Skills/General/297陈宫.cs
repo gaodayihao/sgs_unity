@@ -11,11 +11,11 @@ namespace Model
 
         public override int MaxCard => 1;
         public override int MinCard => 1;
-        public override bool IsValidCard(Card card) => !card.IsConvert && (card is 杀 || card is Equipage);
+        public override int MaxDest => 2;
+        public override int MinDest => 2;
 
-        public override int MaxDest(List<Card> cards) => 2;
-        public override int MinDest(List<Card> cards) => 2;
-        public override bool IsValidDest(Player dest, Player first) => first is null || DestArea.UseSha(first, dest);
+        public override bool IsValidCard(Card card) => !card.IsConvert && (card is 杀 || card is Equipage);
+        public override bool IsValidDest(Player dest) => firstDest is null || DestArea.Instance.UseSha(firstDest, dest);
 
         public override async Task Execute(List<Player> dests, List<Card> cards, string other)
         {
@@ -24,7 +24,7 @@ namespace Model
             await new GetCardFromElse(dests[0], Src, cards).Execute();
 
             TimerTask.Instance.Hint = "视为对该角色使用一张杀，或摸一张牌";
-            TimerTask.Instance.ValidDest = (dest, card, first) => dest == dests[1];
+            TimerTask.Instance.IsValidDest = dest => dest == dests[1];
             bool result = await TimerTask.Instance.Run(dests[0], 0, 1);
 
             if (result) await Card.Convert<杀>().UseCard(dests[0], TimerTask.Instance.Dests);

@@ -18,11 +18,10 @@ namespace Model
             Src.playerEvents.WhenGetCard.RemoveEvent(Src, Execute);
         }
 
-        public override int MaxDest(List<Card> cards) => getCardFromPile.Count;
+        public override int MaxDest => getCardFromPile.Count;
+        public override int MinDest => 1;
 
-        public override int MinDest(List<Card> cards) => 1;
-
-        public override bool IsValidDest(Player dest, Player first) => dest.HandCardCount > 0;
+        public override bool IsValidDest(Player dest) => dest.HandCardCount > 0;
 
         private GetCardFromPile getCardFromPile;
 

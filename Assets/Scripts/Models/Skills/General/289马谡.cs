@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Model
 {
@@ -9,30 +10,17 @@ namespace Model
     {
         public 散谣(Player src) : base(src, "散谣", 1) { }
 
-        public override int MaxCard
-        {
-            get
-            {
-                int maxHp = SgsMain.Instance.MaxHp(Src);
-                int count = 0;
-                foreach (var i in SgsMain.Instance.AlivePlayers)
-                {
-                    if (i.Hp == maxHp) count++;
-                }
-                return count;
-            }
-        }
-
+        public override int MaxCard => SgsMain.Instance.AlivePlayers.Where(x => x.Hp == MaxHp && x != Src).Count();
         public override int MinCard => 1;
+        public override int MaxDest => Operation.Instance.Cards.Count + Operation.Instance.Equips.Count;
+        public override int MinDest => Operation.Instance.Cards.Count + Operation.Instance.Equips.Count;
 
-        public override int MaxDest(List<Card> cards) => cards.Count;
-
-        public override int MinDest(List<Card> cards) => cards.Count;
-
-        public override bool IsValidDest(Player dest, Player first)
+        public override bool IsValidDest(Player dest)
         {
             return dest.Hp == SgsMain.Instance.MaxHp(Src) && dest != Src;
         }
+
+        private int MaxHp => SgsMain.Instance.MaxHp(Src);
 
         public override async Task Execute(List<Player> dests, List<Card> cards, string other)
         {
@@ -70,7 +58,7 @@ namespace Model
             if (!await base.ShowTimer()) return;
             Execute();
             damaged.Value = 0;
-            if (!damaged.player.RegionHaveCard()) return;
+            if (!damaged.player.RegionHaveCard) return;
             var card = await CardPanel.Instance.SelectCard(Src, damaged.player, true);
             await new GetCardFromElse(Src, damaged.player, new List<Card> { card }).Execute();
         }

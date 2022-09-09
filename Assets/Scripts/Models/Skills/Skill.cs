@@ -49,19 +49,18 @@ namespace Model
         /// <summary>
         /// 最大目标数
         /// </summary>
-        public virtual int MaxDest(List<Card> cards) => 0;
+        public virtual int MaxDest => 0;
 
         /// <summary>
         /// 最小目标数
         /// </summary>
-        public virtual int MinDest(List<Card> cards) => 0;
+        public virtual int MinDest => 0;
 
         /// <summary>
         /// 判断目标是否可选
         /// </summary>
         /// <param name="dest">目标</param>
-        /// <param name="first">第一个已选目标</param>
-        public virtual bool IsValidDest(Player dest, Player first) => true;
+        public virtual bool IsValidDest(Player dest) => true;
 
         /// <summary>
         /// 是否有效
@@ -104,6 +103,8 @@ namespace Model
         {
             Time = 0;
         }
+
+        protected Player firstDest => Operation.Instance.Dests.Count == 0 ? null : Operation.Instance.Dests[0];
 
         private static UnityAction<Skill> useSkillView;
         public static event UnityAction<Skill> UseSkillView

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace View
 {
@@ -16,27 +17,25 @@ namespace View
         public Dictionary<int, Card> handcards = new Dictionary<int, Card>();
 
         private Player self => SgsMain.Instance.self;
-        private EquipArea equipArea => EquipArea.Instance;
         private Model.TimerTask timerTask => Model.TimerTask.Instance;
-        private Model.Skill skill => SkillArea.Instance.SelectedSkill;
 
-        // 被选中卡牌
-        public List<Card> SelectedCard { get; private set; } = new List<Card>();
-        public List<Model.Card> model
+        // 已选卡牌
+        private List<Model.Card> SelectedCard => Model.Operation.Instance.Cards;
+        // 已选装备
+        private List<Model.Card> SelectedEquip => Model.Operation.Instance.Equips;
+        // 已选技能
+        private Model.Skill skill => Model.Operation.Instance.skill;
+        // 转化牌
+        private Model.Card Converted
         {
-            get
-            {
-                var m = new List<Model.Card>();
-                foreach (var i in SelectedCard) m.Add(i.model);
-                foreach (var i in equipArea.SelectedCard) m.Add(i.model);
-                return m;
-            }
+            get => Model.Operation.Instance.Converted;
+            set => Model.Operation.Instance.Converted = value;
         }
+
         public int MaxCount { get; private set; }
         public int MinCount { get; private set; }
         // 是否已设置
         public bool IsSettled { get; private set; } = false;
-        public Model.Card Converted { get; set; }
 
 
         /// <summary>
@@ -143,7 +142,7 @@ namespace View
                 foreach (var i in handcards.Values)
                 {
                     if (!i.gameObject.activeSelf) continue;
-                    i.button.interactable = timerTask.ValidCard(i.model);
+                    i.button.interactable = timerTask.IsValidCard(i.model);
                 }
             }
 
@@ -156,6 +155,8 @@ namespace View
         /// </summary>
         public void ResetCardArea()
         {
+            if (!timerTask.isWxkj && self.model != timerTask.player) return;
+
             // 重置手牌状态
             foreach (var card in handcards.Values) card.ResetCard();
             if (timerTask.isWxkj)
@@ -174,49 +175,27 @@ namespace View
             Converted = null;
         }
 
-        public void ResetCardArea(Model.TimerTask timerTask)
-        {
-            if (!timerTask.isWxkj && self.model != timerTask.player) return;
-
-            ResetCardArea();
-        }
-
         /// <summary>
         /// 更新手牌区
         /// </summary>
         public void UpdateCardArea()
         {
-            int count = SelectedCard.Count + equipArea.SelectedCard.Count;
-            foreach (var card in equipArea.SelectedCard)
-            {
-                if (card.name == Model.TimerTask.Instance.GivenSkill)
-                {
-                    count--;
-                    break;
-                }
-            }
+            int count = SelectedCard.Count + SelectedEquip.Count;
 
             // 若已选中手牌数量超出范围，取消第一个选中的手牌
             while (count > MaxCount)
             {
-                if (SelectedCard.Count > 0) SelectedCard[0].Unselect();
-                else if (equipArea.SelectedCard[0].name != Model.TimerTask.Instance.GivenSkill)
-                {
-                    equipArea.SelectedCard[0].Unselect();
-                }
-                else equipArea.SelectedCard[1].Unselect();
+                if (SelectedCard.Count > 0) handcards[SelectedCard[0].Id].Unselect();
+                else EquipArea.Instance.Equips.Values.ToList().Find(x => x.model == SelectedEquip[0]).Unselect();
+
                 count--;
             }
 
             IsSettled = count >= MinCount;
 
-            if (IsSettled)
+            if (IsSettled && skill != null && skill is Model.Converted)
             {
-                var skill = SkillArea.Instance.SelectedSkill;
-                if (skill != null && skill is Model.Converted)
-                {
-                    Converted = (skill as Model.Converted).Execute(model);
-                }
+                Converted = (skill as Model.Converted).Execute(SelectedCard);
             }
             else Converted = null;
         }
@@ -242,8 +221,7 @@ namespace View
 
             foreach (var i in ConvertedCards.Values)
             {
-                Debug.Log(i.model.IsConvert);
-                i.button.interactable = timerTask.ValidCard(i.model);
+                i.button.interactable = timerTask.IsValidCard(i.model);
             }
 
             foreach (var i in ConvertedCards.Values) if (i.gameObject.activeSelf) i.AddShadow();

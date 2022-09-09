@@ -4,18 +4,20 @@ using UnityEngine;
 
 namespace Model
 {
-    public class DestArea
+    public class DestArea : SingletonMono<DestArea>
     {
+        private Operation operation => Operation.Instance;
+        private Card card => operation.Converted is null ? operation.Cards[0] : operation.Converted;
 
         /// <summary>
         /// 根据玩家和卡牌id初始化目标数量
         /// </summary>
         /// <returns>目标数量最大值与最小值</returns>
-        public static int MaxDest(List<Card> cards)
+        public int MaxDest()
         {
             var player = TimerTask.Instance.player;
-            var cardName = cards[0].Name;
-            switch (cardName)
+
+            switch (card.Name)
             {
                 case "杀" + "":
                 case "雷杀":
@@ -37,9 +39,10 @@ namespace Model
             }
         }
 
-        public static int MinDest(List<Card> cards)
+        public int MinDest()
         {
-            switch (cards[0].Name)
+
+            switch (card.Name)
             {
                 case "杀" + "":
                 case "雷杀":
@@ -58,7 +61,7 @@ namespace Model
             }
         }
 
-        public static int ShaMaxDest(Player player)
+        public int ShaMaxDest(Player player)
         {
             int maxCount = 1;
             if (player.HandCardCount == 1 && player.Equipages["武器"] is 方天画戟) maxCount += 2;
@@ -68,7 +71,7 @@ namespace Model
         /// <summary>
         /// 判断dest是否能成为src的目标
         /// </summary>
-        public static bool ValidDest(Player dest, Card card, Player firstdest)
+        public bool ValidDest(Player dest)
         {
             var src = TurnSystem.Instance.CurrentPlayer;
             if (!dest.IsAlive) return false;
@@ -82,14 +85,14 @@ namespace Model
                     return UseSha(src, dest);
 
                 case "过河拆桥":
-                    return src != dest && dest.RegionHaveCard();
+                    return src != dest && dest.RegionHaveCard;
 
                 case "顺手牵羊":
-                    return src.GetDistance(dest) == 1 && dest.RegionHaveCard();
+                    return src.GetDistance(dest) == 1 && dest.RegionHaveCard;
 
                 case "借刀杀人":
-                    if (firstdest is null) return src != dest && dest.weapon != null;
-                    else return UseSha(firstdest, dest);
+                    if (operation.Dests.Count == 0) return src != dest && dest.weapon != null;
+                    else return UseSha(operation.Dests[0], dest);
 
                 case "决斗":
                     return src != dest;
@@ -105,7 +108,7 @@ namespace Model
             }
         }
 
-        public static bool UseSha(Player src, Player dest)
+        public bool UseSha(Player src, Player dest)
         {
             return src != dest && src.AttackRange >= src.GetDistance(dest);
         }

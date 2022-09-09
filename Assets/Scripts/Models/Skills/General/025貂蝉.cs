@@ -10,17 +10,11 @@ namespace Model
         public 离间(Player src) : base(src, "离间", 1) { }
 
         public override int MaxCard => 1;
-
         public override int MinCard => 1;
+        public override int MaxDest => 2;
+        public override int MinDest => 2;
 
-        public override int MaxDest(List<Card> cards) => 2;
-
-        public override int MinDest(List<Card> cards) => 2;
-
-        public override bool IsValidDest(Player dest, Player first)
-        {
-            return dest != Src && dest.general.gender;
-        }
+        public override bool IsValidDest(Player dest) => dest != Src && dest.general.gender;
 
         public override async Task Execute(List<Player> dests, List<Card> cards, string additional)
         {

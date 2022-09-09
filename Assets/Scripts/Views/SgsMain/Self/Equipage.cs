@@ -19,6 +19,7 @@ namespace View
         public EquipArea equipArea => EquipArea.Instance;
         public OperationArea operationArea => OperationArea.Instance;
         public Model.Card model => Model.CardPile.Instance.cards[Id];
+        private Model.Skill skill { get => Model.Operation.Instance.skill; set => Model.Operation.Instance.skill = value; }
 
         void Start()
         {
@@ -44,18 +45,18 @@ namespace View
         private void ClickCard()
         {
             // 可发动丈八蛇矛
-            if (name == "丈八蛇矛" && Model.TimerTask.Instance.ValidCard(Model.Card.Convert<Model.杀>()))
+            if (name == "丈八蛇矛" && Model.TimerTask.Instance.IsValidCard(Model.Card.Convert<Model.杀>()))
             {
-                var skill = SkillArea.Instance.SelectedSkill;
+                // var skill = SkillArea.Instance.SelectedSkill;
                 if (skill == null)
                 {
-                    SkillArea.Instance.SelectedSkill = (model as Model.丈八蛇矛).skill;
+                    skill = (model as Model.丈八蛇矛).skill;
                     operationArea.UseSkill();
                     Use();
                 }
                 else if (skill == (model as Model.丈八蛇矛).skill)
                 {
-                    SkillArea.Instance.SelectedSkill = null;
+                    skill = null;
                     operationArea.UseSkill();
                     Cancel();
                 }
@@ -81,7 +82,8 @@ namespace View
 
             IsSelected = true;
             GetComponent<RectTransform>().anchoredPosition += new Vector2(20, 0);
-            equipArea.SelectedCard.Add(this);
+            // equipArea.SelectedCard.Add(this);
+            Model.Operation.Instance.Equips.Add(model);
         }
 
         /// <summary>
@@ -92,7 +94,8 @@ namespace View
             if (!IsSelected) return;
             IsSelected = false;
             GetComponent<RectTransform>().anchoredPosition -= new Vector2(20, 0);
-            equipArea.SelectedCard.Remove(this);
+            // equipArea.SelectedCard.Remove(this);
+            Model.Operation.Instance.Equips.Remove(model);
         }
 
         /// <summary>

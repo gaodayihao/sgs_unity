@@ -17,7 +17,8 @@ namespace View
 
         private Sprites sprites => Sprites.Instance;
 
-        public Model.Player model => GetComponentInParent<Player>().model;
+        private Model.Player model => GetComponentInParent<Player>().model;
+        private Model.TimerTask timerTask => Model.TimerTask.Instance;
 
         void Start()
         {
@@ -45,7 +46,7 @@ namespace View
             StartCoroutine(UpdateTimer(second));
         }
 
-        public void ShowTimer(Model.TimerTask timerTask)
+        public void ShowTimer()
         {
             if (!gameObject.activeSelf) return;
             if (!timerTask.isWxkj && timerTask.player != model) return;
@@ -64,14 +65,9 @@ namespace View
         /// </summary>
         public void HideTimer()
         {
+            if (!timerTask.isWxkj && timerTask.player != model) return;
             StopAllCoroutines();
             timer.gameObject.SetActive(false);
-        }
-
-        public void HideTimer(Model.TimerTask timerTask)
-        {
-            if (!timerTask.isWxkj && timerTask.player != model) return;
-            HideTimer();
         }
 
         public void HideTimer(Model.CardPanel cardPanel)

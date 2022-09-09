@@ -28,7 +28,8 @@ namespace View
         private EquipArea equipArea => EquipArea.Instance;
         private SkillArea skillArea => SkillArea.Instance;
 
-        private Model.TimerTask timerTask;
+        private Model.Operation model => Model.Operation.Instance;
+        private Model.TimerTask timerTask => Model.TimerTask.Instance;
 
         void Start()
         {
@@ -50,14 +51,13 @@ namespace View
             StopAllCoroutines();
 
             List<int> cards = new List<int>();
-            foreach (var card in cardArea.SelectedCard) cards.Add(card.Id);
-            foreach (var card in equipArea.SelectedCard) cards.Add(card.Id);
+            foreach (var i in model.Cards) cards.Add(i.Id);
+            foreach (var i in model.Equips) cards.Add(i.Id);
 
             List<int> players = new List<int>();
-            foreach (var player in destArea.SelectedPlayer) players.Add(player.model.Position);
+            foreach (var i in model.Dests) players.Add(i.Position);
 
-            string skill = "";
-            if (skillArea.SelectedSkill != null) skill = skillArea.SelectedSkill.Name;
+            string skillName = model.skill != null ? model.skill.Name : "";
 
             if (timerTask.isWxkj)
             {
@@ -71,8 +71,8 @@ namespace View
             }
             else
             {
-                string other = cardArea.Converted is null ? "" : cardArea.Converted.Name;
-                timerTask.SendResult(cards, players, skill, other);
+                string other = model.Converted is null ? "" : model.Converted.Name;
+                timerTask.SendResult(cards, players, skillName, other);
             }
         }
 
@@ -82,16 +82,10 @@ namespace View
         private void ClickCancel()
         {
             // 取消技能
-            if (skillArea.SelectedSkill != null && timerTask.GivenSkill == "")
+            if (model.skill != null && timerTask.GivenSkill == "")
             {
-                foreach (var i in skillArea.Skills)
-                {
-                    if (i.name == skillArea.SelectedSkill.Name)
-                    {
-                        i.button.onClick.Invoke();
-                        return;
-                    }
-                }
+                skillArea.Skills.Find(x => x.name == model.skill.Name).ClickSkill();
+                return;
             }
 
             // SetResult
@@ -102,7 +96,6 @@ namespace View
                 timerTask.SendResult(self.model.Position, false);
                 timerTask.SendResult(self.model.Teammate.Position, false);
             }
-            // else if (timerTask.isCompete) timerTask.SendResult(self.model.Position, false);
             else timerTask.SendResult();
         }
 
@@ -118,12 +111,11 @@ namespace View
         /// <summary>
         /// 显示倒计时进度条
         /// </summary>
-        public void ShowTimer(Model.TimerTask timerTask)
+        public void ShowTimer()
         {
             if (!timerTask.isWxkj && !timerTask.isCompete && self.model != timerTask.player) return;
             if (timerTask.isCompete && self.model != timerTask.player0 && self.model != timerTask.player1) return;
 
-            this.timerTask = timerTask;
             operationArea.SetActive(true);
             hint.text = timerTask.Hint;
 
@@ -148,18 +140,13 @@ namespace View
         /// </summary>
         public void HideTimer()
         {
+            if (!timerTask.isWxkj && !timerTask.isCompete && self.model != timerTask.player) return;
             // 隐藏所有按键
             StopAllCoroutines();
             confirm.gameObject.SetActive(false);
             cancel.gameObject.SetActive(false);
             finishPhase.gameObject.SetActive(false);
             operationArea.SetActive(false);
-        }
-
-        public void HideTimer(Model.TimerTask timerTask)
-        {
-            if (!timerTask.isWxkj && !timerTask.isCompete && self.model != timerTask.player) return;
-            HideTimer();
         }
 
         /// <summary>
@@ -182,7 +169,7 @@ namespace View
         {
             // 启用确定键
             confirm.interactable = cardArea.IsSettled && destArea.IsSettled;
-            cancel.interactable = !timerTask.isPerformPhase || skillArea.SelectedSkill != null;
+            cancel.interactable = !timerTask.isPerformPhase || model.skill != null;
         }
 
         public void UseSkill()
