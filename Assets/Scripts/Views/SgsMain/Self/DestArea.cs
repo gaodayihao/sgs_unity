@@ -38,7 +38,7 @@ namespace View
         {
             if (!CardArea.Instance.IsSettled || !CardArea.Instance.ConvertIsSettle) return;
 
-            if (skill != null)
+            if (skill != null && skill is not Model.Converted)
             {
                 maxCount = skill.MaxDest;
                 minCount = skill.MinDest;
@@ -84,7 +84,7 @@ namespace View
             IsSettled = SelectedPlayer.Count >= minCount;
             if (maxCount == 0) return;
 
-            if (skill != null)
+            if (skill != null && skill is not Model.Converted)
             {
                 foreach (var player in Players)
                 {

@@ -5,9 +5,6 @@ using UnityEngine;
 
 namespace Model
 {
-    /// <summary>
-    /// 武圣
-    /// </summary>
     public class 武圣 : Converted
     {
         public 武圣(Player src) : base(src, "武圣", false, int.MaxValue, "杀") { }
@@ -72,7 +69,7 @@ namespace Model
             else
             {
                 Dest.disabledCard += DisabledCard;
-                foreach (var i in Dest.skills.Values) if (!i.Passive) i.SetActive(false);
+                foreach (var i in Dest.skills) if (!i.Passive) i.SetActive(false);
                 TurnSystem.Instance.AfterTurn += ResetEffect;
                 Dest.playerEvents.whenDamaged.AddEvent(Src, WhenDamaged);
                 isDone = false;
@@ -97,7 +94,7 @@ namespace Model
         public void ResetEffect()
         {
             Dest.disabledCard -= DisabledCard;
-            foreach (var i in Dest.skills.Values) if (!i.Passive && i.Enabled < 1) i.Enabled++;
+            foreach (var i in Dest.skills) if (!i.Passive && i.Enabled < 1) i.SetActive(true);
             Dest.playerEvents.whenDamaged.RemoveEvent(Src, WhenDamaged);
             TurnSystem.Instance.AfterTurn -= ResetEffect;
         }

@@ -94,7 +94,7 @@ namespace Model
         /// </summary>
         public virtual bool IsValid => Time < TimeLimit && Enabled > 0;
 
-        public void Execute()
+        public virtual void Execute()
         {
             Time++;
             useSkillView(this);
@@ -143,6 +143,7 @@ namespace Model
             { "智迟", typeof(智迟) },
             { "烈弓", typeof(烈弓) },
             { "乱击", typeof(乱击) },
+            { "父魂", typeof(父魂) },
         };
     }
 }

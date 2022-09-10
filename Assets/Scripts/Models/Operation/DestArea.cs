@@ -44,7 +44,7 @@ namespace Model
 
             switch (card.Name)
             {
-                case "杀" + "":
+                case "杀":
                 case "雷杀":
                 case "火杀":
                 case "决斗":
@@ -75,7 +75,7 @@ namespace Model
         {
             var src = TurnSystem.Instance.CurrentPlayer;
             if (!dest.IsAlive) return false;
-            if (src.UnlimitedDst(card, dest)) return true;
+            if (src != dest && src.UnlimitedDst(card, dest)) return true;
 
             switch (card.Name)
             {
@@ -83,6 +83,9 @@ namespace Model
                 case "火杀":
                 case "雷杀":
                     return UseSha(src, dest);
+
+                case "酒":
+                    return src == dest;
 
                 case "过河拆桥":
                     return src != dest && dest.RegionHaveCard;

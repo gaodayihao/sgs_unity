@@ -122,8 +122,8 @@ namespace View
             // 初始化进度条和按键
 
             confirm.gameObject.SetActive(true);
-            if (timerTask.Refusable) cancel.gameObject.SetActive(true);
-            if (timerTask.isPerformPhase) finishPhase.gameObject.SetActive(true);
+            cancel.gameObject.SetActive(timerTask.Refusable);
+            finishPhase.gameObject.SetActive(timerTask.isPerformPhase);
 
             skillArea.InitSkillArea();
             cardArea.InitCardArea();

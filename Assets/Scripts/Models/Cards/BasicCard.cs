@@ -31,10 +31,10 @@ namespace Model
             // DamageValue = 1;
             IgnoreArmor = false;
 
-            src.ShaCount++;
+            // if(current) src.ShaCount++;
             await base.UseCard(src, dests);
 
-
+            // Debug.Log(src.Use酒);
             if (src.Use酒)
             {
                 src.Use酒 = false;
@@ -145,8 +145,9 @@ namespace Model
                 await TimerTask.Instance.Cards[0].UseCard(player);
                 return true;
             }
-
         }
+
+        // public override int AiPriority => -1;
     }
 
     /// <summary>

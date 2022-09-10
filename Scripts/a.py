@@ -45,15 +45,25 @@ def original(voice):
 
 
 data = {}
-data["id"] = 304202
-data["name"] = "乱箭宿敌"
+data["id"] = 529802
+data["name"] = "炙炎烽火"
 data["voice"] = [
-    {"name": "乱击", "url": ["YuanShao_LuanJi_01", "YuanShao_LuanJi_02"]},
-    # {"name": "节命", "url": ["XunYu_JieMing_01", "XunYu_JieMing_02"]},
-    {"name": "阵亡", "url": ["YuanShao_Dead"]},
+    {
+        "name": "陷阵",
+        "url": ["GaoShun_XianZhen_01", "GaoShun_XianZhen_01"],
+    },
+    {
+        "name": "禁酒",
+        "url": ["GaoShun_JinJiu_01", "GaoShun_JinJiu_02"],
+    },
+    # {
+    #     "name": "咆哮",
+    #     "url": ["XinGuanXingZhangBao_PaoXiao_01", "XinGuanXingZhangBao_PaoXiao_02"],
+    # },
+    {"name": "阵亡", "url": ["GaoShun_Dead"]},
 ]
 
-dir = "yuanshao01"
+dir = "gaoshun07"
 voice(dir, data["voice"])
 # original(data["voice"])
 image_dir = "Assets/StreamingAssets/Image/General/"

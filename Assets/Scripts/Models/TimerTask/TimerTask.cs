@@ -32,8 +32,8 @@ namespace Model
 
         public List<Card> Cards { get; private set; }
         public List<Player> Dests { get; private set; }
-        public string Skill { get; private set; }
-        public string Other { get; private set; }
+        public string Skill { get; set; }
+        public string Other { get; set; }
 
         /// <summary>
         /// 暂停主线程，并通过服务器或view开始计时
@@ -72,11 +72,12 @@ namespace Model
             Refusable = true;
             MultiConvert.Clear();
 
-            if (Skill == "丈八蛇矛" || Skill != "" && player.skills[Skill] is Converted)
+            Skill s = player.FindSkill(Skill);
+            if (Skill == "丈八蛇矛" || Skill != "" && s is Converted)
             {
-                var skill = Skill == "丈八蛇矛" ? (player.weapon as 丈八蛇矛).skill : player.skills[Skill] as Converted;
-                skill.Execute();
+                var skill = Skill == "丈八蛇矛" ? (player.weapon as 丈八蛇矛).skill : s as Converted;
                 Cards = new List<Card> { skill.Execute(Cards) };
+                skill.Execute();
                 Skill = "";
             }
 

@@ -21,21 +21,23 @@ namespace View
         /// </summary>
         public void InitSkill()
         {
-            foreach (var i in Model.SgsMain.Instance.players)
+            Skills.Clear();
+            foreach (Transform i in Long) if (i.name != "Short") Destroy(i.gameObject);
+            foreach (Transform i in Short) Destroy(i.gameObject);
+
+            foreach (var i in Model.SgsMain.Instance.AlivePlayers)
             {
                 if (!i.isSelf) continue;
                 int c = 0;
                 // 实例化预制件，添加到技能区
                 foreach (var j in i.skills)
                 {
-                    string str;
-                    if (j.Value.Passive) str = "锁定技";
-                    else str = "主动技";
+                    string str = j.Passive ? "锁定技" : "主动技";
                     var prefab = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>(str);
                     var instance = Instantiate(prefab).GetComponent<Skill>();
-                    instance.name = j.Key;
-                    instance.text.text = j.Key;
-                    instance.model = j.Value;
+                    instance.name = j.Name;
+                    instance.text.text = j.Name;
+                    instance.model = j;
 
                     if (i.skills.Count % 2 == 1 && c == 0)
                     {
@@ -48,8 +50,15 @@ namespace View
                     Skills.Add(instance);
                 }
 
-                MoveSeat(i);
+                // MoveSeat(i);
             }
+            MoveSeat(Model.SgsMain.Instance.AlivePlayers.Find(x => x.isSelf));
+        }
+
+        public void InitSkill(Model.UpdateSkill model)
+        {
+            Debug.Log("a");
+            if (model.player.team == self.model.team) InitSkill();
         }
 
         public void MoveSeat(Model.Player model)

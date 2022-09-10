@@ -146,7 +146,6 @@ namespace Model
         /// <summary>
         /// 判断此牌是否在弃牌堆
         /// </summary>
-        /// <returns></returns>
         public List<Card> InDiscardPile()
         {
             if (!IsConvert)
@@ -164,7 +163,31 @@ namespace Model
             }
             return list;
         }
-        
+
+        public virtual bool AiValid()
+        {
+            if (!CardArea.Instance.ValidCard(this)) return false;
+
+            Operation.Instance.Cards.Add(this);
+
+            foreach (var i in AI.Instance.DestList)
+            {
+                if (DestArea.Instance.ValidDest(i))
+                {
+                    Operation.Instance.Dests.Add(i);
+                }
+                if (Operation.Instance.Dests.Count == DestArea.Instance.MaxDest()) break;
+            }
+
+            if (Operation.Instance.Dests.Count >= DestArea.Instance.MinDest())
+            {
+                Operation.Instance.AiCommit();
+                Operation.Instance.Clear();
+                return true;
+            }
+            Operation.Instance.Clear();
+            return false;
+        }
 
         private static UnityAction<Card> useCardView;
         public static event UnityAction<Card> UseCardView

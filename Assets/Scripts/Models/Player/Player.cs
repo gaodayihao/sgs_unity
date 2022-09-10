@@ -16,7 +16,7 @@ namespace Model
         public PlayerEvents playerEvents;
 
         public bool isSelf { get; set; } = false;
-        public bool isAI { get; set; }
+        public bool isAI { get; set; } = false;
         public Player Teammate { get; set; }
         public Team team { get; private set; }
 
@@ -25,7 +25,8 @@ namespace Model
         // 皮肤
         public List<Skin> skins { get; private set; }
         // 技能
-        public Dictionary<string, Skill> skills { get; private set; } = new Dictionary<string, Skill>();
+        public List<Skill> skills { get; private set; } = new List<Skill>();
+        public Skill FindSkill(string name) => skills.Find(x => x.Name == name);
         // 是否存活
         public bool IsAlive { get; set; } = true;
 
@@ -141,39 +142,10 @@ namespace Model
         {
             foreach (var str in general.skill)
             {
-                // switch (str)
-                // {
-                //     case "仁德": skills.Add(str, new 仁德(this)); break;
-                //     case "武圣": skills.Add(str, new 武圣(this)); break;
-                //     case "义绝": skills.Add(str, new 义绝(this)); break;
-                //     case "咆哮": skills.Add(str, new 咆哮(this)); break;
-                //     case "制衡": skills.Add(str, new 制衡(this)); break;
-                //     case "苦肉": skills.Add(str, new 苦肉(this)); break;
-                //     case "诈降": skills.Add(str, new 诈降(this)); break;
-                //     case "奸雄": skills.Add(str, new 奸雄(this)); break;
-                //     case "刚烈": skills.Add(str, new 刚烈(this)); break;
-                //     case "清俭": skills.Add(str, new 清俭(this)); break;
-                //     case "突袭": skills.Add(str, new 突袭(this)); break;
-                //     case "无双": skills.Add(str, new 无双(this)); break;
-                //     case "利驭": skills.Add(str, new 利驭(this)); break;
-                //     case "离间": skills.Add(str, new 离间(this)); break;
-                //     case "闭月": skills.Add(str, new 闭月(this)); break;
-                //     case "驱虎": skills.Add(str, new 驱虎(this)); break;
-                //     case "节命": skills.Add(str, new 节命(this)); break;
-                //     case "好施": skills.Add(str, new 好施(this)); break;
-                //     case "缔盟": skills.Add(str, new 缔盟(this)); break;
-                //     case "恩怨": skills.Add(str, new 恩怨(this)); break;
-                //     case "眩惑": skills.Add(str, new 眩惑(this)); break;
-                //     case "散谣": skills.Add(str, new 散谣(this)); break;
-                //     case "制蛮": skills.Add(str, new 制蛮(this)); break;
-                //     case "明策": skills.Add(str, new 明策(this)); break;
-                //     case "智迟": skills.Add(str, new 智迟(this)); break;
-                //     case "烈弓": skills.Add(str, new 烈弓(this)); break;
-                //     case "乱击": skills.Add(str, new 乱击(this)); break;
-                // }
-
-                // player.skills.Add(skill);
-                skills.Add(str, Activator.CreateInstance(Skill.SkillMap[str], this) as Skill);
+                if (Skill.SkillMap.ContainsKey(str))
+                {
+                    skills.Add(Activator.CreateInstance(Skill.SkillMap[str], this) as Skill);
+                }
             }
         }
 

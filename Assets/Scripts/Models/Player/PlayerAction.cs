@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Threading.Tasks;
-using System.Linq;
+using System;
 
 namespace Model
 {
-    public abstract class PlayerAction<T>
+    public class PlayerAction<T>
     {
         public Player player { get; private set; }
         public PlayerAction(Player player)
@@ -18,7 +18,7 @@ namespace Model
         /// <summary>
         /// 执行操作
         /// </summary>
-        public abstract Task Execute();
+        // public abstract Task Execute();
 
         protected static UnityAction<T> actionView;
         public static event UnityAction<T> ActionView
@@ -44,24 +44,19 @@ namespace Model
         }
         public List<Card> Cards { get; protected set; }
 
-        public override async Task Execute()
+        public async Task Execute()
         {
             // 获得牌
             foreach (var card in Cards)
             {
                 player.HandCards.Add(card);
+                // card.Src = player;
             }
-            actionView?.Invoke(this);
+            actionView(this);
 
             // 执行获得牌后事件
             await player.playerEvents.AfterGetCard.Execute(this);
         }
-
-        // public async Task FromElse(Player dest)
-        // {
-        //     await new LoseCard(dest, Cards).Execute();
-        //     await Execute();
-        // }
     }
 
     /// <summary>
@@ -80,7 +75,7 @@ namespace Model
         }
         public int Count { get; set; }
 
-        public override async Task Execute()
+        public new async Task Execute()
         {
             await player.playerEvents.WhenGetCard.Execute(this);
             if (Count == 0) return;
@@ -107,7 +102,7 @@ namespace Model
         }
         public List<Card> Cards { get; private set; }
 
-        public override async Task Execute()
+        public async Task Execute()
         {
             foreach (var card in Cards)
             {
@@ -115,7 +110,7 @@ namespace Model
                 else if (card is Equipage) await (card as Equipage).RemoveEquipage();
             }
 
-            actionView?.Invoke(this);
+            actionView(this);
 
             // 执行失去牌后事件
             await player.playerEvents.loseCard.Execute(this);
@@ -132,7 +127,7 @@ namespace Model
         /// </summary>
         public Discard(Player player, List<Card> cards) : base(player, cards) { }
 
-        public override async Task Execute()
+        public new async Task Execute()
         {
             string str = "";
             foreach (var card in Cards) str += "【" + card.Name + card.Suit + card.Weight.ToString() + "】";
@@ -156,11 +151,11 @@ namespace Model
         }
         public int Value { get; set; }
 
-        public override async Task Execute()
+        public async Task Execute()
         {
             // 更新体力
             player.Hp += Value;
-            actionView?.Invoke(this);
+            actionView(this);
 
             // 执行事件(濒死)
             if (player.Hp < 1 && Value < 0) await NearDeath();
@@ -181,8 +176,9 @@ namespace Model
                 if (i == TurnSystem.Instance.CurrentPlayer) break;
             }
 
-            if (this is Damaged) await new Die(player, (this as Damaged).Src).Execute();
-            else await new Die(player, null).Execute();
+            // if (this is Damaged) await new Die(player, (this as Damaged).Src).Execute();
+            // else await new Die(player, null).Execute();
+            await new Die(player, this is Damaged ? (this as Damaged).Src : null).Execute();
         }
     }
 
@@ -198,9 +194,9 @@ namespace Model
 
         public Player DamageSrc { get; private set; }
 
-        public override async Task Execute()
+        public async Task Execute()
         {
-            actionView?.Invoke(this);
+            actionView(this);
 
             player.skills.Clear();
             if (player.IsLocked) await new SetLock(player).Execute();
@@ -231,7 +227,7 @@ namespace Model
         /// <param name="value">回复量</param>
         public Recover(Player player, int value = 1) : base(player, value) { }
 
-        public override async Task Execute()
+        public new async Task Execute()
         {
             // 判断体力是否超过上限
             int t = player.Hp + Value - player.HpLimit;
@@ -273,7 +269,7 @@ namespace Model
         public bool IsConDucted { get; set; } = false;
         private bool conduct = false;
 
-        public override async Task Execute()
+        public new async Task Execute()
         {
             // 受到伤害时
             await player.playerEvents.whenDamaged.Execute(this);
@@ -331,14 +327,14 @@ namespace Model
         }
         public Player Dest { get; private set; }
 
-        public override async Task Execute()
+        public new async Task Execute()
         {
             // 获得牌
             foreach (var card in Cards)
             {
                 player.HandCards.Add(card);
             }
-            actionView?.Invoke(this);
+            actionView(this);
 
             // 目标失去牌
             await new LoseCard(Dest, Cards).Execute();
@@ -359,14 +355,14 @@ namespace Model
             CardPile.Instance.AddToDiscard(JudgeCard);
             Debug.Log("判定结果为【" + JudgeCard.Name + JudgeCard.Suit + JudgeCard.Weight + "】");
 
-            await modifyJudge.Execute(this);
+            // await modifyJudge.Execute(this);
 
             return JudgeCard;
         }
 
         // public Card JudgeCard { get; set; }
 
-        public EventSet<Judge> modifyJudge = new EventSet<Judge>();
+        // public EventSet<Judge> modifyJudge = new EventSet<Judge>();
     }
 
     /// <summary>
@@ -380,10 +376,10 @@ namespace Model
         }
         public List<Card> Cards { get; protected set; }
 
-        public override async Task Execute()
+        public async Task Execute()
         {
             await Task.Yield();
-            actionView?.Invoke(this);
+            actionView(this);
         }
     }
 
@@ -399,10 +395,10 @@ namespace Model
 
         public bool ByDamage { get; private set; }
 
-        public override async Task Execute()
+        public async Task Execute()
         {
             player.IsLocked = !player.IsLocked;
-            actionView?.Invoke(this);
+            actionView(this);
             await Task.Yield();
         }
     }
@@ -419,7 +415,7 @@ namespace Model
         public Card Card1 { get; private set; }
         public bool Result { get; private set; }
 
-        public override async Task Execute()
+        public async Task<bool> Execute()
         {
             TimerTask.Instance.Hint = "请选择一张手牌拼点";
             if (player.team == Dest.team)
@@ -439,7 +435,39 @@ namespace Model
             await new LoseCard(player, new List<Card> { Card0 }).Execute();
             await new LoseCard(Dest, new List<Card> { Card1 }).Execute();
 
-            Result = Card0.Weight > Card1.Weight;
+            return Card0.Weight > Card1.Weight;
+        }
+    }
+
+    public class UpdateSkill : PlayerAction<UpdateSkill>
+    {
+        public UpdateSkill(Player player, List<string> skills) : base(player)
+        {
+            Skills = skills;
+        }
+        public List<string> Skills { get; protected set; }
+
+        public void Add()
+        {
+            foreach (var i in Skills)
+            {
+                player.skills.Add(Activator.CreateInstance(Skill.SkillMap[i], player) as Skill);
+            }
+            actionView(this);
+        }
+
+        public void Remove()
+        {
+            foreach (var i in Skills)
+            {
+                var skill = player.FindSkill(i);
+                if (skill != null)
+                {
+                    skill.SetActive(false);
+                    player.skills.Remove(skill);
+                }
+            }
+            actionView(this);
         }
     }
 

@@ -180,48 +180,54 @@ namespace Model
                 performIsDone = !await timerTask.Run(CurrentPlayer, 1, 0);
                 timerTask.isPerformPhase = false;
 
+                if (CurrentPlayer.isAI)
+                {
+                    performIsDone = !AI.Instance.Perform();
+                }
+
                 if (!performIsDone)
                 {
                     if (timerTask.Skill != "")
                     {
-                        var skill = CurrentPlayer.skills[timerTask.Skill] as Active;
+                        var skill = CurrentPlayer.FindSkill(timerTask.Skill) as Active;
                         await skill.Execute(timerTask.Dests, timerTask.Cards, "");
                     }
                     else
                     {
                         var card = timerTask.Cards[0];
+                        if (card is 杀) CurrentPlayer.ShaCount++;
                         await card.UseCard(CurrentPlayer, timerTask.Dests);
                     }
                 }
 
-                else if (CurrentPlayer.isAI && CardArea.Instance.UseSha(CurrentPlayer))
-                {
-                    foreach (var card in CurrentPlayer.HandCards)
-                    {
-                        if (card is 杀)
-                        {
-                            var dest = CurrentPlayer.Next;
-                            do
-                            {
-                                if (DestArea.Instance.UseSha(CurrentPlayer, dest))
-                                {
-                                    await card.UseCard(CurrentPlayer, new List<Player> { dest });
-                                    performIsDone = false;
-                                    goto done;
-                                    // break;
-                                }
-                                dest = dest.Next;
-                            } while (dest != CurrentPlayer);
-                        }
-                        if (card is Equipage)
-                        {
-                            await card.UseCard(CurrentPlayer);
-                            performIsDone = false;
-                            goto done;
-                        }
-                    }
-                }
-            done:
+                //     else if (CurrentPlayer.isAI && CardArea.Instance.UseSha(CurrentPlayer))
+                //     {
+                //         foreach (var card in CurrentPlayer.HandCards)
+                //         {
+                //             if (card is 杀)
+                //             {
+                //                 var dest = CurrentPlayer.Next;
+                //                 do
+                //                 {
+                //                     if (DestArea.Instance.UseSha(CurrentPlayer, dest))
+                //                     {
+                //                         await card.UseCard(CurrentPlayer, new List<Player> { dest });
+                //                         performIsDone = false;
+                //                         goto done;
+                //                         // break;
+                //                     }
+                //                     dest = dest.Next;
+                //                 } while (dest != CurrentPlayer);
+                //             }
+                //             if (card is Equipage)
+                //             {
+                //                 await card.UseCard(CurrentPlayer);
+                //                 performIsDone = false;
+                //                 goto done;
+                //             }
+                //         }
+                //     }
+                // done:
                 finishPerformView?.Invoke(this);
             }
 

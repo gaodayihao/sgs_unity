@@ -27,11 +27,9 @@ namespace Controller
             Model.TimerTask.Instance.StopTimerView += operationArea.HideTimer;
 
             // 手牌区
-            // Model.TimerTask.Instance.StartTimerView += cardArea.InitCardArea;
             Model.TimerTask.Instance.StopTimerView += cardArea.ResetCardArea;
 
             // 目标区
-            // Model.TimerTask.Instance.StartTimerView += destArea.InitDestArea;
             Model.TimerTask.Instance.StopTimerView += destArea.ResetDestArea;
 
             // 获得牌
@@ -52,6 +50,7 @@ namespace Controller
 
             // 技能区
             Model.SgsMain.Instance.GeneralView += skillArea.InitSkill;
+            Model.UpdateSkill.ActionView += skillArea.InitSkill;
             Model.TimerTask.Instance.StopTimerView += skillArea.ResetSkillArea;
 
             // 移动座位
@@ -75,10 +74,8 @@ namespace Controller
             Model.TimerTask.Instance.StartTimerView -= operationArea.ShowTimer;
             Model.TimerTask.Instance.StopTimerView -= operationArea.HideTimer;
 
-            // Model.TimerTask.Instance.StartTimerView -= cardArea.InitCardArea;
             Model.TimerTask.Instance.StopTimerView -= cardArea.ResetCardArea;
 
-            // Model.TimerTask.Instance.StartTimerView -= destArea.InitDestArea;
             Model.TimerTask.Instance.StopTimerView -= destArea.ResetDestArea;
 
             Model.GetCard.ActionView -= cardArea.AddHandCard;
@@ -94,6 +91,7 @@ namespace Controller
             Model.TimerTask.Instance.StopTimerView -= equipArea.ResetEquipArea;
 
             Model.SgsMain.Instance.GeneralView -= skillArea.InitSkill;
+            Model.UpdateSkill.ActionView -= skillArea.InitSkill;
             Model.TimerTask.Instance.StopTimerView -= skillArea.ResetSkillArea;
 
             Model.TimerTask.Instance.MoveSeat -= cardArea.MoveSeat;

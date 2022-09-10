@@ -48,7 +48,7 @@ namespace Model
 
             // 初始化武将
             // await InitGeneral();
-            await Task.Yield();
+            // await Task.Yield();
             generalView();
 
             // 初始化牌堆
@@ -88,7 +88,7 @@ namespace Model
         {
             List<string> list = new List<string>
             {
-                "火杀", "无中生有", "诸葛连弩", "顺手牵羊", "铁索连环", "寒冰剑", "闪电"
+                "火杀", "无中生有", "诸葛连弩", "顺手牵羊", "铁索连环", "寒冰剑", "酒"
             };
 
             while (list.Count > 0)
