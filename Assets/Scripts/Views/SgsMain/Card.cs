@@ -114,9 +114,9 @@ namespace View
         /// <summary>
         /// 设置阴影
         /// </summary>
-        public void AddShadow()
+        public void SetShadow()
         {
-            if (!button.interactable) shadow.color = new Color(0, 0, 0, 0.5f);
+            shadow.color = new Color(0, 0, 0, button.interactable ? 0 : 0.5f);
         }
 
         /// <summary>

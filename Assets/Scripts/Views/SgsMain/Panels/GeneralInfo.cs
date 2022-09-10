@@ -13,11 +13,11 @@ namespace View
         public Transform skills;
         private GameObject skillObj;
 
-        public async Task Init(Model.General model, string skinId)
+        public async Task Init(Model.General model, string skinId, string skinName)
         {
             // imag
             // var model = player.model.general;
-            generalName.text = model.name;
+            generalName.text = "   " + skinName + "*" + model.name;
             // foreach(var i in player.model.skills)
             skillObj = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("技能信息");
             // await Task.Yield();

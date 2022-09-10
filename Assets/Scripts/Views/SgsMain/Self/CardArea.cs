@@ -114,10 +114,10 @@ namespace View
                 {
                     if (!i.gameObject.activeSelf) continue;
                     i.button.interactable = false;
-                    i.AddShadow();
+                    // i.SetShadow();
                 }
-                IsSettled = true;
-                return;
+                // IsSettled = true;
+                // return;
             }
 
             // 无懈可击
@@ -127,27 +127,29 @@ namespace View
                 UpdateSpacing();
             }
 
+            UpdateCardArea();
+
             // 判断每张卡牌是否可选
 
-            if (skill != null)
-            {
-                foreach (var i in handcards.Values)
-                {
-                    if (!i.gameObject.activeSelf) continue;
-                    i.button.interactable = skill.IsValidCard(i.model);
-                }
-            }
-            else
-            {
-                foreach (var i in handcards.Values)
-                {
-                    if (!i.gameObject.activeSelf) continue;
-                    i.button.interactable = timerTask.IsValidCard(i.model);
-                }
-            }
+            // if (skill != null)
+            // {
+            //     foreach (var i in handcards.Values)
+            //     {
+            //         if (!i.gameObject.activeSelf) continue;
+            //         i.button.interactable = skill.IsValidCard(i.model);
+            //     }
+            // }
+            // else
+            // {
+            //     foreach (var i in handcards.Values)
+            //     {
+            //         if (!i.gameObject.activeSelf) continue;
+            //         i.button.interactable = timerTask.IsValidCard(i.model);
+            //     }
+            // }
 
-            // 对已禁用的手牌设置阴影
-            foreach (var card in handcards.Values) if (card.gameObject.activeSelf) card.AddShadow();
+            // // 对已禁用的手牌设置阴影
+            // foreach (var card in handcards.Values) if (card.gameObject.activeSelf) card.SetShadow();
         }
 
         /// <summary>
@@ -198,6 +200,28 @@ namespace View
                 Converted = (skill as Model.Converted).Execute(SelectedCard);
             }
             else Converted = null;
+
+            // 判断每张卡牌是否可选
+
+            if (skill != null)
+            {
+                foreach (var i in handcards.Values)
+                {
+                    if (!i.gameObject.activeSelf) continue;
+                    i.button.interactable = skill.IsValidCard(i.model);
+                }
+            }
+            else
+            {
+                foreach (var i in handcards.Values)
+                {
+                    if (!i.gameObject.activeSelf) continue;
+                    i.button.interactable = timerTask.IsValidCard(i.model);
+                }
+            }
+
+            // 对已禁用的手牌设置阴影
+            foreach (var card in handcards.Values) if (card.gameObject.activeSelf) card.SetShadow();
         }
 
         public Dictionary<string, Card> ConvertedCards { get; set; } = new Dictionary<string, Card>();
@@ -224,7 +248,7 @@ namespace View
                 i.button.interactable = timerTask.IsValidCard(i.model);
             }
 
-            foreach (var i in ConvertedCards.Values) if (i.gameObject.activeSelf) i.AddShadow();
+            foreach (var i in ConvertedCards.Values) if (i.gameObject.activeSelf) i.SetShadow();
         }
 
         public void UpdateConvertCard()

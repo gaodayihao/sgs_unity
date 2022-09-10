@@ -16,12 +16,12 @@ namespace View
             var player = GetComponent<Player>();
             if (player != null)
             {
-                await generalInfo.Init(player.model.general, player.CurrentSkin.id.ToString());
+                await generalInfo.Init(player.model.general, player.CurrentSkin.id.ToString(), player.CurrentSkin.name);
             }
             else
             {
                 var general = GetComponent<General>();
-                await generalInfo.Init(general.model, 1 + general.Id.ToString().PadLeft(3, '0') + "01");
+                await generalInfo.Init(general.model, 1 + general.Id.ToString().PadLeft(3, '0') + "01", "经典形象");
             }
             generalInfo.gameObject.SetActive(true);
         }

@@ -42,7 +42,6 @@ namespace View
             {
                 maxCount = skill.MaxDest;
                 minCount = skill.MinDest;
-
             }
             else
             {
@@ -104,6 +103,5 @@ namespace View
             // 对不能选择的角色设置阴影
             foreach (var player in Players) player.AddShadow();
         }
-
     }
 }

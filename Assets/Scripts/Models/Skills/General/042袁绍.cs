@@ -11,19 +11,11 @@ namespace Model
 
         public override Card Execute(List<Card> cards) => Card.Convert<万箭齐发>(cards);
 
-        public override bool IsValidCard(Card card) => (card.Suit == "红桃" || card.Suit == "方片")
+        public override int MaxCard => 2;
+        public override int MinCard => 2;
+
+        public override bool IsValidCard(Card card) => (first is null || first.Suit == card.Suit)
             && base.IsValidCard(card);
-
-        public override void OnEnabled()
-        {
-            Src.unlimitedDst += IsUnlimited;
-        }
-
-        public override void OnDisabled()
-        {
-            Src.unlimitedDst -= IsUnlimited;
-        }
-
-        private bool IsUnlimited(Card card, Player dest) => card is 杀 && card.Suit == "方片";
+        private Card first => Operation.Instance.Cards.Count > 0 ? Operation.Instance.Cards[0] : null;
     }
 }

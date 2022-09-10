@@ -113,6 +113,25 @@
                     ]
                 }
             ]
+        },
+        {
+            "id": 700001,
+            "name": "李博闻",
+            "voice": [
+                {
+                    "name": "奸雄",
+                    "url": [
+                        "original/spell42_1",
+                        "original/spell42_2"
+                    ]
+                },
+                {
+                    "name": "阵亡",
+                    "url": [
+                        "dead/charDead_15"
+                    ]
+                }
+            ]
         }
     ]
 }

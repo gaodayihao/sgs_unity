@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System;
 
 namespace Model
 {
@@ -112,5 +113,36 @@ namespace Model
             add => useSkillView += value;
             remove => useSkillView -= value;
         }
+
+        public static Dictionary<string, Type> SkillMap { get; set; } = new Dictionary<string, Type>
+        {
+            { "仁德", typeof(仁德) },
+            { "武圣", typeof(武圣) },
+            { "义绝", typeof(义绝) },
+            { "咆哮", typeof(咆哮) },
+            { "制衡", typeof(制衡) },
+            { "苦肉", typeof(苦肉) },
+            { "诈降", typeof(诈降) },
+            { "奸雄", typeof(奸雄) },
+            { "刚烈", typeof(刚烈) },
+            { "清俭", typeof(清俭) },
+            { "突袭", typeof(突袭) },
+            { "无双", typeof(无双) },
+            { "利驭", typeof(利驭) },
+            { "离间", typeof(离间) },
+            { "闭月", typeof(闭月) },
+            { "驱虎", typeof(驱虎) },
+            { "节命", typeof(节命) },
+            { "好施", typeof(好施) },
+            { "缔盟", typeof(缔盟) },
+            { "恩怨", typeof(恩怨) },
+            { "眩惑", typeof(眩惑) },
+            { "散谣", typeof(散谣) },
+            { "制蛮", typeof(制蛮) },
+            { "明策", typeof(明策) },
+            { "智迟", typeof(智迟) },
+            { "烈弓", typeof(烈弓) },
+            { "乱击", typeof(乱击) },
+        };
     }
 }
