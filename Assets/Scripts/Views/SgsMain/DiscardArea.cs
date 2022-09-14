@@ -6,25 +6,55 @@ using UnityEngine.UI;
 
 namespace View
 {
-    public class DiscardArea : MonoBehaviour
+    public class DiscardArea : SingletonMono<DiscardArea>
     {
-        private List<GameObject> discards;
+        public List<Card> discards = new List<Card>();
+        private Dictionary<int, Card> handCards => CardArea.Instance.handcards;
 
-        public void AddDiscard(List<Model.Card> cards)
+        public async void AddDiscard(List<Model.Card> cards)
         {
-            // 从assetbundle中加载卡牌预制件
-            // while (!ABManager.Instance.ABMap.ContainsKey("sgsasset")) await Task.Yield();
-            var card = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("Card");
+            var prefab = ABManager.Instance.GetSgsAsset("Card");
+            var player = cards[0].Src;
 
-            // 实例化新卡牌，根据卡牌id初始化
-            foreach (var discard in cards)
+            if (player != null && !CardSystem.Instance.IsViewSelf(player))
             {
-                var instance = Instantiate(card);
-                instance.transform.SetParent(transform, false);
-                instance.GetComponent<Card>().Init(discard);
+                var cardAnime = Instantiate(ABManager.Instance.GetSgsAsset("CardAnime"), transform.parent).transform;
+                cardAnime.position = CardSystem.Instance.PlayerPos(player);
+
+                foreach (var i in cards)
+                {
+                    var instance = Instantiate(prefab).GetComponent<Card>();
+
+                    instance.Init(i);
+                    instance.SetParent(cardAnime);
+                    discards.Add(instance);
+                }
+                int f = Time.frameCount;
+                while (f == Time.frameCount) await Task.Yield();
+                CardSystem.Instance.UpdateAll(0);
+
+                foreach (var i in cards) discards.Find(x => x.Id == i.Id).SetParent(transform);
+
+                Destroy(cardAnime.gameObject, 0.5f);
+            }
+            else
+            {
+                foreach (var i in cards)
+                {
+                    var instance = Instantiate(prefab).GetComponent<Card>();
+                    instance.Init(i);
+                    discards.Add(instance);
+                    instance.SetParent(transform);
+
+                    if (player is null) instance.transform.position = transform.position;
+                    else if (!player.HandCards.Contains(i)) instance.transform.position = Self.Instance.transform.position;
+                    else instance.transform.position = handCards[i.Id].transform.position;
+                    instance.transform.position = transform.InverseTransformPoint(instance.transform.position);
+                }
             }
 
             UpdateSpacing();
+            CardSystem.Instance.UpdateAll(0.5f);
         }
 
         public void AddDiscard(Model.ShowCard model)
@@ -32,50 +62,12 @@ namespace View
             AddDiscard(model.Cards);
         }
 
-        // 使用牌时调用
-        // public void AddDiscard(Model.Card card)
-        // {
-        //     // if (card.Id == 0) return;
-
-        //     AddDiscard(new Model.Card[1] { card });
-        // }
-
-        // 替换装备时调用
-        // public async void AddDiscard(Model.Equipage newEquip)
-        // {
-        //     if (newEquip.Src.Equipages[newEquip.Type] != null)
-        //     {
-        //         await AddDiscard(new Model.Card[1] { newEquip.Src.Equipages[newEquip.Type] });
-        //     }
-        // }
-
-        // // 弃牌时调用
-        // public async void AddDiscard(Model.LoseCard operation)
-        // {
-        //     if (!(operation is Model.Discard)) return;
-
-        //     if (operation.HandCards != null) await AddDiscard(operation.HandCards);
-        //     if (operation.Equipages != null) await AddDiscard(operation.Equipages);
-        // }
-
-        /// <summary>
-        /// 清空弃牌区
-        /// </summary>
-        public IEnumerator Clear()
+        public async void Clear(Model.TurnSystem turnSystem)
         {
-            yield return new WaitForSeconds(2);
-            // foreach (Transform card in transform) Destroy(card.gameObject);
-            foreach (var card in discards) Destroy(card);
-        }
+            foreach (var i in discards) Destroy(i.gameObject, 2);
 
-        public void Clear(Model.TurnSystem turnSystem)
-        {
-            if (transform.childCount == 0) return;
-            StopAllCoroutines();
-
-            discards = new List<GameObject>();
-            foreach (Transform card in transform) discards.Add(card.gameObject);
-            StartCoroutine(Clear());
+            await Model.SgsMain.Instance.Delay(2f);
+            foreach (var i in discards) i.Move(0.2f);
         }
 
         /// <summary>
@@ -83,15 +75,9 @@ namespace View
         /// </summary>
         private void UpdateSpacing()
         {
-            if (transform.childCount < 7)
+            if (transform.childCount >= 7)
             {
-                GetComponent<RectTransform>().sizeDelta = new Vector2(121.5f * transform.childCount, 190);
-                GetComponent<HorizontalLayoutGroup>().spacing = 0;
-            }
-            else
-            {
-                GetComponent<RectTransform>().sizeDelta = new Vector2(810, 171);
-                var spacing = (810 - 121.5f * transform.childCount) / (float)(transform.childCount - 1) + 0.001f;
+                var spacing = (810 - 121.5f * transform.childCount) / (float)(transform.childCount - 1);
                 GetComponent<HorizontalLayoutGroup>().spacing = spacing;
             }
         }

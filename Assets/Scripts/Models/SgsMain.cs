@@ -23,6 +23,8 @@ namespace Model
 
             foreach (var i in players)
             {
+                TeamPlayers[i.team].Add(i);
+                i.Teammates = TeamPlayers[i.team];
                 i.isSelf = i.team == User.Instance.team;
                 i.isAI = Room.Instance.IsSingle && !i.isSelf;
                 AlivePlayers.Add(i);
@@ -72,6 +74,12 @@ namespace Model
         // 玩家
         public Player[] players;
         public List<Player> AlivePlayers { get; private set; } = new List<Player>();
+
+        public Dictionary<Team, List<Player>> TeamPlayers { get; private set; } = new Dictionary<Team, List<Player>>
+        {
+            { Team.Red, new List<Player>() },
+            { Team.Blue, new List<Player>() }
+        };
 
         public bool GameIsOver { get; private set; } = false;
         public Team Loser { get; private set; }

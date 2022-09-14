@@ -7,6 +7,7 @@ namespace Controller
     public class SgsMain : SingletonCtrl<SgsMain>
     {
         private View.SgsMain view => View.SgsMain.Instance;
+        private View.CardSystem cardAnime => View.CardSystem.Instance;
 
         // Start is called before the first frame update
         void Start()
@@ -25,6 +26,14 @@ namespace Controller
 
             Model.BanPick.Instance.ShowPanelView += view.ShowBP;
 
+            Model.GetCard.ActionView += cardAnime.GetCardFromPile;
+            Model.GetCard.ActionView += cardAnime.GetCardFromElse;
+            Model.GetCard.ActionView += cardAnime.GetDiscard;
+            Model.GetCard.ActionView += cardAnime.GetJudgeCard;
+            Model.ExChange.ActionView += cardAnime.Exchange;
+            Model.Card.UseCardView += cardAnime.UseCard;
+            Model.Skill.UseSkillView += cardAnime.UseSkill;
+
             // Model.SgsMain.Instance.StartGame();
         }
 
@@ -38,6 +47,14 @@ namespace Controller
             Model.CardPanel.Instance.StopTimerView -= view.HidePanel;
 
             Model.TimerTask.Instance.MoveSeat -= view.MoveSeat;
+
+            Model.GetCard.ActionView -= cardAnime.GetCardFromPile;
+            Model.GetCard.ActionView -= cardAnime.GetCardFromElse;
+            Model.GetCard.ActionView -= cardAnime.GetDiscard;
+            Model.GetCard.ActionView -= cardAnime.GetJudgeCard;
+            Model.ExChange.ActionView -= cardAnime.Exchange;
+            Model.Card.UseCardView -= cardAnime.UseCard;
+            Model.Skill.UseSkillView -= cardAnime.UseSkill;
         }
 
     }

@@ -19,7 +19,7 @@ namespace Model
         public string Name { get; set; }
 
         // 使用者
-        public Player Src { get; protected set; }
+        public Player Src { get; set; }
         // 目标
         public List<Player> Dests { get; protected set; }
 
@@ -164,29 +164,35 @@ namespace Model
             return list;
         }
 
-        public virtual bool AiValid()
+        public virtual bool AIPerform()
         {
             if (!CardArea.Instance.ValidCard(this)) return false;
+            // Debug.Log("a");
 
             Operation.Instance.Cards.Add(this);
 
-            foreach (var i in AI.Instance.DestList)
-            {
-                if (DestArea.Instance.ValidDest(i))
-                {
-                    Operation.Instance.Dests.Add(i);
-                }
-                if (Operation.Instance.Dests.Count == DestArea.Instance.MaxDest()) break;
-            }
+            // foreach (var i in AI.Instance.DestList)
+            // {
+            //     // Debug.Log("a");
+            //     if (DestArea.Instance.ValidDest(i))
+            //     {
+            //         Operation.Instance.Dests.Add(i);
+            //     }
+            //     if (Operation.Instance.Dests.Count == DestArea.Instance.MaxDest()) break;
+            // }
 
-            if (Operation.Instance.Dests.Count >= DestArea.Instance.MinDest())
-            {
-                Operation.Instance.AiCommit();
-                Operation.Instance.Clear();
-                return true;
-            }
-            Operation.Instance.Clear();
-            return false;
+            // return Operation.Instance.AICommit();
+
+            return AI.Instance.SelectDest();
+
+            // if (Operation.Instance.Dests.Count >= DestArea.Instance.MinDest())
+            // {
+            //     Operation.Instance.AICommit();
+            //     Operation.Instance.Clear();
+            //     return true;
+            // }
+            // Operation.Instance.Clear();
+            // return false;
         }
 
         private static UnityAction<Card> useCardView;

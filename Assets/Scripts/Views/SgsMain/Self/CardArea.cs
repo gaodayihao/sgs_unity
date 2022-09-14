@@ -10,7 +10,7 @@ namespace View
     public class CardArea : SingletonMono<CardArea>
     {
         // 手牌区
-        public GameObject handCardArea;
+        public Transform handCardArea;
         // 手牌数
         public Text handCardText;
         // 手牌
@@ -41,37 +41,42 @@ namespace View
         /// <summary>
         /// 在手牌区中添加手牌
         /// </summary>
-        public void AddHandCard(Model.GetCard operation)
+        public async void AddHandCard(Model.GetCard operation)
         {
-            if (!operation.player.isSelf) return;
-
-            // 所有新获得手牌的id
-            var cards = operation.Cards;
-
-            // 从assetbundle中加载卡牌预制件
-            var card = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("Card");
+            // if (!operation.player.isSelf) return;
 
             // 实例化新卡牌，添加到手牌区，并根据卡牌id初始化
-            bool active = operation.player == self.model;
-            foreach (var i in cards)
+            // bool active = operation.player == self.model;
+            if (operation.player == self.model) return;
+            // {
+            foreach (var i in operation.Cards)
             {
-                if (handcards.ContainsKey(i.Id))
-                {
-                    handcards[i.Id].transform.SetAsLastSibling();
-                    continue;
-                }
-
-                var instance = Instantiate(card);
-                instance.SetActive(active);
-                instance.transform.SetParent(handCardArea.transform, false);
-                handcards.Add(i.Id, instance.GetComponent<Card>());
-                handcards[i.Id].Init(i);
+                var instance = Instantiate(ABManager.Instance.GetSgsAsset("Card")).GetComponent<Card>();
+                await Task.Yield();
+                instance.gameObject.SetActive(false);
+                instance.Init(i);
+                Add(instance);
+                // Debug.Log("add " + instance.name);
             }
+            // }
+        }
+
+        public void Add(Card card)
+        {
+            if (handcards.ContainsKey(card.Id))
+            {
+                Destroy(handcards[card.Id].gameObject);
+                handcards.Remove(card.Id);
+            }
+
+            handcards.Add(card.Id, card);
+            card.SetParent(handCardArea);
         }
 
         public void MoveSeat(Model.Player model)
         {
             foreach (var i in handcards.Values) i.gameObject.SetActive(model.HandCards.Contains(i.model));
+            UpdateSpacing();
         }
 
         /// <summary>
@@ -91,6 +96,8 @@ namespace View
                 }
                 else handcards[i.Id].gameObject.SetActive(self.model != operation.player);
             }
+            UpdateSpacing();
+            Debug.Log("remove");
         }
 
         public void InitCardArea()
@@ -108,18 +115,6 @@ namespace View
                 MinCount = timerTask.minCard;
             }
 
-            if (MaxCount == 0)
-            {
-                foreach (var i in handcards.Values)
-                {
-                    if (!i.gameObject.activeSelf) continue;
-                    i.button.interactable = false;
-                    // i.SetShadow();
-                }
-                // IsSettled = true;
-                // return;
-            }
-
             // 无懈可击
             if (timerTask.isWxkj)
             {
@@ -128,28 +123,6 @@ namespace View
             }
 
             UpdateCardArea();
-
-            // 判断每张卡牌是否可选
-
-            // if (skill != null)
-            // {
-            //     foreach (var i in handcards.Values)
-            //     {
-            //         if (!i.gameObject.activeSelf) continue;
-            //         i.button.interactable = skill.IsValidCard(i.model);
-            //     }
-            // }
-            // else
-            // {
-            //     foreach (var i in handcards.Values)
-            //     {
-            //         if (!i.gameObject.activeSelf) continue;
-            //         i.button.interactable = timerTask.IsValidCard(i.model);
-            //     }
-            // }
-
-            // // 对已禁用的手牌设置阴影
-            // foreach (var card in handcards.Values) if (card.gameObject.activeSelf) card.SetShadow();
         }
 
         /// <summary>
@@ -165,6 +138,7 @@ namespace View
             {
                 foreach (var i in handcards.Values) i.gameObject.SetActive(self.model.HandCards.Contains(i.model));
                 UpdateSpacing();
+
             }
             if (ConvertedCards.Count > 0)
             {
@@ -202,21 +176,23 @@ namespace View
             else Converted = null;
 
             // 判断每张卡牌是否可选
-
-            if (skill != null)
+            if (MaxCount > 0)
             {
-                foreach (var i in handcards.Values)
+                if (skill != null)
                 {
-                    if (!i.gameObject.activeSelf) continue;
-                    i.button.interactable = skill.IsValidCard(i.model);
+                    foreach (var i in handcards.Values)
+                    {
+                        if (!i.gameObject.activeSelf) continue;
+                        i.button.interactable = skill.IsValidCard(i.model);
+                    }
                 }
-            }
-            else
-            {
-                foreach (var i in handcards.Values)
+                else
                 {
-                    if (!i.gameObject.activeSelf) continue;
-                    i.button.interactable = timerTask.IsValidCard(i.model);
+                    foreach (var i in handcards.Values)
+                    {
+                        if (!i.gameObject.activeSelf) continue;
+                        i.button.interactable = timerTask.IsValidCard(i.model);
+                    }
                 }
             }
 
@@ -233,22 +209,21 @@ namespace View
             if (!IsSettled || ConvertIsSettle) return;
 
             foreach (var i in handcards.Values) i.button.interactable = false;
-            var card = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("Card");
+            var card = ABManager.Instance.GetSgsAsset("Card");
             foreach (var i in timerTask.MultiConvert)
             {
                 var instance = Instantiate(card);
-                instance.transform.SetParent(handCardArea.transform, false);
                 ConvertedCards.Add(i.Name, instance.GetComponent<Card>());
                 ConvertedCards[i.Name].Init(i, true);
+                ConvertedCards[i.Name].SetParent(handCardArea);
             }
-            UpdateSpacing();
-
             foreach (var i in ConvertedCards.Values)
             {
                 i.button.interactable = timerTask.IsValidCard(i.model);
             }
 
             foreach (var i in ConvertedCards.Values) if (i.gameObject.activeSelf) i.SetShadow();
+            UpdateSpacing();
         }
 
         public void UpdateConvertCard()
@@ -262,7 +237,6 @@ namespace View
         public void UpdateHandCardText(Model.Player player)
         {
             handCardText.text = player.HandCardCount.ToString() + "/" + player.HandCardLimit.ToString();
-            UpdateSpacing();
         }
 
         public void UpdateHandCardText(Model.GetCard operation)
@@ -286,21 +260,28 @@ namespace View
         /// <summary>
         /// 更新卡牌间距
         /// </summary>
-        private void UpdateSpacing()
+        public async void UpdateSpacing(bool update = true)
         {
-            int count = 0;
-            foreach (var i in handcards.Values) if (i.gameObject.activeSelf) count++;
-            foreach (var i in ConvertedCards) count++;
+            int count = SgsMain.Instance.self.model.HandCardCount + ConvertedCards.Count;
 
             // 若手牌数小于7，则不用设置负间距，直接返回
             if (count < 8)
             {
                 handCardArea.GetComponent<GridLayoutGroup>().spacing = new Vector2(0, 0);
-                return;
+                // return;
+            }
+            else
+            {
+                float spacing = -(count * 121.5f - 950) / (float)(count - 1) - 0.001f;
+                handCardArea.GetComponent<GridLayoutGroup>().spacing = new Vector2(spacing, 0);
             }
 
-            float spacing = -(count * 121.5f - 950) / (float)(count - 1) - 0.001f;
-            handCardArea.GetComponent<GridLayoutGroup>().spacing = new Vector2(spacing, 0);
+            if (update)
+            {
+                await SgsMain.Instance.WaitFrame();
+                foreach (var i in handcards.Values) i.Move(0.1f);
+                foreach (var i in ConvertedCards.Values) i.Move(0);
+            }
         }
     }
 }

@@ -99,8 +99,8 @@ namespace Model
 
                 if (card is DelayScheme && dest.JudgeArea.Contains((DelayScheme)card))
                 {
-                    ((DelayScheme)card).RemoveToJudgeArea();
-                    await new GetCard(src, new List<Card> { card }).Execute();
+                    // ((DelayScheme)card).RemoveToJudgeArea();
+                    await new GetJudgeCard(src, card).Execute();
                 }
                 else await new GetCardFromElse(src, dest, new List<Card> { card }).Execute();
             }

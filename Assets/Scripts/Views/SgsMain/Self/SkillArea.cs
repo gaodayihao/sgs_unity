@@ -71,7 +71,7 @@ namespace View
         /// </summary>
         public void InitSkillArea()
         {
-            if (timerTask.GivenSkill != "") Skills.Find(x => x.name == timerTask.GivenSkill).Select();
+            if (timerTask.GivenSkill != "") Skills.Find(x => x.name == timerTask.GivenSkill)?.Select();
 
             if (SelectedSkill != null)
             {

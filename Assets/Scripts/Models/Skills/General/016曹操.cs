@@ -25,10 +25,10 @@ namespace Model
             Execute();
 
             // var srcCard = damaged.SrcCard;
-            List<Card> srcCard = null;
-            if (damaged.SrcCard != null) srcCard = damaged.SrcCard.InDiscardPile();
+            // List<Card> srcCard = null;
+            if (damaged.SrcCard != null) await new GetDisCard(Src, new List<Card> { damaged.SrcCard }).Execute();
 
-            if (srcCard != null && srcCard.Count != 0) await new GetCard(Src, srcCard).Execute();
+            // if (srcCard != null && srcCard.Count != 0) await new GetCard(Src, srcCard).Execute();
             await new GetCardFromPile(Src, 1).Execute();
         }
     }

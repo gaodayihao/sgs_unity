@@ -19,6 +19,8 @@ namespace View
         // 按键
         public Button button;
 
+        public Transform target;
+
         // 编号
         public int Id { get; private set; }
         // 是否被选中
@@ -43,6 +45,7 @@ namespace View
         {
             this.model = model;
             name = model.Name;
+            target.name = model.Name + "target";
             this.isConvert = isConvert;
 
             var sprites = Sprites.Instance;
@@ -133,6 +136,7 @@ namespace View
         {
             Id = model.Id;
             name = model.Name;
+            target.name = model.Name + "target";
 
             var sprites = Sprites.Instance;
 
@@ -162,6 +166,112 @@ namespace View
         {
             CardPanel.Instance.selectCards.Add(this);
             CardPanel.Instance.UpdatePanel();
+        }
+
+        // private Vector3 pos;
+
+        public bool inPanel = false;
+
+        void Start()
+        {
+            // target = Instantiate(ABManager.Instance.GetSgsAsset("CardTarget")).transform;
+            // target.name = name;
+            if (!inPanel) transform.SetParent(CardSystem.Instance.transform, false);
+            // Debug.Log(name + " parent " + transform.parent.name);
+        }
+
+        public void SetParent(Transform parent)
+        {
+            // Debug.Log(name + " setparent " + parent.name);
+            // pos = transform.position;
+            target.SetParent(parent, false);
+            // StartCoroutine(Move(second));
+            // CardSystem.Instance.UpdateAll(second);
+            // target.position = pos;
+        }
+
+        public void SetAsLastSibling()
+        {
+            target.SetAsLastSibling();
+            // CardSystem.Instance.UpdateAll(0);
+            // transform.position = target.position;
+        }
+
+        public bool isMoving { get; private set; } = false;
+
+        public void Move(float second)
+        {
+            // await SgsMain.Instance.WaitFrame();
+            // Debug.Log("move" + name);
+            if (isMoving)
+            {
+                // Debug.Log(name + " ismoving");
+                return;
+            }
+
+            if (second == 0 || !gameObject.activeSelf)
+            {
+                // if (!gameObject.activeSelf) Debug.Log(name + " !gameObject.activeSelf");
+                transform.position = target.position;
+                return;
+            }
+
+            // if (!gameObject.activeSelf) return;
+
+            isMoving = true;
+            StartCoroutine(MoveAsync(second));
+        }
+
+        private IEnumerator MoveAsync(float second)
+        {
+            yield return null;
+            // Debug.Log("moveasync" + name);
+            while (transform.position != target.position)
+            {
+                yield return null;
+                var dx = (target.position - transform.position).magnitude / second * Time.deltaTime;
+                second -= Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, target.position, dx);
+                // Debug.Log(transform.position);
+            }
+            isMoving = false;
+        }
+
+        // public void SetActive(bool value)
+        // {
+        //     gameObject.SetActive(value);
+        //     target.gameObject.SetActive(value);
+        // }
+
+        void OnEnable()
+        {
+            if (target == null)
+            {
+                target = Instantiate(ABManager.Instance.GetSgsAsset("CardTarget")).transform;
+                // Debug.Log(target.gameObject is null);
+                // target.name = name;
+            }
+            target.gameObject.SetActive(true);
+        }
+
+        void OnDisable()
+        {
+            if (target != null) target.gameObject.SetActive(false);
+            isMoving = false;
+        }
+
+        public bool WillDestroy = false;
+
+        void OnDestroy()
+        {
+            // Debug.Log(name + " ondestroy");
+            if (target != null) Destroy(target.gameObject);
+            // Debug.Log(DiscardArea.Instance.discards.Contains(this));
+            if (DiscardArea.Instance.discards.Contains(this))
+            {
+                DiscardArea.Instance.discards.Remove(this);
+                // Debug.Log("remove");
+            }
         }
     }
 }

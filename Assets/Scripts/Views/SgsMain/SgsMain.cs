@@ -81,7 +81,7 @@ namespace View
         {
             if (self != null)
             {
-                if (self.model == model) return;
+                // if (self.model == model) return;
                 self.transform.Find("其他角色").gameObject.SetActive(true);
             }
 
@@ -100,32 +100,32 @@ namespace View
             RectTransform rectTransform = player.GetComponent<RectTransform>();
             rectTransform.anchorMax = new Vector2(1, 0);
             rectTransform.anchorMin = new Vector2(1, 0);
-            rectTransform.pivot = new Vector2(1, 0);
-            rectTransform.anchoredPosition = new Vector2(-10, 24);
+            // rectTransform.pivot = new Vector2(1, 0);
+            rectTransform.anchoredPosition = new Vector2(-125f, 160);
         }
         public void RightPos(GameObject player)
         {
             RectTransform rectTransform = player.GetComponent<RectTransform>();
             rectTransform.anchorMax = new Vector2(1, 0.5f);
             rectTransform.anchorMin = new Vector2(1, 0.5f);
-            rectTransform.pivot = new Vector2(1, 0.5f);
-            rectTransform.anchoredPosition = new Vector2(-10, 150);
+            // rectTransform.pivot = new Vector2(1, 0.5f);
+            rectTransform.anchoredPosition = new Vector2(-125f, 150);
         }
         public void TopPos(GameObject player)
         {
             RectTransform rectTransform = player.GetComponent<RectTransform>();
             rectTransform.anchorMax = new Vector2(0.5f, 1);
             rectTransform.anchorMin = new Vector2(0.5f, 1);
-            rectTransform.pivot = new Vector2(0.5f, 1);
-            rectTransform.anchoredPosition = new Vector2(0, -15);
+            // rectTransform.pivot = new Vector2(0.5f, 1);
+            rectTransform.anchoredPosition = new Vector2(0, -150);
         }
         public void LeftPos(GameObject player)
         {
             RectTransform rectTransform = player.GetComponent<RectTransform>();
             rectTransform.anchorMax = new Vector2(0, 0.5f);
             rectTransform.anchorMin = new Vector2(0, 0.5f);
-            rectTransform.pivot = new Vector2(0, 0.5f);
-            rectTransform.anchoredPosition = new Vector2(10, 150);
+            // rectTransform.pivot = new Vector2(0, 0.5f);
+            rectTransform.anchoredPosition = new Vector2(125, 150);
         }
 
         private GameObject panel;
@@ -150,7 +150,7 @@ namespace View
                     break;
             }
 
-            panel = Instantiate(this.panel);
+            panel = Instantiate(panel);
             panel.transform.SetParent(transform, false);
         }
 
@@ -187,6 +187,12 @@ namespace View
             Vector2 canvasSize = GameObject.FindObjectOfType<Canvas>().GetComponent<RectTransform>().sizeDelta;
             float radio = Mathf.Max(canvasSize.x / texture.width, canvasSize.y / texture.height);
             background.rectTransform.sizeDelta *= radio;
+        }
+
+        public async Task WaitFrame(int count = 1)
+        {
+            int t = Time.frameCount + 2;
+            while (t != Time.frameCount) await Task.Yield();
         }
     }
 }

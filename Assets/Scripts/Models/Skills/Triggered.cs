@@ -13,11 +13,22 @@ namespace Model
         /// <summary>
         /// 询问是否发动技能
         /// </summary>
-        public async Task<bool> ShowTimer()
+        protected async Task<bool> ShowTimer()
         {
             TimerTask.Instance.GivenSkill = Name;
             TimerTask.Instance.Hint = "是否发动" + Name + "？";
-            return await TimerTask.Instance.Run(Src);
+            if (isAI)
+            {
+                TimerTask.Instance.maxCard = MaxCard;
+                TimerTask.Instance.minCard = MinCard;
+                TimerTask.Instance.MaxDest = () => MaxDest;
+                TimerTask.Instance.MinDest = () => MinDest;
+                TimerTask.Instance.IsValidCard = IsValidCard;
+                TimerTask.Instance.IsValidDest = IsValidDest;
+            }
+            return await TimerTask.Instance.Run(Src) || isAI && AIResult();
         }
+
+        protected virtual bool AIResult() => true;
     }
 }

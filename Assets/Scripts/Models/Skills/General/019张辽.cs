@@ -41,5 +41,18 @@ namespace Model
                 await new GetCardFromElse(Src, i, card).Execute();
             }
         }
+
+        protected override bool AIResult() => AI.Instance.SelectDest();
+        // {
+        //     foreach (var i in AI.Instance.DestList)
+        //     {
+        //         if (i.HandCardCount > 0)
+        //         {
+        //             Operation.Instance.Dests.Add(i);
+        //             if (Operation.Instance.Dests.Count == MaxDest) break;
+        //         }
+        //     }
+        //     return Operation.Instance.AICommit();
+        // }
     }
 }

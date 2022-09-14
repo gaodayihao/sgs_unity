@@ -26,5 +26,11 @@ namespace Model
         public override bool IsValid => base.IsValid
             && TimerTask.Instance.maxCard > 0
             && TimerTask.Instance.IsValidCard(Execute(null));
+
+        // public override void Execute()
+        // {
+        //     // Dests = TimerTask.Instance.Dests;
+        //     base.Execute();
+        // }
     }
 }

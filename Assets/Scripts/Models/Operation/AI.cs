@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 namespace Model
 {
@@ -13,6 +14,31 @@ namespace Model
         void Start()
         {
             DestList = SgsMain.Instance.AlivePlayers.Where(x => x.isSelf).ToList();
+        }
+
+        public bool SelectDest(List<Player> dests = null)
+        {
+            if (dests is null) dests = DestList;
+
+            foreach (var i in dests)
+            {
+                if (Operation.Instance.IsValidDest(i))
+                {
+                    Operation.Instance.Dests.Add(i);
+                }
+                if (Operation.Instance.Dests.Count == Operation.Instance.MaxDest()) break;
+            }
+
+            return Operation.Instance.AICommit();
+
+            // if (Operation.Instance.Dests.Count >= DestArea.Instance.MinDest())
+            // {
+            //     Operation.Instance.AICommit();
+            //     Operation.Instance.Clear();
+            //     return true;
+            // }
+            // Operation.Instance.Clear();
+            // return false;
         }
 
         private void SortDest()
@@ -32,7 +58,7 @@ namespace Model
             var cardList = new List<Card>(TurnSystem.Instance.CurrentPlayer.HandCards);
             cardList.Sort((x, y) => x is 杀 ? 1 : -1);
 
-            return cardList.Find(x => x.AiValid()) != null;
+            return cardList.Find(x => x.AIPerform()) != null;
         }
     }
 }

@@ -30,8 +30,8 @@ namespace Model
 
         public int second;
 
-        public List<Card> Cards { get; private set; }
-        public List<Player> Dests { get; private set; }
+        public List<Card> Cards { get; set; }
+        public List<Player> Dests { get; set; }
         public string Skill { get; set; }
         public string Other { get; set; }
 
@@ -52,14 +52,22 @@ namespace Model
 
             if (player.isSelf)
             {
-                moveSeat(player);
+                if (player != View.SgsMain.Instance.self.model)
+                {
+                    await SgsMain.Instance.Delay(0.5f);
+                    moveSeat(player);
+                }
                 StartCoroutine(SelfAutoResult());
             }
             else if (Room.Instance.IsSingle) StartCoroutine(AIAutoResult());
+            // Operation.Instance.Clear();
             startTimerView();
             bool result = await WaitResult();
 
             stopTimerView();
+
+            Operation.Instance.Clear();
+            if (Room.Instance.IsSingle && player.isAI) Operation.Instance.CopyTimer();
 
             Hint = "";
             maxCard = 0;
@@ -235,6 +243,7 @@ namespace Model
             maxCard = 1;
             minCard = 1;
             isCompete = true;
+            Refusable = false;
             IsValidCard = card => player0.HandCards.Contains(card) || player1.HandCards.Contains(card);
             this.player0 = player0;
             this.player1 = player1;
@@ -244,8 +253,19 @@ namespace Model
             Cards = new List<Card>(2);
             Dests = new List<Player>();
 
-            if (player0.isSelf) moveSeat(player0);
-            else if (player1.isSelf) moveSeat(player1);
+            if (player0.isSelf && player0 != View.SgsMain.Instance.self.model)
+            {
+                await SgsMain.Instance.Delay(0.5f);
+                moveSeat(player0);
+            }
+            else if (player1.isSelf && player1 != View.SgsMain.Instance.self.model)
+            {
+                await SgsMain.Instance.Delay(0.5f);
+                moveSeat(player1);
+            }
+
+            // if (player0.isSelf) moveSeat(player0);
+            // else if (player1.isSelf) moveSeat(player1);
 
             startTimerView();
             StartCoroutine(CompeteAutoResult());
@@ -257,6 +277,7 @@ namespace Model
             maxCard = 0;
             minCard = 0;
             isCompete = false;
+            Refusable = true;
             IsValidCard = card => !card.IsConvert;
         }
 

@@ -30,6 +30,7 @@ namespace Model
             await new GetCardFromElse(dests[0], Src, cards).Execute();
             if (count < 2 || done) return;
 
+            done = true;
             var list = new List<Card>
             {
                 Card.Convert<杀>(), Card.Convert<火杀>(), Card.Convert<雷杀>(), Card.Convert<酒>(), Card.Convert<桃>()
@@ -37,6 +38,7 @@ namespace Model
             foreach (var i in list) TimerTask.Instance.MultiConvert.Add(i);
             TimerTask.Instance.IsValidCard = CardArea.Instance.ValidCard;
             TimerTask.Instance.MaxDest = DestArea.Instance.MaxDest;
+            TimerTask.Instance.MinDest = DestArea.Instance.MinDest;
             TimerTask.Instance.IsValidDest = DestArea.Instance.ValidDest;
             if (!await TimerTask.Instance.Run(Src)) return;
 

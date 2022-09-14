@@ -20,6 +20,7 @@ namespace Model
         public void AddToJudgeArea(Player owner)
         {
             Owner = owner;
+            Src = owner;
             Owner.JudgeArea.Insert(0, this);
             addJudgeView?.Invoke(this);
         }

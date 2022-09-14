@@ -36,6 +36,10 @@ namespace Model
     {
         public 制蛮(Player src) : base(src, "制蛮", false) { }
 
+        public override int MaxDest => 1;
+        public override int MinDest => 1;
+        public override bool IsValidDest(Player dest1) => dest1 == dest;
+
         public override void OnEnabled()
         {
             foreach (var i in SgsMain.Instance.AlivePlayers)
@@ -55,12 +59,26 @@ namespace Model
         public async Task Execute(Damaged damaged)
         {
             if (damaged.Src is null || damaged.Src != Src) return;
+            dest = damaged.player;
             if (!await base.ShowTimer()) return;
             Execute();
             damaged.Value = 0;
             if (!damaged.player.RegionHaveCard) return;
+
             var card = await CardPanel.Instance.SelectCard(Src, damaged.player, true);
-            await new GetCardFromElse(Src, damaged.player, new List<Card> { card }).Execute();
+            if (card is DelayScheme && dest.JudgeArea.Contains((DelayScheme)card))
+            {
+                await new GetJudgeCard(Src, card).Execute();
+            }
+            else await new GetCardFromElse(Src, damaged.player, new List<Card> { card }).Execute();
+        }
+
+        private Player dest;
+
+        protected override bool AIResult()
+        {
+            AI.Instance.SelectDest();
+            return dest.team == Src.team || dest.Equipages.Values.ToList().Find(x => x != null) != null;
         }
     }
 }

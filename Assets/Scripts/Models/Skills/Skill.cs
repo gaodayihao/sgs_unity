@@ -97,6 +97,7 @@ namespace Model
         public virtual void Execute()
         {
             Time++;
+            Dests = TimerTask.Instance.Dests;
             useSkillView(this);
         }
 
@@ -105,7 +106,11 @@ namespace Model
             Time = 0;
         }
 
+        public List<Player> Dests { get; protected set; }
+
         protected Player firstDest => Operation.Instance.Dests.Count == 0 ? null : Operation.Instance.Dests[0];
+
+        protected bool isAI => Room.Instance.IsSingle && Src.isAI;
 
         private static UnityAction<Skill> useSkillView;
         public static event UnityAction<Skill> UseSkillView

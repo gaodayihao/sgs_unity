@@ -9,6 +9,10 @@ namespace Model
     {
         public 刚烈(Player src) : base(src, "刚烈", false) { }
 
+        public override int MaxDest => 1;
+        public override int MinDest => 1;
+        public override bool IsValidDest(Player dest1) => dest1 == dest;
+
         public override void OnEnabled()
         {
             Src.playerEvents.afterDamaged.AddEvent(Src, Execute);
@@ -22,6 +26,8 @@ namespace Model
         public async Task Execute(Damaged damaged)
         {
             if (damaged.Src is null || damaged.Src == Src) return;
+            dest = damaged.Src;
+
             for (int i = 0; i < -damaged.Value; i++)
             {
                 if (!await base.ShowTimer()) return;
@@ -36,6 +42,15 @@ namespace Model
                     await new Discard(damaged.Src, new List<Card> { c }).Execute();
                 }
             }
+        }
+
+        private Player dest;
+
+        protected override bool AIResult()
+        {
+            bool result = dest.team != Src.team;
+            if (result) AI.Instance.SelectDest();
+            return result;
         }
     }
     public class 清俭 : Triggered
@@ -91,5 +106,7 @@ namespace Model
                 dest = null;
             }
         }
+
+        protected override bool AIResult() => false;
     }
 }

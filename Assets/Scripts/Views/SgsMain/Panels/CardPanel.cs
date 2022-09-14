@@ -24,16 +24,17 @@ namespace View
             hint.text = model.Hint;
 
             // 从assetbundle中加载卡牌预制件
-            cardPrefab = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("Card");
+            cardPrefab = ABManager.Instance.GetSgsAsset("Card");
 
             StartTimer(model.second);
         }
 
         protected void InitCard(Model.Card card, Transform parent, bool display = true)
         {
-            var instance = Instantiate(cardPrefab);
+            var instance = Instantiate(cardPrefab).GetComponent<Card>();
+            instance.inPanel = true;
             instance.transform.SetParent(parent, false);
-            instance.GetComponent<Card>().InitInPanel(card, display);
+            instance.InitInPanel(card, display);
         }
 
         public void UpdatePanel()

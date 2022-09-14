@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 namespace View
 {
@@ -111,10 +112,14 @@ namespace View
         /// <summary>
         /// 显示倒计时进度条
         /// </summary>
-        public void ShowTimer()
+        public async void ShowTimer()
         {
             if (!timerTask.isWxkj && !timerTask.isCompete && self.model != timerTask.player) return;
             if (timerTask.isCompete && self.model != timerTask.player0 && self.model != timerTask.player1) return;
+
+            await SgsMain.Instance.WaitFrame(2);
+
+            // while (CardAnime.Instance.InAnimation > 0) await Task.Yield();
 
             operationArea.SetActive(true);
             hint.text = timerTask.Hint;

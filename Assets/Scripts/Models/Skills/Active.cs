@@ -23,6 +23,7 @@ namespace Model
             await Task.Yield();
             Debug.Log(Src.PosStr + "号位使用了" + Name);
             Time++;
+            // Dests = dests;
             Execute();
         }
 

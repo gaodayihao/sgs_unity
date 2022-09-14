@@ -8,6 +8,10 @@ namespace Model
     {
         public 恩怨(Player src) : base(src, "恩怨", false) { }
 
+        public override int MaxDest => 1;
+        public override int MinDest => 1;
+        public override bool IsValidDest(Player dest1) => dest1 == dest;
+
         public override void OnEnabled()
         {
             Src.playerEvents.AfterGetCard.AddEvent(Src, Execute);
@@ -24,6 +28,7 @@ namespace Model
         {
             if (!(getCard is GetCardFromElse)) return;
             var getCardFromElse = getCard as GetCardFromElse;
+            dest = getCardFromElse.Dest;
             if (getCardFromElse.Cards.Count < 2 || !await base.ShowTimer()) return;
             Execute();
 
@@ -33,12 +38,26 @@ namespace Model
         public async Task Execute(Damaged damaged)
         {
             if (damaged.Src is null) return;
+            dest = damaged.Src;
             for (int i = 0; i < -damaged.Value; i++)
             {
                 if (!await base.ShowTimer()) return;
+                Execute();
                 TimerTask.Instance.Hint = "点确定交给法正一张手牌，点取消失去一点体力";
                 TimerTask.Instance.IsValidCard = card => damaged.Src.HandCards.Contains(card);
                 bool result = await TimerTask.Instance.Run(damaged.Src, 1, 0);
+
+                if (Room.Instance.IsSingle && damaged.Src.isAI)
+                {
+                    if (damaged.Src.HandCardCount > 0)
+                    {
+                        Operation.Instance.Cards.Add(damaged.Src.HandCards[0]);
+                        Operation.Instance.AICommit();
+                        result = true;
+                    }
+                    else result = false;
+                }
+
                 if (result)
                 {
                     var card = TimerTask.Instance.Cards[0];
@@ -47,6 +66,14 @@ namespace Model
                 }
                 else await new UpdateHp(damaged.Src, -1).Execute();
             }
+        }
+
+        private Player dest;
+
+        protected override bool AIResult()
+        {
+            AI.Instance.SelectDest();
+            return true;
         }
     }
 
@@ -98,5 +125,7 @@ namespace Model
             }
             else await new GetCardFromElse(Src, dest0, new List<Card>(dest0.HandCards)).Execute();
         }
+
+        protected override bool AIResult() => false;
     }
 }

@@ -46,7 +46,7 @@ namespace View
             var cards = operation.Cards;
 
             // 从assetbundle中加载卡牌预制件
-            var card = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("Card");
+            var card = ABManager.Instance.GetSgsAsset("Card");
 
             // 实例化新卡牌，添加到手牌区，并根据卡牌id初始化
             foreach (var i in cards)
@@ -61,6 +61,7 @@ namespace View
                 instance.SetActive(false);
                 instance.transform.SetParent(handCardArea.transform, false);
                 handcards.Add(i.Id, instance.GetComponent<Card>());
+                handcards[i.Id].inPanel = true;
                 handcards[i.Id].Init(i);
             }
         }

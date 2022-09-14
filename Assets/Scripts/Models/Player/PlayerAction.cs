@@ -50,7 +50,7 @@ namespace Model
             foreach (var card in Cards)
             {
                 player.HandCards.Add(card);
-                // card.Src = player;
+                card.Src = player;
             }
             actionView(this);
 
@@ -86,6 +86,42 @@ namespace Model
         }
 
         public bool InGetCardPhase { get; set; } = false;
+    }
+
+    public class GetDisCard : GetCard
+    {
+        public GetDisCard(Player player, List<Card> cards) : base(player, cards) { }
+
+        public new async Task Execute()
+        {
+            var list = new List<Card>(Cards);
+            Cards.Clear();
+            foreach (var i in list) Cards.AddRange(i.InDiscardPile());
+            if (Cards.Count > 0) await base.Execute();
+        }
+    }
+
+    public class GetJudgeCard : GetCard
+    {
+        public GetJudgeCard(Player player, Card card) : base(player, new List<Card> { card })
+        {
+            // Dest = dest;
+        }
+
+        public Player Dest { get; private set; }
+
+        public new async Task Execute()
+        {
+            // var list = new List<Card>(Cards);
+            // Cards.Clear();
+            // foreach (var i in list) Cards.AddRange(i.InDiscardPile());
+            // if (Cards.Count > 0) await base.Execute();
+            var card = Cards[0];
+
+            (card as DelayScheme).RemoveToJudgeArea();
+            // await new GetCard(src, new List<Card> { card }).Execute();
+            await base.Execute();
+        }
     }
 
     /// <summary>
@@ -198,8 +234,13 @@ namespace Model
         {
             actionView(this);
 
+            foreach (var i in player.skills) i.SetActive(false);
             player.skills.Clear();
+
             if (player.IsLocked) await new SetLock(player).Execute();
+
+            if (Room.Instance.IsSingle && player.isSelf) AI.Instance.DestList.Remove(player);
+
             player.IsAlive = false;
             player.Next.Last = player.Last;
             player.Last.Next = player.Next;
@@ -434,6 +475,9 @@ namespace Model
             CardPile.Instance.AddToDiscard(Card1);
             await new LoseCard(player, new List<Card> { Card0 }).Execute();
             await new LoseCard(Dest, new List<Card> { Card1 }).Execute();
+
+            // Debug.Log(Card0.Weight);
+            // Debug.Log(Card1.Weight);
 
             return Card0.Weight > Card1.Weight;
         }

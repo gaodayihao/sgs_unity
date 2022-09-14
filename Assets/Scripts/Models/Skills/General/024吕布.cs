@@ -57,6 +57,12 @@ namespace Model
     {
         public 利驭(Player src) : base(src, "利驭", false) { }
 
+        public override int MaxDest => 1;
+        public override int MinDest => 1;
+        public override bool IsValidDest(Player dest1) => dest1 == dest;
+
+        private Player dest;
+
         public override void OnEnabled()
         {
             foreach (var i in SgsMain.Instance.AlivePlayers)
@@ -75,7 +81,7 @@ namespace Model
 
         public async Task Execute(Damaged damaged)
         {
-            var dest = damaged.player;
+            dest = damaged.player;
 
             // 触发条件
             if (damaged.Src != Src || !(damaged.SrcCard is 杀)) return;

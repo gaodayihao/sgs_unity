@@ -19,6 +19,7 @@ namespace Model
         public bool isAI { get; set; } = false;
         public Player Teammate { get; set; }
         public Team team { get; private set; }
+        public List<Player> Teammates { get; set; }
 
         // 武将
         public General general { get; private set; }
@@ -101,16 +102,8 @@ namespace Model
         /// 判断区域内是否有牌
         /// </summary>
         public bool RegionHaveCard => CardCount > 0 || JudgeArea.Count > 0;
-        // return false;
+
         public int CardCount => HandCardCount + Equipages.Values.Where(x => x != null).Count();
-        // {
-        //     get
-        //     {
-        //         if (HandCardCount != 0) return true;
-        //         foreach (var i in Equipages.Values) if (i != null) return true;
-        //         return false;
-        //     }
-        // }
 
         /// <summary>
         /// 按类型查找手牌(人机)

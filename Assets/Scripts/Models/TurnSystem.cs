@@ -165,10 +165,10 @@ namespace Model
             // 重置使用技能次数
             // foreach (var i in CurrentPlayer.skills.Values) if (i is Active) (i as Active).Time = 0;
 
-            bool performIsDone = false;
+            bool result = true;
             var timerTask = TimerTask.Instance;
 
-            while (!performIsDone && !SgsMain.Instance.GameIsOver && CurrentPlayer.IsAlive)
+            while (result && !SgsMain.Instance.GameIsOver && CurrentPlayer.IsAlive)
             {
                 // 暂停线程,显示进度条
                 timerTask.Hint = "出牌阶段，请选择一张牌。";
@@ -177,15 +177,15 @@ namespace Model
                 timerTask.IsValidCard = CardArea.Instance.ValidCard;
                 timerTask.IsValidDest = DestArea.Instance.ValidDest;
                 timerTask.isPerformPhase = true;
-                performIsDone = !await timerTask.Run(CurrentPlayer, 1, 0);
+                result = await timerTask.Run(CurrentPlayer, 1, 0);
                 timerTask.isPerformPhase = false;
 
                 if (CurrentPlayer.isAI)
                 {
-                    performIsDone = !AI.Instance.Perform();
+                    result = AI.Instance.Perform();
                 }
 
-                if (!performIsDone)
+                if (result)
                 {
                     if (timerTask.Skill != "")
                     {
@@ -199,35 +199,6 @@ namespace Model
                         await card.UseCard(CurrentPlayer, timerTask.Dests);
                     }
                 }
-
-                //     else if (CurrentPlayer.isAI && CardArea.Instance.UseSha(CurrentPlayer))
-                //     {
-                //         foreach (var card in CurrentPlayer.HandCards)
-                //         {
-                //             if (card is 杀)
-                //             {
-                //                 var dest = CurrentPlayer.Next;
-                //                 do
-                //                 {
-                //                     if (DestArea.Instance.UseSha(CurrentPlayer, dest))
-                //                     {
-                //                         await card.UseCard(CurrentPlayer, new List<Player> { dest });
-                //                         performIsDone = false;
-                //                         goto done;
-                //                         // break;
-                //                     }
-                //                     dest = dest.Next;
-                //                 } while (dest != CurrentPlayer);
-                //             }
-                //             if (card is Equipage)
-                //             {
-                //                 await card.UseCard(CurrentPlayer);
-                //                 performIsDone = false;
-                //                 goto done;
-                //             }
-                //         }
-                //     }
-                // done:
                 finishPerformView?.Invoke(this);
             }
 

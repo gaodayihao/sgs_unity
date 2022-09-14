@@ -7,21 +7,6 @@ using System.Threading.Tasks;
 
 public class ABManager : Singleton<ABManager>
 {
-    // AB包路径
-    //     private string ABUrl
-    //     {
-    //         get
-    //         {
-    // #if UNITY_EDITOR
-    //             return "file:///" + Application.dataPath + "/../AssetBundles/WebGL/";
-    //             // return Urls.STATIC_URL + "AssetBundles/WebGL/";
-    // #elif UNITY_WEBGL
-    //             return Urls.STATIC_URL + "AssetBundles/";
-    // #else
-    //             return "file:///" + Application.dataPath + "/../AssetBundles/StandaloneWindows/";
-    // #endif
-    //         }
-    //     }
 
     // 依赖项配置文件
     private AssetBundleManifest manifest = null;
@@ -31,6 +16,16 @@ public class ABManager : Singleton<ABManager>
     /// </summary>
     public Dictionary<string, AssetBundle> ABMap { get; private set; } = new Dictionary<string, AssetBundle>();
 
+    private Dictionary<string, GameObject> sgsAsset = new Dictionary<string, GameObject>();
+
+    public GameObject GetSgsAsset(string name)
+    {
+        if (!sgsAsset.ContainsKey(name))
+        {
+            sgsAsset.Add(name, ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>(name));
+        }
+        return sgsAsset[name];
+    }
 
     private event UnityAction<float> progressEvent;
 
