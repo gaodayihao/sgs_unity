@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1724557714
+CRC: 3098381535
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 01ca3cba3a3dfcbbeaa2ca6f395cc074
+    Hash: 18d1d22ab75038ed73fa160d72eb328e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0509caecb96f40a7e77c35b8f6d0c358
+    Hash: 2102ce2fe3952b57482a4da43fac7c9f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,17 +28,19 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 483eb9d28b5f244eeac27a93ff6f40eb, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: df5956a3fad144f4394e2e5e0835523a, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: b59ea64d74168734db9af69a1762a961, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 4db03cec1d43a93438de7adaf4f8d43f, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: de2ab0f2a9f43495e9e44657269685df, type: 3}
+  Script: {fileID: 11500000, guid: 062b01ae459fc9948aff1baaa0543f5c, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: e57737c65a4cebe4d9c6c816bfa2adef, type: 3}
+  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
 - Class: 114
@@ -77,7 +79,6 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 Assets:
-- "Assets/Prefabs/Panels/\u533A\u57DF\u5185.prefab"
 - "Assets/Prefabs/Skill/\u89C9\u9192\u6280.prefab"
 - Assets/Prefabs/Line.prefab
 - "Assets/Prefabs/\u6280\u80FD\u4FE1\u606F.prefab"
@@ -85,9 +86,8 @@ Assets:
 - Assets/Prefabs/CardTarget.prefab
 - "Assets/Prefabs/Skill/\u9501\u5B9A\u6280.prefab"
 - "Assets/Prefabs/Skill/\u9650\u5B9A\u6280.prefab"
-- "Assets/Prefabs/Panels/\u624B\u724C.prefab"
-- "Assets/Prefabs/Panels/\u9E92\u9E9F\u5F13.prefab"
 - Assets/Prefabs/Card.prefab
+- Assets/Prefabs/Panels/CardPanel.prefab
 - "Assets/Prefabs/\u5224\u5B9A\u724C.prefab"
 - "Assets/Prefabs/Skill/\u4E3B\u52A8\u6280.prefab"
 Dependencies:

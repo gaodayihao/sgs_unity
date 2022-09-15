@@ -137,20 +137,20 @@ namespace View
             // if (model.Title == "过河拆桥" || model.Title == "顺手牵羊") ShowRegion(model);
             // else if (model.Title == "麒麟弓") ShowQlg(model);
 
-            switch (model.timerType)
-            {
-                case TimerType.区域内:
-                    panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("区域内");
-                    break;
-                case TimerType.麒麟弓:
-                    panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("麒麟弓");
-                    break;
-                case TimerType.手牌:
-                    panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("手牌");
-                    break;
-            }
+            // switch (model.timerType)
+            // {
+            //     case TimerType.区域内:
+            //         panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("区域内");
+            //         break;
+            //     case TimerType.麒麟弓:
+            //         panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("麒麟弓");
+            //         break;
+            //     case TimerType.手牌:
+            //         panel = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>("手牌");
+            //         break;
+            // }
 
-            panel = Instantiate(panel);
+            panel = Instantiate(ABManager.Instance.GetSgsAsset("CardPanel"));
             panel.transform.SetParent(transform, false);
         }
 

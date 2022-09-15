@@ -90,6 +90,7 @@ namespace Model
             if (!await base.ShowTimer()) return;
             Execute();
 
+            CardPanel.Instance.Title = "利驭";
             CardPanel.Instance.Hint = "对" + dest.PosStr + "号位发动利驭，获得其一张牌";
             var card = await CardPanel.Instance.SelectCard(Src, damaged.player);
 

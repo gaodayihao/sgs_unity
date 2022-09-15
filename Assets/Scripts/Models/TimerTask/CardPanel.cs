@@ -38,6 +38,7 @@ namespace Model
             stopTimerView?.Invoke(this);
 
             Hint = "";
+            Title = "";
             display = false;
 
             return result;

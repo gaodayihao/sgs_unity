@@ -54,7 +54,7 @@ namespace View
                 var instance = Instantiate(ABManager.Instance.GetSgsAsset("Card")).GetComponent<Card>();
                 await Task.Yield();
                 instance.gameObject.SetActive(false);
-                instance.Init(i);
+                instance.InitInSelf(i);
                 Add(instance);
                 // Debug.Log("add " + instance.name);
             }
@@ -214,7 +214,7 @@ namespace View
             {
                 var instance = Instantiate(card);
                 ConvertedCards.Add(i.Name, instance.GetComponent<Card>());
-                ConvertedCards[i.Name].Init(i, true);
+                ConvertedCards[i.Name].InitInSelf(i);
                 ConvertedCards[i.Name].SetParent(handCardArea);
             }
             foreach (var i in ConvertedCards.Values)

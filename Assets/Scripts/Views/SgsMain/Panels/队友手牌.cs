@@ -62,7 +62,7 @@ namespace View
                 instance.transform.SetParent(handCardArea.transform, false);
                 handcards.Add(i.Id, instance.GetComponent<Card>());
                 handcards[i.Id].inPanel = true;
-                handcards[i.Id].Init(i);
+                handcards[i.Id].InitInSelf(i);
             }
         }
 

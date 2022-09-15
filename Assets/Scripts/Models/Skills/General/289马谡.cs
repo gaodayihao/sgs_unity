@@ -65,6 +65,8 @@ namespace Model
             damaged.Value = 0;
             if (!damaged.player.RegionHaveCard) return;
 
+            CardPanel.Instance.Title = "制蛮";
+            CardPanel.Instance.Hint = "对" + dest.PosStr + "号位发动制蛮，获得其区域内一张牌";
             var card = await CardPanel.Instance.SelectCard(Src, damaged.player, true);
             if (card is DelayScheme && dest.JudgeArea.Contains((DelayScheme)card))
             {

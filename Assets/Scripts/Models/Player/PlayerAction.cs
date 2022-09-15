@@ -368,12 +368,15 @@ namespace Model
         }
         public Player Dest { get; private set; }
 
+        public List<Card> Equips { get; private set; } = new List<Card>();
+
         public new async Task Execute()
         {
             // 获得牌
             foreach (var card in Cards)
             {
                 player.HandCards.Add(card);
+                if (card is Equipage && Dest.Equipages.ContainsValue(card as Equipage)) Equips.Add(card);
             }
             actionView(this);
 

@@ -25,7 +25,7 @@ namespace View
                 {
                     var instance = Instantiate(prefab).GetComponent<Card>();
 
-                    instance.Init(i);
+                    instance.InitInSelf(i);
                     instance.SetParent(cardAnime);
                     discards.Add(instance);
                 }
@@ -42,7 +42,7 @@ namespace View
                 foreach (var i in cards)
                 {
                     var instance = Instantiate(prefab).GetComponent<Card>();
-                    instance.Init(i);
+                    instance.Init(i, true);
                     discards.Add(instance);
                     instance.SetParent(transform);
 
@@ -66,7 +66,8 @@ namespace View
         {
             foreach (var i in discards) Destroy(i.gameObject, 2);
 
-            await Model.SgsMain.Instance.Delay(2f);
+            await Model.SgsMain.Instance.Delay(2.1f);
+            UpdateSpacing();
             foreach (var i in discards) i.Move(0.2f);
         }
 
@@ -80,6 +81,7 @@ namespace View
                 var spacing = (810 - 121.5f * transform.childCount) / (float)(transform.childCount - 1);
                 GetComponent<HorizontalLayoutGroup>().spacing = spacing;
             }
+            GetComponent<HorizontalLayoutGroup>().spacing = 0;
         }
     }
 }

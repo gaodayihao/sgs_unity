@@ -25,7 +25,6 @@ namespace View
         public int Id { get; private set; }
         // 是否被选中
         public bool IsSelected { get; private set; }
-        private bool isConvert;
 
         // 手牌区
         private CardArea cardArea => CardArea.Instance;
@@ -38,34 +37,37 @@ namespace View
             set => Model.Operation.Instance.Converted = value;
         }
 
-        /// <summary>
-        /// 初始化卡牌
-        /// </summary>
-        public async void Init(Model.Card model, bool isConvert = false)
+        public async void Init(Model.Card model, bool known)
         {
             this.model = model;
             name = model.Name;
             target.name = model.Name + "target";
-            this.isConvert = isConvert;
+
+            if (!known) return;
 
             var sprites = Sprites.Instance;
             while (sprites.cardImage is null) await Task.Yield();
 
             // 初始化sprite
             image.sprite = sprites.cardImage[name];
-            if (!isConvert)
+            if (!model.IsConvert)
             {
+
+                suit.gameObject.SetActive(true);
+                weight.gameObject.SetActive(true);
                 Id = model.Id;
                 suit.sprite = sprites.cardSuit[model.Suit];
                 if (model.Suit == "黑桃" || model.Suit == "草花") weight.sprite = sprites.blackWeight[model.Weight];
                 else weight.sprite = sprites.redWeight[model.Weight];
             }
-            else
-            {
-                suit.gameObject.SetActive(false);
-                weight.gameObject.SetActive(false);
-            }
+        }
 
+        /// <summary>
+        /// 初始化卡牌
+        /// </summary>
+        public void InitInSelf(Model.Card model)
+        {
+            Init(model, true);
             button.onClick.AddListener(ClickCard);
         }
 
@@ -78,7 +80,7 @@ namespace View
             if (!IsSelected) Select();
             else Unselect();
 
-            if (!isConvert) cardArea.UpdateCardArea();
+            if (!model.IsConvert) cardArea.UpdateCardArea();
             else cardArea.UpdateConvertCard();
 
             DestArea.Instance.ResetDestArea();
@@ -94,7 +96,7 @@ namespace View
             if (IsSelected) return;
             IsSelected = true;
             GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 20);
-            if (!isConvert) Model.Operation.Instance.Cards.Add(model);
+            if (!model.IsConvert) Model.Operation.Instance.Cards.Add(model);
             else
             {
                 if (Converted != null) cardArea.ConvertedCards[Converted.Name].Unselect();
@@ -110,7 +112,7 @@ namespace View
             if (!IsSelected) return;
             IsSelected = false;
             GetComponent<RectTransform>().anchoredPosition -= new Vector2(0, 20);
-            if (!isConvert) Model.Operation.Instance.Cards.Remove(model);
+            if (!model.IsConvert) Model.Operation.Instance.Cards.Remove(model);
             else Converted = null;
         }
 
@@ -135,26 +137,7 @@ namespace View
         public void InitInPanel(Model.Card model, bool known = true)
         {
             Id = model.Id;
-            name = model.Name;
-            target.name = model.Name + "target";
-
-            var sprites = Sprites.Instance;
-
-            // 初始化sprite
-            if (known)
-            {
-                image.sprite = sprites.cardImage[name];
-                suit.sprite = sprites.cardSuit[model.Suit];
-                if (model.Suit == "黑桃" || model.Suit == "草花") weight.sprite = sprites.blackWeight[model.Weight];
-                else weight.sprite = sprites.redWeight[model.Weight];
-            }
-            else
-            {
-                image.sprite = sprites.cardImage["未知牌"];
-                suit.gameObject.SetActive(false);
-                weight.gameObject.SetActive(false);
-            }
-
+            Init(model, known);
             button.interactable = true;
             button.onClick.AddListener(ClickInPanel);
         }
@@ -164,59 +147,33 @@ namespace View
         /// </summary>
         private void ClickInPanel()
         {
-            CardPanel.Instance.selectCards.Add(this);
+            CardPanel.Instance.selectCard = this;
             CardPanel.Instance.UpdatePanel();
         }
-
-        // private Vector3 pos;
 
         public bool inPanel = false;
 
         void Start()
         {
-            // target = Instantiate(ABManager.Instance.GetSgsAsset("CardTarget")).transform;
-            // target.name = name;
             if (!inPanel) transform.SetParent(CardSystem.Instance.transform, false);
-            // Debug.Log(name + " parent " + transform.parent.name);
         }
 
         public void SetParent(Transform parent)
         {
-            // Debug.Log(name + " setparent " + parent.name);
-            // pos = transform.position;
             target.SetParent(parent, false);
-            // StartCoroutine(Move(second));
-            // CardSystem.Instance.UpdateAll(second);
-            // target.position = pos;
-        }
-
-        public void SetAsLastSibling()
-        {
-            target.SetAsLastSibling();
-            // CardSystem.Instance.UpdateAll(0);
-            // transform.position = target.position;
         }
 
         public bool isMoving { get; private set; } = false;
 
         public void Move(float second)
         {
-            // await SgsMain.Instance.WaitFrame();
-            // Debug.Log("move" + name);
-            if (isMoving)
-            {
-                // Debug.Log(name + " ismoving");
-                return;
-            }
+            if (isMoving) return;
 
             if (second == 0 || !gameObject.activeSelf)
             {
-                // if (!gameObject.activeSelf) Debug.Log(name + " !gameObject.activeSelf");
                 transform.position = target.position;
                 return;
             }
-
-            // if (!gameObject.activeSelf) return;
 
             isMoving = true;
             StartCoroutine(MoveAsync(second));
@@ -225,32 +182,19 @@ namespace View
         private IEnumerator MoveAsync(float second)
         {
             yield return null;
-            // Debug.Log("moveasync" + name);
             while (transform.position != target.position)
             {
                 yield return null;
                 var dx = (target.position - transform.position).magnitude / second * Time.deltaTime;
                 second -= Time.deltaTime;
                 transform.position = Vector3.MoveTowards(transform.position, target.position, dx);
-                // Debug.Log(transform.position);
             }
             isMoving = false;
         }
 
-        // public void SetActive(bool value)
-        // {
-        //     gameObject.SetActive(value);
-        //     target.gameObject.SetActive(value);
-        // }
-
         void OnEnable()
         {
-            if (target == null)
-            {
-                target = Instantiate(ABManager.Instance.GetSgsAsset("CardTarget")).transform;
-                // Debug.Log(target.gameObject is null);
-                // target.name = name;
-            }
+            if (target == null) target = Instantiate(ABManager.Instance.GetSgsAsset("CardTarget")).transform;
             target.gameObject.SetActive(true);
         }
 
@@ -264,14 +208,8 @@ namespace View
 
         void OnDestroy()
         {
-            // Debug.Log(name + " ondestroy");
             if (target != null) Destroy(target.gameObject);
-            // Debug.Log(DiscardArea.Instance.discards.Contains(this));
-            if (DiscardArea.Instance.discards.Contains(this))
-            {
-                DiscardArea.Instance.discards.Remove(this);
-                // Debug.Log("remove");
-            }
+            if (DiscardArea.Instance.discards.Contains(this)) DiscardArea.Instance.discards.Remove(this);
         }
     }
 }

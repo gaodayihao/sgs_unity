@@ -35,6 +35,8 @@ namespace Model
             getCard.Count -= TimerTask.Instance.Dests.Count;
             foreach (var i in TimerTask.Instance.Dests)
             {
+                CardPanel.Instance.Title = "突袭";
+                CardPanel.Instance.Hint = "对" + i.PosStr + "号位发动突袭，获得其一张牌";
                 if (Src.team == i.team) CardPanel.Instance.display = true;
                 bool result = await CardPanel.Instance.Run(Src, i, TimerType.手牌);
                 var card = result ? CardPanel.Instance.Cards : new List<Card> { i.HandCards[0] };

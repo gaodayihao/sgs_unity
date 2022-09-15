@@ -41,12 +41,9 @@ namespace View
                 var card = Instantiate(ABManager.Instance.GetSgsAsset("Card")).GetComponent<Card>();
                 card.SetParent(cardAnime);
                 Cards.Add(i.Id, card);
-                if (model.player.isSelf) card.Init(i);
-                else
-                {
-                    card.InitInPanel(i, false);
-                    card.button.interactable = false;
-                }
+
+                if (IsViewSelf(model.player)) card.InitInSelf(i);
+                else card.Init(i, model.player.isSelf);
             }
 
             int f = Time.frameCount;
@@ -107,12 +104,8 @@ namespace View
             {
                 var card = Cards[i.Id];
 
-                if (known) card.Init(i);
-                else
-                {
-                    card.InitInPanel(i, false);
-                    card.button.interactable = false;
-                }
+                if (IsViewSelf(dest)) card.InitInSelf(i);
+                else card.Init(i, known);
 
                 if (IsViewSelf(dest)) CardArea.Instance.Add(card);
                 else Destroy(card.gameObject, 1);
@@ -162,7 +155,7 @@ namespace View
                 var card = Instantiate(ABManager.Instance.GetSgsAsset("Card")).GetComponent<Card>();
                 card.SetParent(cardAnime);
                 Cards.Add(i.Id, card);
-                card.Init(i);
+                card.InitInSelf(i);
                 var d = DiscardArea.Instance.discards.Find(x => x.Id == i.Id);
                 if (d != null) card.transform.position = transform.InverseTransformPoint(d.transform.position);
                 else

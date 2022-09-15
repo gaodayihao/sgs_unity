@@ -37,6 +37,7 @@ namespace Model
                 if (card.Suit == "红桃" || card.Suit == "方片") await new Damaged(damaged.Src, Src).Execute();
                 else if (damaged.Src.CardCount > 0)
                 {
+                    CardPanel.Instance.Title = "刚烈";
                     CardPanel.Instance.Hint = "对" + damaged.Src.PosStr + "号位发动刚烈，弃置其一张牌";
                     var c = await CardPanel.Instance.SelectCard(Src, damaged.Src);
                     await new Discard(damaged.Src, new List<Card> { c }).Execute();

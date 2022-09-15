@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace View
 {
-    public class Drag<T> : SingletonMono<T>, IDragHandler where T : MonoBehaviour
+    public class Drag : MonoBehaviour, IDragHandler
     {
         private Canvas canvas;
 
@@ -17,7 +17,7 @@ namespace View
         public void OnDrag(PointerEventData eventData)
         {
             // 移动拖拽框的位置
-            GetComponent<RectTransform>().anchoredPosition += eventData.delta / canvas.scaleFactor;
+            transform.parent.GetComponent<RectTransform>().anchoredPosition += eventData.delta / canvas.scaleFactor;
         }
     }
 }

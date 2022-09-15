@@ -289,6 +289,8 @@ namespace Model
             sha.DamageValue[dest.Position] = 0;
             var card = await CardPanel.Instance.SelectCard(Owner, dest);
             await new Discard(dest, new List<Card> { card }).Execute();
+
+            if (dest.CardCount == 0) return;
             card = await CardPanel.Instance.SelectCard(Owner, dest);
             await new Discard(dest, new List<Card> { card }).Execute();
         }
