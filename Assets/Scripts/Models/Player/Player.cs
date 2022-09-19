@@ -137,7 +137,9 @@ namespace Model
             {
                 if (Skill.SkillMap.ContainsKey(str))
                 {
-                    skills.Add(Activator.CreateInstance(Skill.SkillMap[str], this) as Skill);
+                    var skill = (Activator.CreateInstance(Skill.SkillMap[str], this) as Skill);
+                    skill.Name = str;
+                    skills.Add(skill);
                 }
             }
         }
@@ -171,10 +173,10 @@ namespace Model
         /// <summary>
         /// 卡牌对你无效
         /// </summary>
-        public Func<Card, bool> disabledForMe = (card) => false;
-        public bool DisabledForMe(Card card)
+        public Func<Card, bool> disableForMe = (card) => false;
+        public bool DisableForMe(Card card)
         {
-            foreach (Func<Card, bool> i in disabledForMe.GetInvocationList())
+            foreach (Func<Card, bool> i in disableForMe.GetInvocationList())
             {
                 if (i(card)) return true;
             }

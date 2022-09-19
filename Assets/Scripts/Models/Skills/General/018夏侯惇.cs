@@ -7,18 +7,18 @@ namespace Model
 {
     public class 刚烈 : Triggered
     {
-        public 刚烈(Player src) : base(src, "刚烈", false) { }
+        public 刚烈(Player src) : base(src) { }
 
         public override int MaxDest => 1;
         public override int MinDest => 1;
         public override bool IsValidDest(Player dest1) => dest1 == dest;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.afterDamaged.AddEvent(Src, Execute);
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.afterDamaged.RemoveEvent(Src, Execute);
         }
@@ -56,15 +56,16 @@ namespace Model
     }
     public class 清俭 : Triggered
     {
-        public 清俭(Player src) : base(src, "清俭", false, 1) { }
+        public 清俭(Player src) : base(src) { }
+        public override int TimeLimit => 1;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.AfterGetCard.AddEvent(Src, Execute);
             TurnSystem.Instance.AfterTurn += Reset;
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.AfterGetCard.RemoveEvent(Src, Execute);
             TurnSystem.Instance.AfterTurn -= Reset;

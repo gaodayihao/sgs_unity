@@ -8,14 +8,14 @@ namespace Model
 {
     public class 好施 : Triggered
     {
-        public 好施(Player src) : base(src, "好施", false) { }
+        public 好施(Player src) : base(src) { }
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.WhenGetCard.AddEvent(Src, Execute);
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.WhenGetCard.RemoveEvent(Src, Execute);
         }
@@ -73,7 +73,7 @@ namespace Model
 
     public class 缔盟 : Active
     {
-        public 缔盟(Player src) : base(src, "缔盟", 1) { }
+        public 缔盟(Player src) : base(src) { }
 
         public override int MaxDest => 2;
         public override int MinDest => 2;

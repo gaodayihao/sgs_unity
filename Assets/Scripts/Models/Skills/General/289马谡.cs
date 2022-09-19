@@ -8,7 +8,7 @@ namespace Model
 {
     public class 散谣 : Active
     {
-        public 散谣(Player src) : base(src, "散谣", 1) { }
+        public 散谣(Player src) : base(src) { }
 
         public override int MaxCard => SgsMain.Instance.AlivePlayers.Where(x => x.Hp == MaxHp && x != Src).Count();
         public override int MinCard => 1;
@@ -34,13 +34,13 @@ namespace Model
 
     public class 制蛮 : Triggered
     {
-        public 制蛮(Player src) : base(src, "制蛮", false) { }
+        public 制蛮(Player src) : base(src) { }
 
         public override int MaxDest => 1;
         public override int MinDest => 1;
         public override bool IsValidDest(Player dest1) => dest1 == dest;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             foreach (var i in SgsMain.Instance.AlivePlayers)
             {
@@ -48,7 +48,7 @@ namespace Model
             }
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             foreach (var i in SgsMain.Instance.AlivePlayers)
             {

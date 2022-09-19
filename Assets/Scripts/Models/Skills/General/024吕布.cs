@@ -7,9 +7,10 @@ namespace Model
 {
     public class 无双 : Triggered
     {
-        public 无双(Player src) : base(src, "无双", true) { }
+        public 无双(Player src) : base(src) { }
+        public override bool Passive => true;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.afterUseCard.AddEvent(Src, Execute杀);
             foreach (var i in SgsMain.Instance.AlivePlayers)
@@ -18,7 +19,7 @@ namespace Model
             }
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.afterUseCard.RemoveEvent(Src, Execute杀);
             foreach (var i in SgsMain.Instance.AlivePlayers)
@@ -55,7 +56,7 @@ namespace Model
 
     public class 利驭 : Triggered
     {
-        public 利驭(Player src) : base(src, "利驭", false) { }
+        public 利驭(Player src) : base(src) { }
 
         public override int MaxDest => 1;
         public override int MinDest => 1;
@@ -63,7 +64,7 @@ namespace Model
 
         private Player dest;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             foreach (var i in SgsMain.Instance.AlivePlayers)
             {
@@ -71,7 +72,7 @@ namespace Model
             }
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             foreach (var i in SgsMain.Instance.AlivePlayers)
             {

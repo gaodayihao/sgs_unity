@@ -7,7 +7,7 @@ namespace Model
 {
     public class 明策 : Active
     {
-        public 明策(Player src) : base(src, "明策", 1) { }
+        public 明策(Player src) : base(src) { }
 
         public override int MaxCard => 1;
         public override int MinCard => 1;
@@ -34,14 +34,15 @@ namespace Model
 
     public class 智迟 : Triggered
     {
-        public 智迟(Player src) : base(src, "智迟", true) { }
+        public 智迟(Player src) : base(src) { }
+        public override bool Passive => true;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.afterDamaged.AddEvent(Src, Execute);
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.afterDamaged.RemoveEvent(Src, Execute);
         }
@@ -51,7 +52,7 @@ namespace Model
             if (TurnSystem.Instance.CurrentPlayer == Src) return;
 
             Execute();
-            Src.disabledForMe += Disable;
+            Src.disableForMe += Disable;
             TurnSystem.Instance.AfterTurn += Reset;
             await Task.Yield();
         }
@@ -63,7 +64,7 @@ namespace Model
         }
         protected override void Reset()
         {
-            Src.disabledForMe -= Disable;
+            Src.disableForMe -= Disable;
             TurnSystem.Instance.AfterTurn -= Reset;
         }
     }

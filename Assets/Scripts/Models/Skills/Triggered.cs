@@ -7,8 +7,7 @@ namespace Model
 {
     public class Triggered : Skill
     {
-        public Triggered(Player src, string name, bool passive, int timeLimit = int.MaxValue)
-            : base(src, name, passive, timeLimit) { }
+        public Triggered(Player src) : base(src) { }
 
         /// <summary>
         /// 询问是否发动技能

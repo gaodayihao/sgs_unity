@@ -7,17 +7,18 @@ namespace Model
 {
     public class 咆哮 : Triggered
     {
-        public 咆哮(Player src) : base(src, "咆哮", true) { }
+        public 咆哮(Player src) : base(src) { }
+        public override bool Passive => true;
 
         public bool Effect(Card card) => card is 杀;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.unlimitedCard += Effect;
             Src.playerEvents.whenUseCard.AddEvent(Src, Execute);
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.unlimitedCard -= Effect;
             Src.playerEvents.whenUseCard.RemoveEvent(Src, Execute);

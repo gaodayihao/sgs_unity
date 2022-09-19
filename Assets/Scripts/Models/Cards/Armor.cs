@@ -44,13 +44,13 @@ namespace Model
         public override async Task AddEquipage(Player owner)
         {
             await base.AddEquipage(owner);
-            Owner.disabledForMe += Disable;
+            Owner.disableForMe += Disable;
         }
 
         public override async Task RemoveEquipage()
         {
             await base.RemoveEquipage();
-            Owner.disabledForMe -= Disable;
+            Owner.disableForMe -= Disable;
         }
         public bool Disable(Card card) => card is 杀
             && card is not 雷杀
@@ -70,13 +70,13 @@ namespace Model
         public override async Task AddEquipage(Player owner)
         {
             await base.AddEquipage(owner);
-            Owner.disabledForMe += Disable;
+            Owner.disableForMe += Disable;
         }
 
         public override async Task RemoveEquipage()
         {
             await base.RemoveEquipage();
-            Owner.disabledForMe -= Disable;
+            Owner.disableForMe -= Disable;
         }
 
         public bool Disable(Card card) => card is 杀

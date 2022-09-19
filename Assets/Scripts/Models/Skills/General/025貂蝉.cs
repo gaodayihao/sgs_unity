@@ -7,7 +7,7 @@ namespace Model
 {
     public class 离间 : Active
     {
-        public 离间(Player src) : base(src, "离间", 1) { }
+        public 离间(Player src) : base(src) { }
 
         public override int MaxCard => 1;
         public override int MinCard => 1;
@@ -27,14 +27,14 @@ namespace Model
 
     public class 闭月 : Triggered
     {
-        public 闭月(Player src) : base(src, "闭月", false) { }
+        public 闭月(Player src) : base(src) { }
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.startPhaseEvents[Phase.End].AddEvent(Src, Execute);
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.startPhaseEvents[Phase.End].RemoveEvent(Src, Execute);
         }

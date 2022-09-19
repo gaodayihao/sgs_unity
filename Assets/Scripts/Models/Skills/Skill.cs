@@ -14,20 +14,23 @@ namespace Model
         // 所属玩家
         public Player Src { get; private set; }
         // 技能名称
-        public string Name { get; private set; }
+        public string Name { get; set; }
         // 锁定技
-        public bool Passive { get; private set; } = false;
+        public virtual bool Passive => false;
+        // 限定技
+        // public virtual bool Ultimate => false;
+        // public bool UltimateIsDone { get; protected set; }
         // 限定次数
-        public int TimeLimit { get; private set; }
+        public virtual int TimeLimit => int.MaxValue;
         // 已使用次数
         public int Time { get; set; }
 
-        public Skill(Player src, string name, bool passive, int timeLimit)
+        public Skill(Player src)
         {
             Src = src;
-            Name = name;
-            Passive = passive;
-            TimeLimit = timeLimit;
+            // Name = name;
+            // Passive = passive;
+            // TimeLimit = timeLimit;
 
             SetActive(true);
         }
@@ -74,20 +77,20 @@ namespace Model
             {
                 if (Enabled > 0) return;
                 Enabled++;
-                if (Enabled > 0) OnEnabled();
+                if (Enabled > 0) OnEnable();
             }
             else
             {
                 if (Enabled <= 0) return;
                 Enabled--;
-                if (Enabled <= 0) OnDisabled();
+                if (Enabled <= 0) OnDisable();
             }
 
         }
 
-        public virtual void OnEnabled() { }
+        public virtual void OnEnable() { }
 
-        public virtual void OnDisabled() { }
+        public virtual void OnDisable() { }
 
         /// <summary>
         /// 技能是否满足条件
@@ -149,6 +152,16 @@ namespace Model
             { "烈弓", typeof(烈弓) },
             { "乱击", typeof(乱击) },
             { "父魂", typeof(父魂) },
+            { "享乐", typeof(享乐) },
+            { "放权", typeof(放权) },
+            // { "当先", typeof(当先) },
+            { "弓骑", typeof(弓骑) },
+            { "解烦", typeof(解烦) },
         };
+    }
+
+    public interface Ultimate
+    {
+        public bool IsDone { get; set; }
     }
 }

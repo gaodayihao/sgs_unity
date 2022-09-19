@@ -7,19 +7,20 @@ namespace Model
 {
     public class 武圣 : Converted
     {
-        public 武圣(Player src) : base(src, "武圣", false, int.MaxValue, "杀") { }
+        public 武圣(Player src) : base(src) { }
+        public override string CardName => "杀";
 
         public override Card Execute(List<Card> cards) => Card.Convert<杀>(cards);
 
         public override bool IsValidCard(Card card) => (card.Suit == "红桃" || card.Suit == "方片")
             && base.IsValidCard(card);
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.unlimitedDst += IsUnlimited;
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.unlimitedDst -= IsUnlimited;
         }
@@ -32,7 +33,7 @@ namespace Model
     /// </summary>
     public class 义绝 : Active
     {
-        public 义绝(Player src) : base(src, "义绝", 1) { }
+        public 义绝(Player src) : base(src) { }
 
         public override int MaxCard => 1;
         public override int MinCard => 1;

@@ -9,8 +9,8 @@ namespace Model
     /// </summary>
     public class Active : Skill
     {
-        public Active(Player src, string name, int timeLimit)
-            : base(src, name, false, timeLimit) { }
+        public Active(Player src) : base(src) { }
+        public override int TimeLimit => 1;
 
         /// <summary>
         /// 发动技能
@@ -29,12 +29,12 @@ namespace Model
 
         public override bool IsValid => TimerTask.Instance.isPerformPhase && base.IsValid;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             TurnSystem.Instance.AfterPerform += Reset;
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             TurnSystem.Instance.AfterPerform -= Reset;
         }

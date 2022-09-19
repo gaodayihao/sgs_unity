@@ -7,7 +7,8 @@ namespace Model
 {
     public class 仁德 : Active
     {
-        public 仁德(Player src) : base(src, "仁德", int.MaxValue) { }
+        public 仁德(Player src) : base(src) { }
+        public override int TimeLimit => int.MaxValue;
 
         public override int MaxCard => int.MaxValue;
         public override int MinCard => 1;

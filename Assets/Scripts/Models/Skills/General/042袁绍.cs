@@ -7,7 +7,8 @@ namespace Model
 {
     public class 乱击 : Converted
     {
-        public 乱击(Player src) : base(src, "乱击", false, int.MaxValue, "万箭齐发") { }
+        public 乱击(Player src) : base(src) { }
+        public override string CardName => "万箭齐发";
 
         public override Card Execute(List<Card> cards) => Card.Convert<万箭齐发>(cards);
 

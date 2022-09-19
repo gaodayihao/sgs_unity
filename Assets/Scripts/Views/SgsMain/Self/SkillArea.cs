@@ -32,8 +32,13 @@ namespace View
                 // 实例化预制件，添加到技能区
                 foreach (var j in i.skills)
                 {
-                    string str = j.Passive ? "锁定技" : "主动技";
-                    var prefab = ABManager.Instance.ABMap["sgsasset"].LoadAsset<GameObject>(str);
+                    string str;
+                    // if (j.GetType().IsAssignableFrom(typeof(Model.Ultimate))) str = "限定技";
+                    if (j is Model.Ultimate) str = "限定技";
+                    else if (j.Passive) str = "锁定技";
+                    else str = "主动技";
+
+                    var prefab = ABManager.Instance.GetSgsAsset(str);
                     var instance = Instantiate(prefab).GetComponent<Skill>();
                     instance.name = j.Name;
                     instance.text.text = j.Name;

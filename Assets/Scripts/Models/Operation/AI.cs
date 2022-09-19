@@ -22,11 +22,11 @@ namespace Model
 
             foreach (var i in dests)
             {
+                if (Operation.Instance.Dests.Count == Operation.Instance.MaxDest()) break;
                 if (Operation.Instance.IsValidDest(i))
                 {
                     Operation.Instance.Dests.Add(i);
                 }
-                if (Operation.Instance.Dests.Count == Operation.Instance.MaxDest()) break;
             }
 
             return Operation.Instance.AICommit();

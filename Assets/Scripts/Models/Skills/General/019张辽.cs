@@ -6,14 +6,14 @@ namespace Model
 {
     public class 突袭 : Triggered
     {
-        public 突袭(Player src) : base(src, "突袭", false) { }
+        public 突袭(Player src) : base(src) { }
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.WhenGetCard.AddEvent(Src, Execute);
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.WhenGetCard.RemoveEvent(Src, Execute);
         }

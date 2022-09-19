@@ -22,6 +22,8 @@ namespace View
             base.Awake();
 #if UNITY_EDITOR
             ABManager.Instance.LoadSgsMain();
+#elif UNITY_ANDROID
+            Application.targetFrameRate = 60;
 #endif
         }
 

@@ -7,19 +7,19 @@ namespace Model
 {
     public class 烈弓 : Triggered
     {
-        public 烈弓(Player src) : base(src, "烈弓", false) { }
+        public 烈弓(Player src) : base(src) { }
 
         public override int MaxDest => 1;
         public override int MinDest => 1;
         public override bool IsValidDest(Player dest1) => dest1 == dest;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.afterUseCard.AddEvent(Src, Execute);
             Src.unlimitedDst += IsUnlimited;
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.afterUseCard.RemoveEvent(Src, Execute);
             Src.unlimitedDst -= IsUnlimited;

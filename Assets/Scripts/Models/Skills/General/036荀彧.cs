@@ -7,7 +7,7 @@ namespace Model
 {
     public class 驱虎 : Active
     {
-        public 驱虎(Player src) : base(src, "驱虎", 1) { }
+        public 驱虎(Player src) : base(src) { }
 
         public override int MaxDest => 1;
         public override int MinDest => 1;
@@ -38,17 +38,17 @@ namespace Model
 
     public class 节命 : Triggered
     {
-        public 节命(Player src) : base(src, "节命", false) { }
+        public 节命(Player src) : base(src) { }
 
         public override int MaxDest => 1;
         public override int MinDest => 1;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.afterDamaged.AddEvent(Src, Execute);
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.afterDamaged.RemoveEvent(Src, Execute);
         }

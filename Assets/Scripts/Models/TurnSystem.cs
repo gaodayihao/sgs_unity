@@ -12,8 +12,6 @@ namespace Model
     /// </summary>
     public class TurnSystem : SingletonMono<TurnSystem>
     {
-
-        // 
         private void Init()
         {
             // 初始化被跳过阶段,设置为否
@@ -26,8 +24,6 @@ namespace Model
                     SkipPhase[player].Add(phase, false);
                 }
             }
-
-            // PerformTimer = SgsMain.Instance.mode.performTimer;
         }
 
         // 当前执行回合的玩家
@@ -39,20 +35,15 @@ namespace Model
         // 被跳过阶段
         public Dictionary<Player, Dictionary<Phase, bool>> SkipPhase { get; set; }
 
+        public int Round { get; private set; } = 1;
+
         public async Task StartGame()
         {
             Init();
 
             CurrentPlayer = SgsMain.Instance.players[0];
-            // int turnCount = 0;
-
-            // 单机模式
-            // if (Room.Instance.isSingle)
-            // {
             while (true)
             {
-                // Debug.Log("CurrentPlayer is " + CurrentPlayer.Position.ToString());
-
                 // 执行回合
                 startTurnView?.Invoke(this);
                 BeforeTurn?.Invoke();
@@ -60,21 +51,18 @@ namespace Model
                 {
                     // if (!Room.Instance.IsSingle) await Sync();
                     await ExecutePhase();
+                    if (ExtraPhase != Phase.Null) await ExeuteExtraPhase();
                     if (SgsMain.Instance.GameIsOver) return;
                 }
                 finishTurnView?.Invoke(this);
                 AfterTurn?.Invoke();
 
+                // 额外回合
+                if (ExtraTurn != null) await ExecuteExtraTurn();
+
                 CurrentPlayer = CurrentPlayer.Next;
-                // turnCount++;
+                Round++;
             }
-            // }
-            // 多人模式
-            // else
-            // {
-            //     SendPhase(CurrentPlayer, Phase.Prepare);
-            //     Connection.Instance.IsRunning = false;
-            // }
         }
 
         private async Task Sync()
@@ -226,6 +214,44 @@ namespace Model
                     i = i.Next;
                 }
             });
+        }
+
+        public Player ExtraTurn { get; set; }
+        private async Task ExecuteExtraTurn()
+        {
+            var t = CurrentPlayer;
+            CurrentPlayer = ExtraTurn;
+            ExtraTurn = null;
+
+            // 执行回合
+            startTurnView?.Invoke(this);
+            BeforeTurn?.Invoke();
+            for (CurrentPhase = Phase.Prepare; CurrentPhase <= Phase.End; CurrentPhase++)
+            {
+                // if (!Room.Instance.IsSingle) await Sync();
+                await ExecutePhase();
+                if (ExtraPhase != Phase.Null) await ExeuteExtraPhase();
+                if (SgsMain.Instance.GameIsOver) return;
+            }
+            finishTurnView?.Invoke(this);
+            AfterTurn?.Invoke();
+
+            if (ExtraTurn != null) await ExecuteExtraTurn();
+
+            CurrentPlayer = t;
+        }
+
+        public Phase ExtraPhase = Phase.Null;
+        private async Task ExeuteExtraPhase()
+        {
+            var t = CurrentPhase;
+            CurrentPhase = ExtraPhase;
+            ExtraPhase = Phase.Null;
+
+            // 执行回合
+            await ExecutePhase();
+
+            CurrentPhase = t;
         }
 
         private UnityAction<TurnSystem> startTurnView;

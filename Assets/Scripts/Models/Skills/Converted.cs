@@ -6,14 +6,10 @@ namespace Model
 {
     public abstract class Converted : Skill
     {
-        public Converted(Player src, string name, bool passive, int timeLimit, string cardName)
-           : base(src, name, passive, timeLimit)
-        {
-            CardName = cardName;
-        }
+        public Converted(Player src) : base(src) { }
 
         // 转化牌名称
-        public string CardName { get; private set; }
+        public virtual string CardName => "";
 
         public abstract Card Execute(List<Card> cards);
 

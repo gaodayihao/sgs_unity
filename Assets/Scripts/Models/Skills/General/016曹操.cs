@@ -7,14 +7,14 @@ namespace Model
 {
     public class 奸雄 : Triggered
     {
-        public 奸雄(Player src) : base(src, "奸雄", false) { }
+        public 奸雄(Player src) : base(src) { }
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.afterDamaged.AddEvent(Src, Execute);
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.afterDamaged.RemoveEvent(Src, Execute);
         }

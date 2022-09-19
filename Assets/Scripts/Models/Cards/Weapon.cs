@@ -159,7 +159,12 @@ namespace Model
 
         public class ZBSMSkill : Converted
         {
-            public ZBSMSkill(Player src) : base(src, "丈八蛇矛", false, int.MaxValue, "杀") { }
+            public ZBSMSkill(Player src) : base(src)
+            {
+                Name = "丈八蛇矛";
+            }
+
+            public override string CardName => "杀";
 
             public override Card Execute(List<Card> cards)
             {

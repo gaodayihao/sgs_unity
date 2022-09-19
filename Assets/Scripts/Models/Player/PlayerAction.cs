@@ -97,6 +97,7 @@ namespace Model
             var list = new List<Card>(Cards);
             Cards.Clear();
             foreach (var i in list) Cards.AddRange(i.InDiscardPile());
+            foreach (var i in Cards) CardPile.Instance.discardPile.Remove(i);
             if (Cards.Count > 0) await base.Execute();
         }
     }
@@ -165,6 +166,7 @@ namespace Model
 
         public new async Task Execute()
         {
+            if (Cards is null || Cards.Count == 0) return;
             string str = "";
             foreach (var card in Cards) str += "【" + card.Name + card.Suit + card.Weight.ToString() + "】";
             Debug.Log(player.PosStr + "号位弃置了" + str);
@@ -376,6 +378,7 @@ namespace Model
             foreach (var card in Cards)
             {
                 player.HandCards.Add(card);
+                card.Src = player;
                 if (card is Equipage && Dest.Equipages.ContainsValue(card as Equipage)) Equips.Add(card);
             }
             actionView(this);

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.Events;
+using System.Linq;
 
 namespace Model
 {
@@ -58,7 +59,7 @@ namespace Model
             await Src.playerEvents.afterUseCard.Execute(this);
         }
 
-        public bool Disabled(Player dest) => dest.DisabledForMe(this);
+        public bool Disabled(Player dest) => dest.DisableForMe(this);
 
         /// <summary>
         /// 打出牌
@@ -156,12 +157,13 @@ namespace Model
 
             if (PrimiTives.Count == 0) return null;
 
-            var list = new List<Card>();
-            foreach (var i in PrimiTives)
-            {
-                if (CardPile.Instance.discardPile.Contains(i)) list.Add(i);
-            }
-            return list;
+            // var list = new List<Card>();
+            return PrimiTives.Where(x => CardPile.Instance.discardPile.Contains(x)).ToList();
+            // foreach (var i in PrimiTives)
+            // {
+            //     if (CardPile.Instance.discardPile.Contains(i)) list.Add(i);
+            // }
+            // return list;
         }
 
         public virtual bool AIPerform()

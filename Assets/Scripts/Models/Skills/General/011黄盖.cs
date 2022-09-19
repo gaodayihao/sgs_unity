@@ -7,7 +7,7 @@ namespace Model
 {
     public class 苦肉 : Active
     {
-        public 苦肉(Player src) : base(src, "苦肉", 1) { }
+        public 苦肉(Player src) : base(src) { }
 
         public override int MaxCard => 1;
         public override int MinCard => 1;
@@ -23,14 +23,15 @@ namespace Model
 
     public class 诈降 : Triggered
     {
-        public 诈降(Player src) : base(src, "诈降", true) { }
+        public 诈降(Player src) : base(src) { }
+        public override bool Passive => true;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.afterLoseHp.AddEvent(Src, Execute);
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.afterLoseHp.RemoveEvent(Src, Execute);
         }

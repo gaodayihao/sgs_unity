@@ -28,7 +28,9 @@ namespace View
         {
             audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.volume = 0.4f;
-            // audioSource.loop = true;
+#if UNITY_WEBGL
+            audioSource.loop = true;
+#endif
         }
 
         public async void Load(string url)

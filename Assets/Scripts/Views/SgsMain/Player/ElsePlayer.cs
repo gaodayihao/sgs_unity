@@ -36,6 +36,11 @@ namespace View
             // phaseSprite = Sprites.Instance.phase;
         }
 
+        void OnEnable()
+        {
+            handCardCount.text = model?.HandCardCount.ToString();
+        }
+
         /// <summary>
         /// 显示倒计时进度条
         /// </summary>

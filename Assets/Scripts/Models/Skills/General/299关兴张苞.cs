@@ -8,7 +8,8 @@ namespace Model
 {
     public class 父魂 : Converted
     {
-        public 父魂(Player src) : base(src, "父魂", false, int.MaxValue, "杀") { }
+        public 父魂(Player src) : base(src) { }
+        public override string CardName => "杀";
 
         public override int MaxCard => 2;
         public override int MinCard => 2;
@@ -25,7 +26,7 @@ namespace Model
 
         public override bool IsValidCard(Card card) => Src.HandCards.Contains(card) && base.IsValidCard(card);
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             foreach (var i in SgsMain.Instance.AlivePlayers)
             {
@@ -33,7 +34,7 @@ namespace Model
             }
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             foreach (var i in SgsMain.Instance.AlivePlayers)
             {

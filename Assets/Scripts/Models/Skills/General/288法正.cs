@@ -6,19 +6,19 @@ namespace Model
 {
     public class 恩怨 : Triggered
     {
-        public 恩怨(Player src) : base(src, "恩怨", false) { }
+        public 恩怨(Player src) : base(src) { }
 
         public override int MaxDest => 1;
         public override int MinDest => 1;
         public override bool IsValidDest(Player dest1) => dest1 == dest;
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.AfterGetCard.AddEvent(Src, Execute);
             Src.playerEvents.afterDamaged.AddEvent(Src, Execute);
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.AfterGetCard.RemoveEvent(Src, Execute);
             Src.playerEvents.afterDamaged.RemoveEvent(Src, Execute);
@@ -79,14 +79,14 @@ namespace Model
 
     public class 眩惑 : Triggered
     {
-        public 眩惑(Player src) : base(src, "眩惑", false) { }
+        public 眩惑(Player src) : base(src) { }
 
-        public override void OnEnabled()
+        public override void OnEnable()
         {
             Src.playerEvents.finishPhaseEvents[Phase.Get].AddEvent(Src, Execute);
         }
 
-        public override void OnDisabled()
+        public override void OnDisable()
         {
             Src.playerEvents.finishPhaseEvents[Phase.Get].RemoveEvent(Src, Execute);
         }
