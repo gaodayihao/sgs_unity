@@ -11,7 +11,6 @@ public enum Phase
     Perform,    // 出牌阶段
     Discard,    // 弃牌阶段
     End,        // 结束阶段
-    Null,
 }
 
 public enum TimerType

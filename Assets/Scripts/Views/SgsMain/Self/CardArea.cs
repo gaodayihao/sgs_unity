@@ -47,7 +47,7 @@ namespace View
 
             // 实例化新卡牌，添加到手牌区，并根据卡牌id初始化
             // bool active = operation.player == self.model;
-            if (operation.player == self.model) return;
+            if (operation.player != self.model.Teammate) return;
             // {
             foreach (var i in operation.Cards)
             {

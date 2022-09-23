@@ -54,7 +54,6 @@ namespace Model
 
         public override int MaxDest => 1;
         public override int MinDest => 1;
-        public override bool IsValid => base.IsValid && !IsDone;
 
         public override async Task Execute(List<Player> dests, List<Card> cards, string other)
         {

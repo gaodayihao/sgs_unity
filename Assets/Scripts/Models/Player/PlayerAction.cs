@@ -198,7 +198,7 @@ namespace Model
             // 执行事件(濒死)
             if (player.Hp < 1 && Value < 0) await NearDeath();
             // 失去体力
-            if (Value < 0 && !(this is Damaged)) await player.playerEvents.afterLoseHp.Execute(this);
+            if (Value < 0 && this is not Damaged) await player.playerEvents.afterLoseHp.Execute(this);
         }
 
         public async Task NearDeath()

@@ -29,7 +29,7 @@ namespace Model
             recover = new EventSet<Recover>();
             whenDamaged = new EventSet<Damaged>();
             afterDamaged = new EventSet<Damaged>();
-            afterLoseHp=new EventSet<UpdateHp>();
+            afterLoseHp = new EventSet<UpdateHp>();
 
             whenUseCard = new EventSet<Card>();
             afterUseCard = new EventSet<Card>();
@@ -53,7 +53,7 @@ namespace Model
 
         // 回复体力后事件
         public EventSet<Recover> recover;
-        
+
         // 受到伤害时事件
         public EventSet<Damaged> whenDamaged;
         // 受到伤害后事件

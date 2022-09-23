@@ -51,7 +51,7 @@ namespace Model
                 {
                     // if (!Room.Instance.IsSingle) await Sync();
                     await ExecutePhase();
-                    if (ExtraPhase != Phase.Null) await ExeuteExtraPhase();
+                    while (ExtraPhase.Count > 0) await ExeuteExtraPhase();
                     if (SgsMain.Instance.GameIsOver) return;
                 }
                 finishTurnView?.Invoke(this);
@@ -60,8 +60,8 @@ namespace Model
                 // 额外回合
                 if (ExtraTurn != null) await ExecuteExtraTurn();
 
+                if (CurrentPlayer.Position > CurrentPlayer.Next.Position) Round++;
                 CurrentPlayer = CurrentPlayer.Next;
-                Round++;
             }
         }
 
@@ -144,6 +144,8 @@ namespace Model
             finishPhaseView?.Invoke(this);
         }
 
+        public bool IsDone { get; set; }
+
         private async Task Perform()
         {
             // 重置出杀次数
@@ -153,10 +155,10 @@ namespace Model
             // 重置使用技能次数
             // foreach (var i in CurrentPlayer.skills.Values) if (i is Active) (i as Active).Time = 0;
 
-            bool result = true;
+            IsDone = true;
             var timerTask = TimerTask.Instance;
 
-            while (result && !SgsMain.Instance.GameIsOver && CurrentPlayer.IsAlive)
+            while (IsDone && !SgsMain.Instance.GameIsOver && CurrentPlayer.IsAlive)
             {
                 // 暂停线程,显示进度条
                 timerTask.Hint = "出牌阶段，请选择一张牌。";
@@ -165,15 +167,15 @@ namespace Model
                 timerTask.IsValidCard = CardArea.Instance.ValidCard;
                 timerTask.IsValidDest = DestArea.Instance.ValidDest;
                 timerTask.isPerformPhase = true;
-                result = await timerTask.Run(CurrentPlayer, 1, 0);
+                IsDone = await timerTask.Run(CurrentPlayer, 1, 0);
                 timerTask.isPerformPhase = false;
 
                 if (CurrentPlayer.isAI)
                 {
-                    result = AI.Instance.Perform();
+                    IsDone = AI.Instance.Perform();
                 }
 
-                if (result)
+                if (IsDone)
                 {
                     if (timerTask.Skill != "")
                     {
@@ -230,7 +232,7 @@ namespace Model
             {
                 // if (!Room.Instance.IsSingle) await Sync();
                 await ExecutePhase();
-                if (ExtraPhase != Phase.Null) await ExeuteExtraPhase();
+                while (ExtraPhase.Count > 0) await ExeuteExtraPhase();
                 if (SgsMain.Instance.GameIsOver) return;
             }
             finishTurnView?.Invoke(this);
@@ -241,12 +243,12 @@ namespace Model
             CurrentPlayer = t;
         }
 
-        public Phase ExtraPhase = Phase.Null;
+        public List<Phase> ExtraPhase { get; } = new List<Phase>();
         private async Task ExeuteExtraPhase()
         {
             var t = CurrentPhase;
-            CurrentPhase = ExtraPhase;
-            ExtraPhase = Phase.Null;
+            CurrentPhase = ExtraPhase[0];
+            ExtraPhase.RemoveAt(0);
 
             // 执行回合
             await ExecutePhase();

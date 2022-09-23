@@ -26,7 +26,7 @@ namespace Model
 
         public async Task Execute(GetCard getCard)
         {
-            if (!(getCard is GetCardFromElse)) return;
+            if (getCard is not GetCardFromElse) return;
             var getCardFromElse = getCard as GetCardFromElse;
             dest = getCardFromElse.Dest;
             if (getCardFromElse.Cards.Count < 2 || !await base.ShowTimer()) return;

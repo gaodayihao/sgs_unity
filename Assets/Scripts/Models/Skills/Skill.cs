@@ -95,11 +95,14 @@ namespace Model
         /// <summary>
         /// 技能是否满足条件
         /// </summary>
-        public virtual bool IsValid => Time < TimeLimit && Enabled > 0;
+        public virtual bool IsValid => Time < TimeLimit
+            && Enabled > 0
+            && (this is not Ultimate || !(this as Ultimate).IsDone);
 
         public virtual void Execute()
         {
             Time++;
+            // if (this is Ultimate) (this as Ultimate).IsDone = true;
             Dests = TimerTask.Instance.Dests;
             useSkillView(this);
         }
@@ -109,7 +112,7 @@ namespace Model
             Time = 0;
         }
 
-        public List<Player> Dests { get; protected set; }
+        public List<Player> Dests { get; private set; }
 
         protected Player firstDest => Operation.Instance.Dests.Count == 0 ? null : Operation.Instance.Dests[0];
 
@@ -157,6 +160,11 @@ namespace Model
             // { "当先", typeof(当先) },
             { "弓骑", typeof(弓骑) },
             { "解烦", typeof(解烦) },
+            { "精策", typeof(精策) },
+            { "龙吟", typeof(龙吟) },
+            { "竭忠", typeof(竭忠) },
+            { "千驹", typeof(千驹) },
+            { "倾袭", typeof(倾袭) },
         };
     }
 

@@ -26,7 +26,7 @@ namespace Model
         public new async Task Execute()
         {
             base.Execute();
-            TurnSystem.Instance.ExtraPhase = Phase.Perform;
+            TurnSystem.Instance.ExtraPhase.Add(Phase.Perform);
             inSkill = true;
             await Task.Yield();
         }
